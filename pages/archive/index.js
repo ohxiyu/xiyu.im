@@ -38,7 +38,7 @@ export async function getStaticProps({ locale }) {
   )
   delete props.allPages
 
-  const postsSortByDate = Object.create(props.posts)
+  const postsSortByDate = [...(props.posts || [])]
 
   postsSortByDate.sort((a, b) => {
     return b?.publishDate - a?.publishDate
