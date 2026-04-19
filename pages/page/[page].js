@@ -38,9 +38,13 @@ export async function getStaticProps({ params: { page }, locale }) {
     props?.NOTION_CONFIG
   )
 
-  const allPosts = allPages?.filter(
-    page => page.type === 'Post' && page.status === 'Published'
-  )
+  const allPosts = allPages
+    ?.filter(page => page.type === 'Post' && page.status === 'Published')
+    ?.sort((a, b) => {
+      const dateA = new Date(a?.publishDate || 0).getTime()
+      const dateB = new Date(b?.publishDate || 0).getTime()
+      return dateB - dateA
+    })
   const POSTS_PER_PAGE = siteConfig('POSTS_PER_PAGE', 12, props?.NOTION_CONFIG)
   // 处理分页
   props.posts = allPosts.slice(
@@ -56,7 +60,14 @@ export async function getStaticProps({ params: { page }, locale }) {
       if (post.password && post.password !== '') {
         continue
       }
-      post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+      try {
+        post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+      } catch (error) {
+        console.warn(
+          `[page-${page}:getStaticProps] getPostBlocks failed for post ${post?.id}:`,
+          error
+        )
+      }
     }
   }
 
