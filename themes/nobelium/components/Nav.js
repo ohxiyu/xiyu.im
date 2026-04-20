@@ -47,7 +47,7 @@ const Nav = props => {
       <div className='observer-element h-4 md:h-12' ref={sentinalRef}></div>
       <div
         className={`sticky-nav m-auto w-full h-6 flex flex-row justify-between items-center mb-2 md:mb-12 py-8 bg-opacity-60 ${
-          !fullWidth ? 'max-w-3xl px-4' : 'px-4 md:px-24'
+          !fullWidth ? 'max-w-5xl px-4' : 'px-4 md:px-24'
         }`}
         id='sticky-nav'
         ref={navRef}>
@@ -67,16 +67,9 @@ const Nav = props => {
               )}
             </div>
           </SmartLink>
-          {post ? (
-            <p className='ml-2 max-h-12 line-clamp-2 overflow-ellipsis font-medium text-gray-800 dark:text-gray-300 header-name'>
-              {post?.title}
-            </p>
-          ) : (
-            <p className='logo line-clamp-1 overflow-ellipsis ml-2 font-medium text-gray-800 dark:text-gray-300 header-name whitespace-nowrap'>
-              {siteConfig('TITLE')}
-              {/* ,{' '}<span className="font-normal">{siteConfig('DESCRIPTION')}</span> */}
-            </p>
-          )}
+          <p className='logo line-clamp-1 overflow-ellipsis ml-2 font-medium text-gray-800 dark:text-gray-300 header-name whitespace-nowrap'>
+            {siteConfig('TITLE')}
+          </p>
         </div>
         <NavBar {...props} />
       </div>
