@@ -12,8 +12,8 @@ export default function Header(props) {
   const { siteInfo } = props
 
   return (
-    <header className='text-center justify-between items-center px-6 bg-white h-80 dark:bg-black relative z-10'>
-      <div className='float-none inline-block py-12'>
+    <header className='text-center justify-between items-center px-6 bg-white min-h-64 md:min-h-72 dark:bg-black relative z-10'>
+      <div className='float-none inline-block py-8 md:py-12'>
         <SmartLink href='/'>
           {/* 可使用一张单图作为logo */}
           <div className='flex space-x-6 justify-center'>
@@ -22,8 +22,8 @@ export default function Header(props) {
                 priority={true}
                 src={siteInfo?.icon}
                 className='rounded-full'
-                width={100}
-                height={100}
+                width={88}
+                height={88}
                 alt={siteConfig('AUTHOR')}
               />
             </div>

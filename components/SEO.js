@@ -38,7 +38,7 @@ const SEO = props => {
         })
       }
     })
-  }, [])
+  }, [webFontUrl])
 
   // SEO关键词
   const KEYWORDS = siteConfig('KEYWORDS')
@@ -381,7 +381,7 @@ const getSEOMeta = (props, router, locale) => {
     default:
       return {
         title: post
-          ? `${post?.title} | ${siteInfo?.title}`
+          ? `${siteInfo?.title} | ${post?.title}`
           : `${siteInfo?.title} | loading`,
         description: post?.summary,
         type: post?.type,
