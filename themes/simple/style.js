@@ -7,11 +7,11 @@
 const Style = () => {
   return <style jsx global>{`
     
-  // 底色
+  /* 底色 */
   .dark body{
       background-color: black;
   }
-  // 文本不可选取
+  /* 文本不可选取 */
     .forbid-copy {
         user-select: none;
         -webkit-user-select: none;
@@ -21,12 +21,12 @@ const Style = () => {
 
   /* simple主题正文宽度（只在普通文章模式生效） */
   #theme-simple {
-    --notion-max-width: 860px;
+    --notion-max-width: 960px;
   }
 
   @media (min-width: 1536px) {
     #theme-simple {
-      --notion-max-width: 920px;
+      --notion-max-width: 1120px;
     }
   }
 
