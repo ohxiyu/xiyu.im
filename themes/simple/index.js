@@ -69,11 +69,44 @@ const LayoutBase = props => {
   const { children, slotTop } = props
   const { onLoading, fullWidth } = useGlobal()
   const searchModal = useRef(null)
+  const simpleLayoutStyle = {
+    '--simple-container-max-width': siteConfig(
+      'SIMPLE_CONTAINER_MAX_WIDTH',
+      '95vw',
+      CONFIG
+    ),
+    '--simple-container-max-width-2xl': siteConfig(
+      'SIMPLE_CONTAINER_MAX_WIDTH_2XL',
+      '1900px',
+      CONFIG
+    ),
+    '--simple-article-max-width': siteConfig(
+      'SIMPLE_ARTICLE_MAX_WIDTH',
+      '1200px',
+      CONFIG
+    ),
+    '--simple-article-max-width-2xl': siteConfig(
+      'SIMPLE_ARTICLE_MAX_WIDTH_2XL',
+      '1700px',
+      CONFIG
+    ),
+    '--simple-notion-max-width': siteConfig(
+      'SIMPLE_NOTION_MAX_WIDTH',
+      '960px',
+      CONFIG
+    ),
+    '--simple-notion-max-width-2xl': siteConfig(
+      'SIMPLE_NOTION_MAX_WIDTH_2XL',
+      '1120px',
+      CONFIG
+    )
+  }
 
   return (
     <ThemeGlobalSimple.Provider value={{ searchModal }}>
       <div
         id='theme-simple'
+        style={simpleLayoutStyle}
         className={`${siteConfig('FONT_STYLE')} min-h-screen flex flex-col dark:text-gray-300  bg-white dark:bg-black scroll-smooth`}>
         <Style />
 
@@ -91,7 +124,7 @@ const LayoutBase = props => {
           className={
             (JSON.parse(siteConfig('LAYOUT_SIDEBAR_REVERSE'))
               ? 'flex-row-reverse'
-              : '') + ' w-full flex-1 flex items-start max-w-[95vw] 2xl:max-w-[1900px] mx-auto px-4 xl:px-8 pt-12'
+              : '') + ' simple-main-container w-full flex-1 flex items-start mx-auto pt-12'
           }>
           <div id='container-inner ' className='w-full flex-grow min-h-fit'>
             <Transition
@@ -225,7 +258,7 @@ const LayoutSlug = props => {
       {lock && <ArticleLock validPassword={validPassword} />}
 
       {!lock && post && (
-        <div className={`px-2 ${fullWidth ? '' : 'xl:max-w-6xl 2xl:max-w-[1700px]'}`}>
+        <div className={`px-2 ${fullWidth ? '' : 'simple-article-container'}`}>
           {/* 文章信息 */}
           <ArticleInfo post={post} />
 
