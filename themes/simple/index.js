@@ -69,36 +69,37 @@ const LayoutBase = props => {
   const { children, slotTop } = props
   const { onLoading, fullWidth } = useGlobal()
   const searchModal = useRef(null)
+  const getWidthConfig = (key, fallback) => {
+    const value = siteConfig(key, fallback, CONFIG)
+    if (typeof value === 'number') {
+      return `${value}px`
+    }
+    return value || fallback
+  }
   const simpleLayoutStyle = {
-    '--simple-container-max-width': siteConfig(
+    '--simple-container-max-width': getWidthConfig(
       'SIMPLE_CONTAINER_MAX_WIDTH',
-      '95vw',
-      CONFIG
+      '95vw'
     ),
-    '--simple-container-max-width-2xl': siteConfig(
+    '--simple-container-max-width-2xl': getWidthConfig(
       'SIMPLE_CONTAINER_MAX_WIDTH_2XL',
-      '1900px',
-      CONFIG
+      '1900px'
     ),
-    '--simple-article-max-width': siteConfig(
+    '--simple-article-max-width': getWidthConfig(
       'SIMPLE_ARTICLE_MAX_WIDTH',
-      '1200px',
-      CONFIG
+      '1200px'
     ),
-    '--simple-article-max-width-2xl': siteConfig(
+    '--simple-article-max-width-2xl': getWidthConfig(
       'SIMPLE_ARTICLE_MAX_WIDTH_2XL',
-      '1700px',
-      CONFIG
+      '1700px'
     ),
-    '--simple-notion-max-width': siteConfig(
+    '--simple-notion-max-width': getWidthConfig(
       'SIMPLE_NOTION_MAX_WIDTH',
-      '960px',
-      CONFIG
+      '960px'
     ),
-    '--simple-notion-max-width-2xl': siteConfig(
+    '--simple-notion-max-width-2xl': getWidthConfig(
       'SIMPLE_NOTION_MAX_WIDTH_2XL',
-      '1120px',
-      CONFIG
+      '1120px'
     )
   }
 
