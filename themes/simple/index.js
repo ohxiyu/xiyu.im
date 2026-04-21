@@ -91,7 +91,7 @@ const LayoutBase = props => {
           className={
             (JSON.parse(siteConfig('LAYOUT_SIDEBAR_REVERSE'))
               ? 'flex-row-reverse'
-              : '') + ' w-full flex-1 flex items-start max-w-9/10 mx-auto pt-12'
+              : '') + ' w-full flex-1 flex items-start max-w-screen-2xl mx-auto px-4 xl:px-6 pt-12'
           }>
           <div id='container-inner ' className='w-full flex-grow min-h-fit'>
             <Transition
@@ -225,7 +225,7 @@ const LayoutSlug = props => {
       {lock && <ArticleLock validPassword={validPassword} />}
 
       {!lock && post && (
-        <div className={`px-2  ${fullWidth ? '' : 'xl:max-w-4xl 2xl:max-w-6xl'}`}>
+        <div className={`px-2 ${fullWidth ? '' : 'xl:max-w-5xl 2xl:max-w-7xl'}`}>
           {/* 文章信息 */}
           <ArticleInfo post={post} />
 

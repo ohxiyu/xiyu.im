@@ -18,6 +18,18 @@ const Style = () => {
         -ms-user-select: none;
     }
   
+
+  /* simple主题正文宽度（只在普通文章模式生效） */
+  #theme-simple {
+    --notion-max-width: 860px;
+  }
+
+  @media (min-width: 1536px) {
+    #theme-simple {
+      --notion-max-width: 920px;
+    }
+  }
+
   #theme-simple #announcement-content {
     /* background-color: #f6f6f6; */
   }
