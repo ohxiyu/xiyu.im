@@ -7,8 +7,8 @@ const AISummary = ({ aiSummary }) => {
   const [summary, setSummary] = useState(aiSummary)
 
   useEffect(() => {
-    showAiSummaryAnimation(aiSummary, setSummary)
-  }, [])
+    return showAiSummaryAnimation(aiSummary, setSummary)
+  }, [aiSummary])
 
   return (
     aiSummary && (
@@ -45,13 +45,17 @@ const AISummary = ({ aiSummary }) => {
 }
 
 const showAiSummaryAnimation = (rawSummary, setSummary) => {
-  if (!rawSummary) return
+  if (!rawSummary) return undefined
   let currentIndex = 0
   const typingDelay = 20
   const punctuationDelayMultiplier = 6
   let animationRunning = true
+  let cancelled = false
+  let rafId = 0
+  let timerId = 0
   let lastUpdateTime = performance.now()
   const animate = () => {
+    if (cancelled) return
     if (currentIndex < rawSummary.length && animationRunning) {
       const currentTime = performance.now()
       const timeDiff = currentTime - lastUpdateTime
@@ -74,24 +78,31 @@ const showAiSummaryAnimation = (rawSummary, setSummary) => {
           observer.disconnect()
         }
       }
-      requestAnimationFrame(animate)
+      rafId = requestAnimationFrame(animate)
     }
   }
-  animate(rawSummary)
+  rafId = requestAnimationFrame(animate)
   const observer = new IntersectionObserver(
     entries => {
       animationRunning = entries[0].isIntersecting
       if (animationRunning && currentIndex === 0) {
-        setTimeout(() => {
-          requestAnimationFrame(animate)
+        timerId = setTimeout(() => {
+          rafId = requestAnimationFrame(animate)
         }, 200)
       }
     },
     { threshold: 0 }
   )
-  let post_ai = document.querySelector('.post-ai')
+  const post_ai = document.querySelector('.post-ai')
   if (post_ai) {
     observer.observe(post_ai)
+  }
+
+  return () => {
+    cancelled = true
+    cancelAnimationFrame(rafId)
+    clearTimeout(timerId)
+    observer.disconnect()
   }
 }
 

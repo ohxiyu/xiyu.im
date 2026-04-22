@@ -1,11 +1,9 @@
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 /**
  * 白点鼠标跟随
- * @returns 
+ * @returns
  */
 const CursorDot = () => {
-    const router = useRouter();
     useEffect(() => {
         // 创建小白点元素
         const dot = document.createElement('div');
@@ -15,6 +13,8 @@ const CursorDot = () => {
         // 鼠标坐标和缓动目标坐标
         let mouse = { x: -100, y: -100 }; // 初始位置在屏幕外
         let dotPos = { x: mouse.x, y: mouse.y };
+        let rafId = 0;
+        let timerId = 0;
 
         // 监听鼠标移动
         const handleMouseMove = (e) => {
@@ -31,12 +31,12 @@ const CursorDot = () => {
             dot.classList.remove('cursor-dot-hover'); // 移除放大样式
         };
 
-
+        let clickableElements = [];
         // 为所有可点击元素和包含 hover 或 group-hover 类名的元素添加事件监听
-        setTimeout(() => {
-            const clickableElements = document.querySelectorAll(
+        timerId = setTimeout(() => {
+            clickableElements = Array.from(document.querySelectorAll(
                 'a, button, [role="button"], [onclick], [cursor="pointer"], [class*="hover"], [class*="group-hover"], [class*="cursor-pointer"]'
-            );
+            ));
             clickableElements.forEach((el) => {
                 el.addEventListener('mouseenter', handleMouseEnter);
                 el.addEventListener('mouseleave', handleMouseLeave);
@@ -53,25 +53,24 @@ const CursorDot = () => {
             dot.style.left = `${dotPos.x}px`;
             dot.style.top = `${dotPos.y}px`;
 
-            requestAnimationFrame(updateDotPosition);
+            rafId = requestAnimationFrame(updateDotPosition);
         };
 
         // 启动动画
-        updateDotPosition();
+        rafId = requestAnimationFrame(updateDotPosition);
 
         // 清理函数
         return () => {
+            cancelAnimationFrame(rafId);
+            clearTimeout(timerId);
             document.removeEventListener('mousemove', handleMouseMove);
-            const clickableElements = document.querySelectorAll(
-                'a, button, [role="button"], [onclick], [cursor="pointer"], [class*="hover"], [class*="group-hover"], [class*="cursor-pointer"]'
-            );
             clickableElements.forEach((el) => {
                 el.removeEventListener('mouseenter', handleMouseEnter);
                 el.removeEventListener('mouseleave', handleMouseLeave);
             });
-            document.body.removeChild(dot);
+            if (dot.parentNode) dot.parentNode.removeChild(dot);
         };
-    }, [router]);
+    }, []);
 
     return (
         <style jsx global>{`

@@ -21,6 +21,7 @@ import { BlogListPage } from './components/BlogListPage'
 import { BlogListScroll } from './components/BlogListScroll'
 import Catalog from './components/Catalog'
 import { Footer } from './components/Footer'
+import Hero from './components/Hero'
 import JumpToTopButton from './components/JumpToTopButton'
 import Nav from './components/Nav'
 import SearchNavBar from './components/SearchNavBar'
@@ -65,7 +66,7 @@ const LayoutBase = props => {
         {/* 主区 */}
         <main
           id='out-wrapper'
-          className={`relative m-auto flex-grow w-full transition-all ${!fullWidth ? 'max-w-2xl px-4' : 'px-4 md:px-24'}`}>
+          className={`relative m-auto flex-grow w-full transition-all ${!fullWidth ? 'max-w-4xl px-4' : 'px-4 md:px-24'}`}>
           <Transition
             show={!onLoading}
             appear={true}
@@ -110,7 +111,17 @@ const LayoutBase = props => {
  * @returns
  */
 const LayoutIndex = props => {
-  return <LayoutPostList {...props} topSlot={<Announcement {...props} />} />
+  return (
+    <LayoutPostList
+      {...props}
+      topSlot={
+        <>
+          <Hero siteInfo={props.siteInfo} />
+          <Announcement {...props} />
+        </>
+      }
+    />
+  )
 }
 
 /**

@@ -8,14 +8,16 @@ import { loadExternalResource } from '@/lib/utils'
  */
 const Lenis = () => {
   const lenisRef = useRef(null) // 用于存储 Lenis 实例
+  const rafIdRef = useRef(0)
 
   useEffect(() => {
+    let cancelled = false
     // 异步加载
     async function loadLenis() {
       try {
         await loadExternalResource('/js/lenis.js', 'js')
 
-        // console.log('Lenis', window.Lenis)
+        if (cancelled) return
         if (!window.Lenis) {
           console.error('Lenis not loaded')
           return
@@ -35,21 +37,16 @@ const Lenis = () => {
           infinite: false
         })
 
-        // 存储实例到 ref
         lenisRef.current = lenis
 
-        // 监听滚动事件
-        // lenis.on('scroll', ({ scroll, limit, velocity, direction, progress }) => {
-        //   // console.log({ scroll, limit, velocity, direction, progress })
-        // })
-
-        // 动画帧循环
-        function raf(time) {
+        // 动画帧循环，保存 id 便于卸载时取消
+        const raf = time => {
+          if (cancelled) return
           lenis.raf(time)
-          requestAnimationFrame(raf)
+          rafIdRef.current = requestAnimationFrame(raf)
         }
 
-        requestAnimationFrame(raf)
+        rafIdRef.current = requestAnimationFrame(raf)
       } catch (error) {
         console.error('Failed to load Lenis:', error)
       }
@@ -58,11 +55,14 @@ const Lenis = () => {
     loadLenis()
 
     return () => {
-      // 在组件卸载时清理资源
+      cancelled = true
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current)
+        rafIdRef.current = 0
+      }
       if (lenisRef.current) {
-        lenisRef.current.destroy() // 销毁 Lenis 实例
+        lenisRef.current.destroy()
         lenisRef.current = null
-        // console.log('Lenis instance destroyed')
       }
     }
   }, [])

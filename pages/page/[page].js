@@ -53,22 +53,21 @@ export async function getStaticProps({ params: { page }, locale }) {
   )
   props.page = page
 
-  // 处理预览
+  // 处理预览（并行抓取以加速构建）
   if (siteConfig('POST_LIST_PREVIEW', false, props?.NOTION_CONFIG)) {
-    for (const i in props.posts) {
-      const post = props.posts[i]
-      if (post.password && post.password !== '') {
-        continue
-      }
-      try {
-        post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
-      } catch (error) {
-        console.warn(
-          `[page-${page}:getStaticProps] getPostBlocks failed for post ${post?.id}:`,
-          error
-        )
-      }
-    }
+    await Promise.all(
+      (props.posts || []).map(async post => {
+        if (post.password && post.password !== '') return
+        try {
+          post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+        } catch (error) {
+          console.warn(
+            `[page-${page}:getStaticProps] getPostBlocks failed for post ${post?.id}:`,
+            error
+          )
+        }
+      })
+    )
   }
 
   delete props.allPages

@@ -62,22 +62,19 @@ const Collapse = ({
   const expandSection = element => {
     const sectionHeight = element.scrollHeight
     const sectionWidth = element.scrollWidth
-    let clearTime = 0
     switch (type) {
       case 'horizontal':
         element.style.width = sectionWidth + 'px'
-        clearTime = setTimeout(() => {
+        setTimeout(() => {
           element.style.width = 'auto'
         }, 400)
         break
       case 'vertical':
         element.style.height = sectionHeight + 'px'
-        clearTime = setTimeout(() => {
+        setTimeout(() => {
           element.style.height = 'auto'
         }, 400)
     }
-
-    clearTimeout(clearTime)
   }
 
   useEffect(() => {

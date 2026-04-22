@@ -208,18 +208,19 @@ const nextConfig = {
         {
           source: '/:path*{/}?',
           headers: [
-            // 为了博客兼容性，不做过多安全限制
-            { key: 'Access-Control-Allow-Credentials', value: 'true' },
+            // CORS: 公开内容只读访问，不带 credentials；浏览器会忽略 Credentials:true + Origin:* 的组合，去掉避免误导
             { key: 'Access-Control-Allow-Origin', value: '*' },
-            {
-              key: 'Access-Control-Allow-Methods',
-              value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT'
-            },
+            { key: 'Access-Control-Allow-Methods', value: 'GET,OPTIONS' },
             {
               key: 'Access-Control-Allow-Headers',
               value:
                 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-            }
+            },
+            // 基础安全头
+            { key: 'X-Content-Type-Options', value: 'nosniff' },
+            { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+            { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+            { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' }
             // 安全头部 相关配置，谨慎开启
             //   { key: 'X-Frame-Options', value: 'DENY' },
             //   { key: 'X-Content-Type-Options', value: 'nosniff' },

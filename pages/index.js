@@ -49,22 +49,21 @@ export async function getStaticProps(req) {
     )
   }
 
-  // 预览文章内容
+  // 预览文章内容（并行抓取以加速构建）
   if (siteConfig('POST_LIST_PREVIEW', false, props?.NOTION_CONFIG)) {
-    for (const i in props.posts) {
-      const post = props.posts[i]
-      if (post.password && post.password !== '') {
-        continue
-      }
-      try {
-        post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
-      } catch (error) {
-        console.warn(
-          `[index:getStaticProps] getPostBlocks failed for post ${post?.id}:`,
-          error
-        )
-      }
-    }
+    await Promise.all(
+      (props.posts || []).map(async post => {
+        if (post.password && post.password !== '') return
+        try {
+          post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+        } catch (error) {
+          console.warn(
+            `[index:getStaticProps] getPostBlocks failed for post ${post?.id}:`,
+            error
+          )
+        }
+      })
+    )
   }
 
   // 非关键副作用任务（失败不应阻塞首页渲染，避免ISR失败后首页长期停留旧内容）
