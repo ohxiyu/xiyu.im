@@ -23,31 +23,30 @@ const Nav = props => {
   )
 
   const navRef = useRef(null)
-  const sentinalRef = useRef([])
-  const handler = ([entry]) => {
-    if (navRef && navRef.current && autoCollapseNavBar) {
-      if (!entry?.isIntersecting) {
-        navRef.current?.classList.add('sticky-nav-full')
-      } else {
-        navRef.current?.classList.remove('sticky-nav-full')
-      }
-    } else {
-      navRef.current?.classList.add('remove-sticky')
-    }
-  }
+  const sentinalRef = useRef(null)
   useEffect(() => {
-    const obvserver = new window.IntersectionObserver(handler)
-    obvserver.observe(sentinalRef.current)
-    return () => {
-      if (sentinalRef.current) obvserver.unobserve(sentinalRef.current)
+    const handler = ([entry]) => {
+      if (navRef.current && autoCollapseNavBar) {
+        if (!entry?.isIntersecting) {
+          navRef.current.classList.add('sticky-nav-full')
+        } else {
+          navRef.current.classList.remove('sticky-nav-full')
+        }
+      } else {
+        navRef.current?.classList.add('remove-sticky')
+      }
     }
-  }, [sentinalRef])
+    const observer = new window.IntersectionObserver(handler)
+    const node = sentinalRef.current
+    if (node) observer.observe(node)
+    return () => observer.disconnect()
+  }, [autoCollapseNavBar])
   return (
     <>
       <div className='observer-element h-4 md:h-12' ref={sentinalRef}></div>
       <div
         className={`sticky-nav m-auto w-full h-6 flex flex-row justify-between items-center mb-2 md:mb-12 py-8 bg-opacity-60 ${
-          !fullWidth ? 'max-w-5xl px-4' : 'px-4 md:px-24'
+          !fullWidth ? 'max-w-4xl px-4' : 'px-4 md:px-24'
         }`}
         id='sticky-nav'
         ref={navRef}>
