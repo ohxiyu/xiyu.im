@@ -21,6 +21,7 @@ import { BlogListPage } from './components/BlogListPage'
 import { BlogListScroll } from './components/BlogListScroll'
 import Catalog from './components/Catalog'
 import { Footer } from './components/Footer'
+import Hero from './components/Hero'
 import JumpToTopButton from './components/JumpToTopButton'
 import Nav from './components/Nav'
 import SearchNavBar from './components/SearchNavBar'
@@ -110,7 +111,17 @@ const LayoutBase = props => {
  * @returns
  */
 const LayoutIndex = props => {
-  return <LayoutPostList {...props} topSlot={<Announcement {...props} />} />
+  return (
+    <LayoutPostList
+      {...props}
+      topSlot={
+        <>
+          <Hero siteInfo={props.siteInfo} />
+          <Announcement {...props} />
+        </>
+      }
+    />
+  )
 }
 
 /**
