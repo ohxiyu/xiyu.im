@@ -7,17 +7,58 @@
 const Style = () => {
   return <style jsx global>{`
     
-  // 底色
+  /* 底色 */
   .dark body{
       background-color: black;
   }
-  // 文本不可选取
+  /* 文本不可选取 */
     .forbid-copy {
         user-select: none;
         -webkit-user-select: none;
         -ms-user-select: none;
     }
   
+
+  /* simple主题正文宽度（支持Notion配置覆盖） */
+  #theme-simple {
+    --notion-max-width: var(--simple-notion-max-width, 960px);
+  }
+
+  @media (min-width: 1536px) {
+    #theme-simple {
+      --notion-max-width: var(--simple-notion-max-width-2xl, 1120px);
+    }
+  }
+
+  #theme-simple .simple-main-container {
+    max-width: var(--simple-container-max-width, 95vw);
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #theme-simple .simple-article-container {
+    max-width: var(--simple-article-max-width, 1200px);
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (min-width: 1280px) {
+    #theme-simple .simple-main-container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    #theme-simple .simple-main-container {
+      max-width: var(--simple-container-max-width-2xl, 1900px);
+    }
+    #theme-simple .simple-article-container {
+      max-width: var(--simple-article-max-width-2xl, 1700px);
+    }
+  }
+
   #theme-simple #announcement-content {
     /* background-color: #f6f6f6; */
   }
