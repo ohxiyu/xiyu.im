@@ -1,7 +1,7 @@
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import throttle from 'lodash.throttle'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BlogItem } from './BlogItem'
 
 /**
@@ -16,23 +16,23 @@ export default function BlogListScroll(props) {
   const POSTS_PER_PAGE = siteConfig('POSTS_PER_PAGE', null, NOTION_CONFIG)
   let hasMore = false
   const postsToShow = posts
-    ? Object.assign(posts).slice(0, POSTS_PER_PAGE * page)
+    ? posts.slice(0, POSTS_PER_PAGE * page)
     : []
 
   if (posts) {
     const totalCount = posts.length
     hasMore = page * POSTS_PER_PAGE < totalCount
   }
-  const handleGetMore = () => {
+  const handleGetMore = useCallback(() => {
     if (!hasMore) return
-    updatePage(page + 1)
-  }
+    updatePage(prev => prev + 1)
+  }, [hasMore])
 
   const targetRef = useRef(null)
 
   // 监听滚动自动分页加载
-  const scrollTrigger = useCallback(
-    throttle(() => {
+  const scrollTrigger = useMemo(
+    () => throttle(() => {
       const scrollS = window.scrollY + window.outerHeight
       const clientHeight = targetRef
         ? targetRef.current
@@ -42,7 +42,8 @@ export default function BlogListScroll(props) {
       if (scrollS > clientHeight + 100) {
         handleGetMore()
       }
-    }, 500)
+    }, 500),
+    [handleGetMore]
   )
 
   useEffect(() => {
@@ -50,8 +51,9 @@ export default function BlogListScroll(props) {
 
     return () => {
       window.removeEventListener('scroll', scrollTrigger)
+      scrollTrigger.cancel?.()
     }
-  })
+  }, [scrollTrigger])
 
   return (
     <div id='posts-wrapper' className='w-full md:pr-8 mb-12' ref={targetRef}>

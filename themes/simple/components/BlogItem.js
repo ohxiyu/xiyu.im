@@ -18,25 +18,25 @@ export const BlogItem = props => {
   return (
     <div
       key={post.id}
-      className='h-42 my-6 pb-12 border-b dark:border-gray-800'>
+      className='my-6 pb-12 border-b dark:border-gray-800'>
       {/* 文章标题 */}
 
-      <div className='flex'>
+      <div className='flex flex-col md:flex-row'>
         <div className='article-cover h-full'>
           {/* 图片封面 */}
           {showPageCover && (
-            <div className='overflow-hidden mr-2 w-56 h-full'>
+            <div className='overflow-hidden mb-4 md:mb-0 md:mr-4 w-full md:w-56 h-full'>
               <SmartLink href={post.href} passHref legacyBehavior>
                 <LazyImage
                   src={post?.pageCoverThumbnail}
-                  className='w-56 h-full object-cover object-center group-hover:scale-110 duration-500'
+                  className='w-full md:w-56 h-44 md:h-full object-cover object-center group-hover:scale-110 duration-500'
                 />
               </SmartLink>
             </div>
           )}
         </div>
 
-        <article className='article-info'>
+        <article className='article-info flex-1 min-w-0'>
           <h2 className='mb-2'>
             <SmartLink
               href={post.href}

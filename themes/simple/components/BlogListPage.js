@@ -14,7 +14,7 @@ import { BlogItem } from './BlogItem'
 export default function BlogListPage(props) {
   const { page = 1, posts, postCount } = props
   const router = useRouter()
-  const { NOTION_CONFIG } = useGlobal()
+  const { NOTION_CONFIG, locale } = useGlobal()
   const POSTS_PER_PAGE = siteConfig('POSTS_PER_PAGE', null, NOTION_CONFIG)
   const totalPage = Math.ceil(postCount / POSTS_PER_PAGE)
   const currentPage = +page
@@ -57,16 +57,21 @@ export default function BlogListPage(props) {
                 : `${pagePrefix}/page/${currentPage - 1}`,
             query: router.query.s ? { s: router.query.s } : {}
           }}
-          className={`${showPrev ? 'text-blue-600 border-b border-blue-400 visible ' : ' invisible bg-gray pointer-events-none '} no-underline pb-1 px-3`}>
-          NEWER POSTS <i className='fa-solid fa-arrow-left'></i>
+          aria-disabled={!showPrev}
+          className={`${showPrev ? 'text-blue-600 border-b border-blue-400 visible opacity-100' : 'invisible bg-gray pointer-events-none opacity-50'} no-underline pb-1 px-3`}>
+          {locale.COMMON.PREV} <i className='fa-solid fa-arrow-left'></i>
         </SmartLink>
+        <span className='text-gray-500 dark:text-gray-400 leading-6'>
+          {currentPage} / {totalPage || 1}
+        </span>
         <SmartLink
           href={{
             pathname: `${pagePrefix}/page/${currentPage + 1}`,
             query: router.query.s ? { s: router.query.s } : {}
           }}
-          className={`${showNext ? 'text-blue-600 border-b border-blue-400 visible' : ' invisible bg-gray pointer-events-none '} no-underline pb-1 px-3`}>
-          OLDER POSTS <i className='fa-solid fa-arrow-right'></i>
+          aria-disabled={!showNext}
+          className={`${showNext ? 'text-blue-600 border-b border-blue-400 visible opacity-100' : 'invisible bg-gray pointer-events-none opacity-50'} no-underline pb-1 px-3`}>
+          {locale.COMMON.NEXT} <i className='fa-solid fa-arrow-right'></i>
         </SmartLink>
       </div>
     </div>
