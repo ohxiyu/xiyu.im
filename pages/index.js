@@ -47,13 +47,12 @@ export async function getStaticProps(req) {
 
   // 预览文章内容
   if (siteConfig('POST_LIST_PREVIEW', false, props?.NOTION_CONFIG)) {
-    for (const i in props.posts) {
-      const post = props.posts[i]
-      if (post.password && post.password !== '') {
-        continue
-      }
-      post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
-    }
+    await Promise.all(
+      (props.posts || []).map(async post => {
+        if (post.password && post.password !== '') return
+        post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+      })
+    )
   }
 
   // 生成robotTxt
