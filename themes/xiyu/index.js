@@ -20,6 +20,7 @@ import PrevNext from './components/PrevNext'
 import ArchiveYear from './components/ArchiveYear'
 import AboutHero from './components/AboutHero'
 import AboutFacts from './components/AboutFacts'
+import Elsewhere from './components/Elsewhere'
 import Topics from './components/Topics'
 import Colophon from './components/Colophon'
 
@@ -359,6 +360,7 @@ const LayoutPage = props => {
           <NotionPage post={post} />
         </div>
         <AboutFacts postCount={postCount} />
+        <Elsewhere />
         <Topics tagOptions={tagOptions} />
         <Colophon />
       </>
