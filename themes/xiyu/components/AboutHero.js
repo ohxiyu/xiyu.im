@@ -1,10 +1,12 @@
 import { siteConfig } from '@/lib/config'
+import CONFIG from '../config'
 
 // 关于页 Hero：羽字肖像 + 大标题 + 一句话
 const AboutHero = () => {
   const author = siteConfig('AUTHOR') || 'xiyu'
   const lead = siteConfig('BIO') || '一个普通的干饭人，长期主义者。'
-  const glyph = (author || 'x')[0]
+  const glyph = siteConfig('XIYU_ABOUT_GLYPH', '羽', CONFIG)
+  const location = siteConfig('XIYU_ABOUT_LOCATION', 'Based in Shanghai · CN', CONFIG)
   return (
     <section className='about-hero'>
       <div>
@@ -19,7 +21,7 @@ const AboutHero = () => {
         </div>
         <div className='portrait-caption'>
           独立开发者 · 长期主义者<br />
-          Based in Shanghai · CN
+          {location}
         </div>
       </div>
     </section>

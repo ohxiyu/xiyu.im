@@ -41,6 +41,7 @@ const LayoutBase = props => {
     <ThemeGlobalXiyu.Provider value={{ searchModal }}>
       <div id='theme-xiyu'>
         <Style />
+        <div className='paper-grain' aria-hidden='true' />
         <div className='page'>
           <Nav {...props} />
           <div style={{ opacity: onLoading ? 0.6 : 1, transition: 'opacity .2s' }}>

@@ -1191,6 +1191,99 @@ body.canvas-mode { overflow: hidden; }
   overflow: hidden;
 }
 .page-frame .page { padding-top: 40px; padding-bottom: 56px; }
+
+/* ===== NotionPage 渲染兼容层：让 Notion 输出也能继承 xiyu 正文观感 ===== */
+.article-body .notion { color: inherit; }
+.article-body .notion-text { margin: 0 0 20px; line-height: 1.85; text-wrap: pretty; }
+.article-body .notion-h,
+.article-body .notion-h1,
+.article-body .notion-h2,
+.article-body .notion-h3 {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.article-body .notion-h1 { font-size: 30px; margin: 64px 0 22px; }
+.article-body .notion-h2 { font-size: 26px; margin: 56px 0 20px; }
+.article-body .notion-h3 { font-size: 19px; margin: 40px 0 14px; }
+.article-body .notion-quote {
+  margin: 28px 0;
+  padding: 4px 0 4px 22px;
+  border-left: 2px solid var(--rule);
+  color: var(--ink-mute);
+  font-style: italic;
+}
+.article-body .notion-inline-code,
+.article-body .notion-code-inline {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.88em;
+  background: var(--tag-bg);
+  color: var(--ink);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.article-body .notion-code {
+  background: var(--bg-elev);
+  border: 1px solid var(--rule);
+  padding: 20px 24px;
+  margin: 28px 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.article-body .notion-callout {
+  border: 1px solid var(--rule);
+  background: var(--bg-elev);
+  padding: 20px 24px;
+  margin: 28px 0;
+  position: relative;
+}
+.article-body .notion-callout::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+}
+.article-body .notion-hr,
+.article-body hr {
+  border: 0;
+  height: 1px;
+  background: var(--rule);
+  margin: 48px 0;
+}
+.article-body .notion-link {
+  color: var(--ink);
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+  text-decoration: none;
+  transition: color .15s;
+}
+.article-body .notion-link:hover { color: var(--accent-ink); }
+.article-body .notion-asset-wrapper figcaption,
+.article-body figcaption {
+  font-size: 13px;
+  color: var(--ink-mute);
+  margin-top: 10px;
+  text-align: center;
+  font-family: "JetBrains Mono", monospace;
+}
+/* 首字下沉：针对 NotionPage 输出的第一个 notion-text */
+.article-body .notion-page-content > .notion-text:first-of-type::first-letter,
+.article-body .notion > .notion-text:first-of-type::first-letter {
+  font-family: "Noto Serif SC", serif;
+  font-size: 3.2em;
+  float: left;
+  line-height: 0.95;
+  padding: 6px 10px 0 0;
+  color: var(--accent-ink);
+  font-weight: 500;
+}
 `}</style>
 )
 

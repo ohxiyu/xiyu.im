@@ -1,18 +1,19 @@
 const CONFIG = {
-  NOBELIUM_NAV_NOTION_ICON: true, // 是否读取Notion图标作为站点头像 ; 否则默认显示黑色SVG方块
+  // —— 首页 Hero 区配置 ——
+  XIYU_BITCOIN_YEARS: 7, // Hero 第三个数字 "Long BTC" 显示的年数
 
-  // 特殊菜单
-  NOBELIUM_MENU_RANDOM_POST: true, // 是否显示随机跳转文章按钮
-  NOBELIUM_MENU_SEARCH_BUTTON: true, // 是否显示搜索按钮，该按钮支持Algolia搜索
-  NOBELIUM_MENU_DARKMODE_BUTTON: true, // 菜单显示深色模式切换
+  // —— 关于页 ——
+  XIYU_ABOUT_GLYPH: '羽', // 关于页肖像区的大字（原设计稿是"羽"）
+  XIYU_ABOUT_LOCATION: 'Based in Shanghai · CN', // 肖像下方 caption 第二行
 
-  // 默认菜单配置 （开启自定义菜单后，以下配置则失效，请在Notion中自行配置菜单）
-  NOBELIUM_MENU_CATEGORY: false, // 显示分类
-  NOBELIUM_MENU_TAG: true, // 显示标签
-  NOBELIUM_MENU_ARCHIVE: false, // 显示归档
-  NOBELIUM_MENU_SEARCH: true, // 显示搜索
-  NOBELIUM_MENU_RSS: false, // 显示订阅
+  // —— 页脚 ——
+  XIYU_FOOT_QUOTE: '长期主义 · 记录思考', // 页脚副文案
 
-  NOBELIUM_AUTO_COLLAPSE_NAV_BAR: true // 页头导航栏动画
+  // —— 导航栏 ——
+  XIYU_NAV_TWITTER: '', // Twitter 链接，空则隐藏（也可通过 NEXT_PUBLIC_CONTACT_TWITTER 提供）
+  XIYU_NAV_TAGLINE: 'long · bitcoin', // brand 旁的等宽副标
+
+  // —— Now 卡 ——
+  XIYU_NOW_SLUG: 'now' // 首页 Now 卡引用的 Notion page slug，读不到时 fallback 到最新文章 summary
 }
 export default CONFIG
