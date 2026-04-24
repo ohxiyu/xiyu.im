@@ -3,7 +3,7 @@ const CONFIG = {
   XIYU_BITCOIN_YEARS: 7, // Hero 第三个数字 "Long BTC" 显示的年数
 
   // —— 关于页 ——
-  XIYU_ABOUT_GLYPH: '羽', // 关于页肖像区的大字（原设计稿是"羽"）
+  XIYU_ABOUT_GLYPH: '₿', // 关于页肖像区的大字（原设计稿是"羽"）
   XIYU_ABOUT_LOCATION: 'Based in anywhere', // 肖像下方 caption 第二行
 
   // —— 页脚 ——
