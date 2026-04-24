@@ -4,7 +4,7 @@ const CONFIG = {
 
   // —— 关于页 ——
   XIYU_ABOUT_GLYPH: '羽', // 关于页肖像区的大字（原设计稿是"羽"）
-  XIYU_ABOUT_LOCATION: 'Based in Shanghai · CN', // 肖像下方 caption 第二行
+  XIYU_ABOUT_LOCATION: 'Based in anywhere', // 肖像下方 caption 第二行
 
   // —— 页脚 ——
   XIYU_FOOT_QUOTE: '长期主义 · 记录思考', // 页脚副文案

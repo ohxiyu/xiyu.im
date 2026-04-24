@@ -1,5 +1,6 @@
 import SmartLink from '@/components/SmartLink'
 import { siteConfig } from '@/lib/config'
+import { useGlobal } from '@/lib/global'
 import { useRouter } from 'next/router'
 import ThemeToggle from './ThemeToggle'
 import CONFIG from '../config'
@@ -7,6 +8,7 @@ import CONFIG from '../config'
 // xiyu 主题顶部导航（对应 .design/source/shared.jsx 的 SiteNav）
 const Nav = props => {
   const router = useRouter()
+  const { isDarkMode } = useGlobal() || {}
   const path = router?.asPath || '/'
   const active = path.startsWith('/archive')
     ? 'archive'
@@ -20,7 +22,9 @@ const Nav = props => {
     siteConfig('CONTACT_TWITTER') ||
     siteConfig('XIYU_NAV_TWITTER', '', CONFIG)
 
-  const logo = siteConfig('BLOG_LOGO') || '/images/logo/logo-mark.svg'
+  const lightLogo = siteConfig('BLOG_LOGO') || '/images/logo/logo-mark.svg'
+  const darkLogo = siteConfig('BLOG_LOGO_DARK') || '/images/logo/logo-mark-dark.svg'
+  const logo = isDarkMode ? darkLogo : lightLogo
   const author = siteConfig('AUTHOR') || 'xiyu'
 
   return (
