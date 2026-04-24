@@ -35,7 +35,7 @@ const BlogPost = ({ post, totalCount, index = 0 }) => {
             {post.title}
           </SmartLink>
         </h3>
-        {post.summary && <p className='post-excerpt row-excerpt'>{post.summary}</p>}
+        <p className='post-excerpt row-excerpt'>{post.summary || ''}</p>
         <div className='row-tags'>
           {tags.map((t, i) => (
             <span key={t}>
