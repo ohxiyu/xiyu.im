@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>xiyu · logo</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#0f0d0a;
+    --yellow:#ffc828;
+    --paper:#faf7f2;
+    --orange:#e67e22;
+    --mute:#6b6358;
+    --rule:#e8e1d3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#ece7dd;font-family:"Noto Sans SC",-apple-system,system-ui,sans-serif;color:var(--ink);padding:56px 48px 96px}
+  .wrap{max-width:1280px;margin:0 auto}
+  h1{font-family:"Noto Serif SC",serif;font-size:40px;font-weight:500;letter-spacing:-.02em;margin:0 0 8px}
+  .sub{color:var(--mute);font-size:15px;margin:0 0 48px;max-width:60ch;line-height:1.7}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+  .eyebrow::before{content:"";width:18px;height:1px;background:var(--orange)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-bottom:56px}
+  .card{background:var(--paper);border:1px solid var(--rule);overflow:hidden;display:flex;flex-direction:column}
+  .stage{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;position:relative;padding:28px}
+  .stage.yellow{background:var(--yellow)}
+  .stage.paper{background:var(--paper)}
+  .stage.ink{background:var(--ink)}
+  .stage.checker{background:var(--paper);background-image:linear-gradient(45deg,#f0ead e 25%,transparent 25%),linear-gradient(-45deg,#f0eade 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#f0eade 75%),linear-gradient(-45deg,transparent 75%,#f0eade 75%);background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0px}
+  .label{padding:16px 20px;border-top:1px solid var(--rule);font-size:13px;display:flex;justify-content:space-between;align-items:baseline}
+  .label .n{font-family:"JetBrains Mono",monospace;color:var(--mute);font-size:11px;letter-spacing:.06em}
+  .label .ttl{font-family:"Noto Serif SC",serif;font-size:15px;font-weight:500}
+  .label .desc{color:var(--mute);font-size:12px;display:block;margin-top:4px;font-family:"Noto Sans SC",sans-serif}
+
+  .section{margin-bottom:64px}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--rule);padding-bottom:16px;margin-bottom:28px}
+  .section-head h2{font-family:"Noto Serif SC",serif;font-weight:500;font-size:22px;margin:0}
+  .section-head .meta{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute);letter-spacing:.08em}
+
+  /* Favicon row */
+  .fav-row{display:flex;gap:24px;align-items:center;padding:32px;background:var(--paper);border:1px solid var(--rule)}
+  .fav{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .fav .chip{background:var(--yellow);padding:8px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+  .fav .cap{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--mute);letter-spacing:.06em}
+
+  /* Nav bar sim */
+  .navbar-sim{background:var(--paper);border:1px solid var(--rule);padding:24px 40px;display:flex;align-items:center;justify-content:space-between}
+  .navlinks{display:flex;gap:24px;font-size:13px;color:#2d2720}
+  .navlinks a{color:inherit;text-decoration:none}
+
+  /* Business card */
+  .card-stage{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .bcard{aspect-ratio:1.68/1;padding:28px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+  .bcard.front{background:var(--yellow);color:var(--ink)}
+  .bcard.back{background:var(--ink);color:var(--yellow)}
+  .bcard .bc-meta{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+  .bcard .bc-name{font-family:"Noto Serif SC",serif;font-size:28px;font-weight:500;letter-spacing:-.01em}
+  .bcard .bc-hand{font-family:"JetBrains Mono",monospace;font-size:12px}
+
+  /* Usage swatches */
+  .app-chip{padding:14px 18px;background:var(--ink);color:var(--yellow);display:inline-flex;align-items:center;gap:10px;border-radius:10px}
+  .app-chip.light{background:var(--paper);color:var(--ink);border:1px solid var(--rule)}
+
+  .lockup{display:flex;align-items:center;gap:14px}
+  .word{font-family:"Noto Serif SC",serif;font-size:32px;font-weight:500;letter-spacing:-.01em;display:flex;align-items:baseline;gap:6px}
+  .word .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);display:inline-block;transform:translateY(-4px)}
+  .tagline{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;border-left:1px solid var(--rule);padding-left:14px;line-height:1.4}
+
+  .notes{background:var(--paper);border:1px solid var(--rule);padding:28px 32px;font-size:14px;line-height:1.75;color:#2d2720;max-width:80ch}
+  .notes ul{padding-left:20px;margin:10px 0}
+  .notes li{margin:6px 0}
+  .notes strong{color:var(--ink)}
+  code{font-family:"JetBrains Mono",monospace;font-size:.88em;background:#f0eade;padding:2px 6px;border-radius:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">xiyu · identity system · v1</div>
+  <h1>logo 探索</h1>
+  <p class="sub">以头像为原点：<strong>发髻 + 圆框眼镜 + 胡须</strong> 是你最容易被识别出来的三个特征。下面按"从具象到抽象"排 6 个方向，再往下是标志牌、名片、favicon 的实际落地。</p>
+
+  <!-- ===== Primary marks ===== -->
+  <section class="section">
+    <div class="section-head"><h2>主标识 · 6 个方向</h2><span class="meta">1/ from portrait → mark</span></div>
+    <div class="grid">
+
+      <!-- 01 : full portrait line -->
+      <div class="card">
+        <div class="stage yellow">
+          <svg viewBox="0 0 200 200" width="180" height="180" aria-label="xiyu portrait mark">
+            <!-- bun -->
+            <ellipse cx="88" cy="38" rx="26" ry="22" fill="#0f0d0a"/>
+            <!-- headband -->
+            <rect x="70" y="56" width="36" height="6" rx="2" fill="#a8d8e8"/>
+            <!-- head -->
+            <path d="M62 70 Q60 66 66 64 L118 64 Q140 64 140 96 L140 130 Q140 145 125 150 L95 156 Q72 156 66 140 L62 130 Z" fill="#0f0d0a"/>
+            <!-- beard -->
+            <path d="M82 118 Q82 150 108 156 Q132 152 132 118 L132 110 Q120 122 108 122 Q94 122 82 110 Z" fill="#0f0d0a"/>
+            <!-- glasses: left lens hollow, right lens orange disc -->
+            <circle cx="94" cy="96" r="13" fill="none" stroke="#0f0d0a" stroke-width="3.5"/>
+            <circle cx="124" cy="96" r="13" fill="#ffc828" stroke="#0f0d0a" stroke-width="3.5"/>
+            <line x1="107" y1="96" x2="111" y2="96" stroke="#0f0d0a" stroke-width="3"/>
+            <circle cx="124" cy="96" r="3" fill="#0f0d0a"/>
+          </svg>
+        </div>
+        <div class="label">
+          <div><div class="ttl">01 · Portrait</div><div class="desc">头像最忠实的简化版</div></div>
+          <div class="n">Hi-fidelity</div>
+        </div>
+      </div>
+
+      <!-- 02 : bun + glasses only (signature silhouette) -->
+      <div class="card">
+        <div class="stage yellow">
+          <svg viewBox="0 0 200 200" width="180" height="180" aria-label="xiyu bun glasses mark">
+            <!-- bun -->
+            <ellipse cx="100" cy="50" rx="30" ry="26" fill="#0f0d0a"/>
+            <!-- tie -->
+            <rect x="80" y="68" width="40" height="7" rx="2" fill="#a8d8e8"/>
+            <!-- glasses bar + two lenses -->
+            <circle cx="78" cy="128" r="22" fill="none" stroke="#0f0d0a" stroke-width="6"/>
+            <circle cx="122" cy="128" r="22" fill="#0f0d0a"/>
+            <circle cx="122" cy="128" r="6" fill="#ffc828"/>
+            <line x1="100" y1="128" x2="100" y2="128" stroke="#0f0d0a" stroke-width="6"/>
+            <path d="M96 128 L104 128" stroke="#0f0d0a" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="label">
+          <div><div class="ttl">02 · Signature</div><div class="desc">发髻 + 一黑一透眼镜</div></div>
+          <div class="n">★ 推荐</div>
+        </div>
+      </div>
+
+      <!-- 03 : "x" monogram built from glasses -->
+      <div class="card">
+        <div class="stage yellow">
+          <svg viewBox="0 0 200 200" width="180" height="180" aria-label="x monogram">
+            <!-- two circles forming the x loops -->
+            <circle cx="72" cy="100" r="38" fill="none" stroke="#0f0d0a" stroke-width="10"/>
+            <circle cx="128" cy="100" r="38" fill="#0f0d0a"/>
+            <!-- bridge crossing through = the 'x' diagonals suggestion -->
+            <line x1="106" y1="100" x2="94" y2="100" stroke="#0f0d0a" stroke-width="10" stroke-linecap="round"/>
+            <!-- pupil dot -->
+            <circle cx="128" cy="100" r="7" fill="#ffc828"/>
+            <!-- tiny bun above as dot of 'i' -->
+            <circle cx="100" cy="38" r="12" fill="#0f0d0a"/>
+          </svg>
+        </div>
+        <div class="label">
+          <div><div class="ttl">03 · x-monogram</div><div class="desc">眼镜即 "x"，发髻作 i 点</div></div>
+          <div class="n">Abstract</div>
+        </div>
+      </div>
+
+      <!-- 04 : geometric seal (circular, like a chop) -->
+      <div class="card">
+        <div class="stage paper">
+          <svg viewBox="0 0 200 200" width="180" height="180" aria-label="xiyu seal">
+            <circle cx="100" cy="100" r="78" fill="none" stroke="#0f0d0a" stroke-width="2.5"/>
+            <circle cx="100" cy="100" r="70" fill="none" stroke="#0f0d0a" stroke-width="1"/>
+            <!-- glasses inside -->
+            <circle cx="82" cy="102" r="16" fill="none" stroke="#0f0d0a" stroke-width="4"/>
+            <circle cx="118" cy="102" r="16" fill="#0f0d0a"/>
+            <line x1="98" y1="102" x2="102" y2="102" stroke="#0f0d0a" stroke-width="4"/>
+            <circle cx="118" cy="102" r="5" fill="#ffc828"/>
+            <!-- top arc text simulated by glyph -->
+            <text x="100" y="56" text-anchor="middle" font-family="Noto Serif SC" font-size="14" font-weight="600" fill="#0f0d0a" letter-spacing="4">xiyu</text>
+            <text x="100" y="158" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#0f0d0a" letter-spacing="3">LONG · BITCOIN</text>
+          </svg>
+        </div>
+        <div class="label">
+          <div><div class="ttl">04 · Seal</div><div class="desc">印章式，适合内文章节收尾</div></div>
+          <div class="n">Editorial</div>
+        </div>
+      </div>
+
+      <!-- 05 : asymmetric eye — the portrait's defining beat -->
+      <div class="card">
+        <div class="stage ink">
+          <svg viewBox="0 0 200 200" width="180" height="180" aria-label="asymmetric eye">
+            <circle cx="70" cy="100" r="32" fill="none" stroke="#ffc828" stroke-width="7"/>
+            <circle cx="130" cy="100" r="32" fill="#ffc828"/>
+            <circle cx="130" cy="100" r="9" fill="#0f0d0a"/>
+            <path d="M102 100 L98 100" stroke="#ffc828" stroke-width="7" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="label">
+          <div><div class="ttl">05 · Asymmetric eye</div><div class="desc">两只眼睛 = 观察 + 信仰</div></div>
+          <div class="n">Icon only</div>
+        </div>
+      </div>
+
+      <!-- 06 : wordmark only -->
+      <div class="card">
+        <div class="stage paper">
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span style="font-family:'Noto Serif SC',serif;font-size:72px;font-weight:500;letter-spacing:-.025em;color:var(--ink)">xiyu</span>
+            <span style="width:10px;height:10px;border-radius:50%;background:var(--orange);display:inline-block;transform:translateY(-6px)"></span>
+          </div>
+        </div>
+        <div class="label">
+          <div><div class="ttl">06 · Wordmark</div><div class="desc">纯文字 + 橙点，最克制的版本</div></div>
+          <div class="n">Type only</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== Horizontal lockups ===== -->
+  <section class="section">
+    <div class="section-head"><h2>横向组合 · Lockup</h2><span class="meta">2/ navbar / header</span></div>
+    <div class="navbar-sim">
+      <div class="lockup">
+        <svg viewBox="0 0 200 200" width="38" height="38" aria-hidden="true">
+          <ellipse cx="100" cy="50" rx="30" ry="26" fill="#0f0d0a"/>
+          <rect x="80" y="68" width="40" height="7" rx="2" fill="#a8d8e8"/>
+          <circle cx="78" cy="128" r="22" fill="none" stroke="#0f0d0a" stroke-width="6"/>
+          <circle cx="122" cy="128" r="22" fill="#0f0d0a"/>
+          <circle cx="122" cy="128" r="6" fill="#ffc828"/>
+          <path d="M96 128 L104 128" stroke="#0f0d0a" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+        <div class="word">xiyu<span class="dot"></span></div>
+        <div class="tagline">long · bitcoin<br/>est. 2013</div>
+      </div>
+      <div class="navlinks">
+        <a href="#">写作</a><a href="#">归档</a><a href="#">关于</a><a href="#">Twitter ↗</a>
+      </div>
+    </div>
+
+    <div style="height:20px"></div>
+
+    <div class="navbar-sim" style="background:#0f0d0a;border-color:#0f0d0a">
+      <div class="lockup">
+        <svg viewBox="0 0 200 200" width="38" height="38" aria-hidden="true">
+          <ellipse cx="100" cy="50" rx="30" ry="26" fill="#ffc828"/>
+          <rect x="80" y="68" width="40" height="7" rx="2" fill="#a8d8e8"/>
+          <circle cx="78" cy="128" r="22" fill="none" stroke="#ffc828" stroke-width="6"/>
+          <circle cx="122" cy="128" r="22" fill="#ffc828"/>
+          <circle cx="122" cy="128" r="6" fill="#0f0d0a"/>
+          <path d="M96 128 L104 128" stroke="#ffc828" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+        <div class="word" style="color:#ffc828">xiyu<span class="dot" style="background:#e67e22"></span></div>
+        <div class="tagline" style="color:#a69d8c;border-color:#2a251e">long · bitcoin<br/>est. 2013</div>
+      </div>
+      <div class="navlinks" style="color:#d9d2c3">
+        <a href="#" style="color:inherit">写作</a><a href="#" style="color:inherit">归档</a><a href="#" style="color:inherit">关于</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Favicons ===== -->
+  <section class="section">
+    <div class="section-head"><h2>Favicon · 小尺寸适配</h2><span class="meta">3/ 16 · 32 · 64 · 128</span></div>
+    <div class="fav-row">
+      <div class="fav">
+        <div class="chip" style="padding:3px">
+          <svg viewBox="0 0 200 200" width="16" height="16"><ellipse cx="100" cy="52" rx="32" ry="28" fill="#0f0d0a"/><circle cx="76" cy="130" r="26" fill="none" stroke="#0f0d0a" stroke-width="10"/><circle cx="124" cy="130" r="26" fill="#0f0d0a"/></svg>
+        </div>
+        <div class="cap">16 px</div>
+      </div>
+      <div class="fav">
+        <div class="chip" style="padding:4px">
+          <svg viewBox="0 0 200 200" width="32" height="32"><ellipse cx="100" cy="52" rx="32" ry="28" fill="#0f0d0a"/><rect x="78" y="72" width="44" height="7" rx="2" fill="#a8d8e8"/><circle cx="76" cy="130" r="26" fill="none" stroke="#0f0d0a" stroke-width="9"/><circle cx="124" cy="130" r="26" fill="#0f0d0a"/><circle cx="124" cy="130" r="7" fill="#ffc828"/></svg>
+        </div>
+        <div class="cap">32 px</div>
+      </div>
+      <div class="fav">
+        <div class="chip" style="padding:6px">
+          <svg viewBox="0 0 200 200" width="64" height="64"><ellipse cx="100" cy="52" rx="32" ry="28" fill="#0f0d0a"/><rect x="78" y="72" width="44" height="7" rx="2" fill="#a8d8e8"/><circle cx="76" cy="130" r="26" fill="none" stroke="#0f0d0a" stroke-width="8"/><circle cx="124" cy="130" r="26" fill="#0f0d0a"/><circle cx="124" cy="130" r="7" fill="#ffc828"/><path d="M100 130 L100 130" stroke="#0f0d0a" stroke-width="7" stroke-linecap="round"/></svg>
+        </div>
+        <div class="cap">64 px</div>
+      </div>
+      <div class="fav">
+        <div class="chip" style="padding:10px;border-radius:18px">
+          <svg viewBox="0 0 200 200" width="96" height="96"><ellipse cx="100" cy="52" rx="32" ry="28" fill="#0f0d0a"/><rect x="78" y="72" width="44" height="7" rx="2" fill="#a8d8e8"/><circle cx="76" cy="130" r="26" fill="none" stroke="#0f0d0a" stroke-width="7"/><circle cx="124" cy="130" r="26" fill="#0f0d0a"/><circle cx="124" cy="130" r="7" fill="#ffc828"/><path d="M98 130 L104 130" stroke="#0f0d0a" stroke-width="7" stroke-linecap="round"/></svg>
+        </div>
+        <div class="cap">128 px (iOS)</div>
+      </div>
+      <div class="fav">
+        <div class="chip" style="background:#0f0d0a;padding:10px;border-radius:18px">
+          <svg viewBox="0 0 200 200" width="96" height="96"><ellipse cx="100" cy="52" rx="32" ry="28" fill="#ffc828"/><rect x="78" y="72" width="44" height="7" rx="2" fill="#a8d8e8"/><circle cx="76" cy="130" r="26" fill="none" stroke="#ffc828" stroke-width="7"/><circle cx="124" cy="130" r="26" fill="#ffc828"/><circle cx="124" cy="130" r="7" fill="#0f0d0a"/><path d="M98 130 L104 130" stroke="#ffc828" stroke-width="7" stroke-linecap="round"/></svg>
+        </div>
+        <div class="cap">Dark</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Business card / physical ===== -->
+  <section class="section">
+    <div class="section-head"><h2>延伸应用 · Name card</h2><span class="meta">4/ physical</span></div>
+    <div class="card-stage">
+      <div class="bcard front">
+        <div class="bc-meta">xiyu · long bitcoin · est. 2013</div>
+        <svg viewBox="0 0 200 200" width="84" height="84" style="position:absolute;right:28px;top:28px" aria-hidden="true">
+          <ellipse cx="100" cy="50" rx="30" ry="26" fill="#0f0d0a"/>
+          <rect x="80" y="68" width="40" height="7" rx="2" fill="#faf7f2"/>
+          <circle cx="78" cy="128" r="22" fill="none" stroke="#0f0d0a" stroke-width="6"/>
+          <circle cx="122" cy="128" r="22" fill="#0f0d0a"/>
+          <circle cx="122" cy="128" r="6" fill="#ffc828"/>
+          <path d="M98 128 L102 128" stroke="#0f0d0a" stroke-width="6"/>
+        </svg>
+        <div>
+          <div class="bc-name">xiyu<span style="color:var(--orange)">.</span></div>
+          <div class="bc-hand">写字的人 · 独立开发者</div>
+        </div>
+      </div>
+      <div class="bcard back">
+        <div class="bc-meta" style="color:#f3d46a">contact</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-family:'JetBrains Mono',monospace;font-size:13px">
+          <div>xiyu.im</div>
+          <div>@ohxiyu · twitter</div>
+          <div>hi@xiyu.im</div>
+          <div>github.com/xiyu</div>
+        </div>
+        <div class="bc-hand" style="font-family:'Noto Serif SC',serif;font-style:italic;font-size:14px;color:#f3d46a">"long bitcoin, short everything else."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Usage ===== -->
+  <section class="section">
+    <div class="section-head"><h2>使用范围</h2><span class="meta">5/ placement</span></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+      <div class="app-chip">
+        <svg viewBox="0 0 200 200" width="22" height="22"><ellipse cx="100" cy="52" rx="32" ry="28" fill="#ffc828"/><circle cx="76" cy="130" r="26" fill="none" stroke="#ffc828" stroke-width="8"/><circle cx="124" cy="130" r="26" fill="#ffc828"/><circle cx="124" cy="130" r="7" fill="#0f0d0a"/></svg>
+        <span style="font-family:'Noto Serif SC',serif;font-size:14px;font-weight:500">xiyu<span style="color:#e67e22">.</span></span>
+      </div>
+      <div class="app-chip light">
+        <svg viewBox="0 0 200 200" width="22" height="22"><ellipse cx="100" cy="52" rx="32" ry="28" fill="#0f0d0a"/><circle cx="76" cy="130" r="26" fill="none" stroke="#0f0d0a" stroke-width="8"/><circle cx="124" cy="130" r="26" fill="#0f0d0a"/><circle cx="124" cy="130" r="7" fill="#ffc828"/></svg>
+        <span style="font-family:'Noto Serif SC',serif;font-size:14px;font-weight:500">xiyu<span style="color:#e67e22">.</span></span>
+      </div>
+      <div class="app-chip" style="background:var(--yellow);color:var(--ink)">
+        <svg viewBox="0 0 200 200" width="22" height="22"><ellipse cx="100" cy="52" rx="32" ry="28" fill="#0f0d0a"/><circle cx="76" cy="130" r="26" fill="none" stroke="#0f0d0a" stroke-width="8"/><circle cx="124" cy="130" r="26" fill="#0f0d0a"/><circle cx="124" cy="130" r="7" fill="#ffc828"/></svg>
+        <span style="font-family:'Noto Serif SC',serif;font-size:14px;font-weight:500">xiyu<span>.</span></span>
+      </div>
+    </div>
+
+    <div class="notes">
+      <strong>建议主选 · 方向 02（Signature）</strong>
+      <ul>
+        <li>保留头像 DNA 的最少线条：发髻 + 一黑一透的眼镜 + 蓝色发带点缀（你原图里就有这三样）</li>
+        <li>在 16 px 仍能辨认；在 128 px 保留完整视觉冲击力</li>
+        <li>深/浅底色都有对应版本，无需重绘</li>
+      </ul>
+      <strong style="display:block;margin-top:18px">搭配字标：</strong>
+      <ul>
+        <li>主标头：<code>Noto Serif SC</code> "xiyu" + 橙色 dot；这和当前博客的 brand-mark 完全一致</li>
+        <li>子标签：<code>JetBrains Mono</code> "long · bitcoin" 做副标</li>
+      </ul>
+      <strong style="display:block;margin-top:18px">颜色用法：</strong>
+      <ul>
+        <li><strong>黄底（#FFC828）</strong>：发髻 + 镜框都用黑，右镜片中的小圆点可用黄 → 与原头像一致</li>
+        <li><strong>米白底（#FAF7F2）</strong>：同上，小圆点改橙（#E67E22）以呼应博客 accent</li>
+        <li><strong>黑底（#0F0D0A）</strong>：整体反色，发髻/镜框用黄，中心点用黑</li>
+      </ul>
+      <strong style="display:block;margin-top:18px">落地文件建议：</strong>
+      <ul>
+        <li><code>logo-mark.svg</code> · 方向 02 主体（正色 · 反色 · 单色黑 · 单色白，共 4 个变体）</li>
+        <li><code>logo-lockup.svg</code> · mark + wordmark 横排</li>
+        <li><code>favicon.ico</code> + <code>apple-touch-icon.png</code>（180×180）+ <code>maskable-icon.png</code>（512×512）</li>
+        <li><code>og-image.png</code> · 1200×630 黄底 + signature mark + 博客名</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
