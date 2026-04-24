@@ -1205,6 +1205,48 @@ body.canvas-mode { overflow: hidden; }
 .article-body .notion-h1 { font-size: 30px; margin: 64px 0 22px; }
 .article-body .notion-h2 { font-size: 26px; margin: 56px 0 20px; }
 .article-body .notion-h3 { font-size: 19px; margin: 40px 0 14px; }
+
+/* ===== .about-body 内 Notion 正文兼容（保持和设计稿 .about-body p 一致的节奏） ===== */
+.about-body .notion { color: inherit; }
+.about-body .notion-text {
+  margin: 0 0 20px;
+  line-height: 1.85;
+  font-size: inherit;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+.about-body .notion-text strong,
+.about-body .notion-text b { color: var(--ink); font-weight: 600; }
+.about-body .notion-h,
+.about-body .notion-h1,
+.about-body .notion-h2,
+.about-body .notion-h3 {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.about-body .notion-h1 { font-size: 26px; margin: 40px 0 18px; }
+.about-body .notion-h2 { font-size: 22px; margin: 36px 0 16px; }
+.about-body .notion-h3 { font-size: 18px; margin: 28px 0 12px; }
+.about-body .notion-link {
+  color: var(--ink);
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+  text-decoration: none;
+  transition: color .15s;
+}
+.about-body .notion-link:hover { color: var(--accent-ink); }
+.about-body .notion-quote {
+  margin: 24px 0;
+  padding: 4px 0 4px 20px;
+  border-left: 2px solid var(--rule);
+  color: var(--ink-mute);
+  font-style: italic;
+}
 .article-body .notion-quote {
   margin: 28px 0; padding: 4px 0 4px 22px;
   border-left: 2px solid var(--rule);
