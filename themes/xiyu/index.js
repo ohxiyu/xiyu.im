@@ -224,6 +224,12 @@ const LayoutSlug = props => {
   if (lock) return <ArticleLock validPassword={validPassword} />
   if (!post) return null
 
+  // 如果走的是 /about 路径，不管 Notion 这条记录是 Post 还是 Page，都渲染关于页设计稿
+  const path = router?.asPath || ''
+  if (path === '/about' || path.startsWith('/about?') || path.startsWith('/about/') || path.startsWith('/about.html')) {
+    return renderAboutPage(props)
+  }
+
   const rawNum = post?.pageProperties?.num ?? post?.pageProperties?.Num
   const num = rawNum ? String(rawNum).padStart(4, '0') : ''
   const tags = Array.isArray(post.tags) ? post.tags : []
@@ -357,48 +363,53 @@ const LayoutTagIndex = props => {
 }
 
 /**
- * 独立页面 · slug=about 用定制布局，其它用 NotionPage 渲染
+ * 独立页面 · slug=about 或 /about 路径用定制布局，其它用 NotionPage 渲染
  */
+const renderAboutPage = props => {
+  const { tagOptions, postCount } = props
+  const since = parseInt(siteConfig('SINCE')) || 2013
+  const years = Math.max(1, new Date().getFullYear() - since + 1)
+  const bitcoinYears = parseInt(siteConfig('XIYU_BITCOIN_YEARS', 7, CONFIG)) || 7
+  return (
+    <>
+      <AboutHero />
+      <div className='about-body'>
+        <p>
+          我从 {since} 年开始写博客，到今天是第 {years} 年。最早写的是技术笔记，
+          后来慢慢变成投资思考、AI 实验、生活观察的混合体。
+          <strong>这里不是一个内容产品，它是我的公开思考档案</strong>——
+          我写给三年后的自己看，顺便让愿意陪我读的人进来坐坐。
+        </p>
+        <p>
+          我在币圈待了快 {bitcoinYears} 年。2017 年冲过 ICO，2021 年追过 NFT，中间还玩过合约、做过网格、研究过各种山寨。
+          回头看，最大的教训不是买错了哪个币，而是——<strong>我根本就不该"炒"</strong>。
+          现在我只做一件事：<em>长期持有比特币，观察市场，不参与，不预测。</em>
+        </p>
+        <p>
+          近两年我把大部分精力放在 AI Agent 上。做了一个叫 OpenClaw 的开源框架，
+          让非程序员也能搭一个 7×24 小时替自己干活的数字助理。
+          它替我处理邮件、写交易报告、盯盘、做周报——<strong>我做减法，它做加法</strong>。
+        </p>
+      </div>
+      <AboutFacts postCount={postCount} />
+      <div className='about-body'>
+        <p>
+          如果你也在长期持有比特币，或者在折腾 AI Agent，或者只是喜欢一些反直觉的思考——
+          欢迎通过下面的链接找我。我尽量回每一封邮件，不保证立刻。
+        </p>
+      </div>
+      <Elsewhere />
+      <Topics tagOptions={tagOptions} />
+      <Colophon />
+    </>
+  )
+}
+
 const LayoutPage = props => {
-  const { post, tagOptions, postCount } = props
+  const { post } = props
   if (!post) return null
   if (post.slug === 'about') {
-    const since = parseInt(siteConfig('SINCE')) || 2013
-    const years = Math.max(1, new Date().getFullYear() - since + 1)
-    const bitcoinYears = parseInt(siteConfig('XIYU_BITCOIN_YEARS', 7, CONFIG)) || 7
-    return (
-      <>
-        <AboutHero />
-        <div className='about-body'>
-          <p>
-            我从 {since} 年开始写博客，到今天是第 {years} 年。最早写的是技术笔记，
-            后来慢慢变成投资思考、AI 实验、生活观察的混合体。
-            <strong>这里不是一个内容产品，它是我的公开思考档案</strong>——
-            我写给三年后的自己看，顺便让愿意陪我读的人进来坐坐。
-          </p>
-          <p>
-            我在币圈待了快 {bitcoinYears} 年。2017 年冲过 ICO，2021 年追过 NFT，中间还玩过合约、做过网格、研究过各种山寨。
-            回头看，最大的教训不是买错了哪个币，而是——<strong>我根本就不该"炒"</strong>。
-            现在我只做一件事：<em>长期持有比特币，观察市场，不参与，不预测。</em>
-          </p>
-          <p>
-            近两年我把大部分精力放在 AI Agent 上。做了一个叫 OpenClaw 的开源框架，
-            让非程序员也能搭一个 7×24 小时替自己干活的数字助理。
-            它替我处理邮件、写交易报告、盯盘、做周报——<strong>我做减法，它做加法</strong>。
-          </p>
-        </div>
-        <AboutFacts postCount={postCount} />
-        <div className='about-body'>
-          <p>
-            如果你也在长期持有比特币，或者在折腾 AI Agent，或者只是喜欢一些反直觉的思考——
-            欢迎通过下面的链接找我。我尽量回每一封邮件，不保证立刻。
-          </p>
-        </div>
-        <Elsewhere />
-        <Topics tagOptions={tagOptions} />
-        <Colophon />
-      </>
-    )
+    return renderAboutPage(props)
   }
   return (
     <article>
