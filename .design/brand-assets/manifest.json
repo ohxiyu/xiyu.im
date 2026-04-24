@@ -1,0 +1,15 @@
+{
+  "name": "xiyu's Blog",
+  "short_name": "xiyu",
+  "description": "long bitcoin · writing since 2013",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#ffc828",
+  "background_color": "#faf7f2",
+  "icons": [
+    { "src": "/favicon-32.png",       "sizes": "32x32",   "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/maskable-512.png",     "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/maskable-512.png",     "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

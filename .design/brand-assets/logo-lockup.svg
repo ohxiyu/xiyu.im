@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 200" width="520" height="200" role="img" aria-label="xiyu · long bitcoin">
+  
+  <g>
+    <ellipse cx="88" cy="38" rx="26" ry="22" fill="#0f0d0a"></ellipse>
+    <rect x="70" y="56" width="36" height="6" rx="2" fill="#a8d8e8"></rect>
+    <path d="M62 70 Q60 66 66 64 L118 64 Q140 64 140 96 L140 130 Q140 145 125 150 L95 156 Q72 156 66 140 L62 130 Z" fill="#0f0d0a"></path>
+    <path d="M82 118 Q82 150 108 156 Q132 152 132 118 L132 110 Q120 122 108 122 Q94 122 82 110 Z" fill="#0f0d0a"></path>
+    <circle cx="94" cy="96" r="13" fill="none" stroke="#0f0d0a" stroke-width="3.5"></circle>
+    <circle cx="124" cy="96" r="13" fill="#ffc828" stroke="#0f0d0a" stroke-width="3.5"></circle>
+    <line x1="107" y1="96" x2="111" y2="96" stroke="#0f0d0a" stroke-width="3"></line>
+    <circle cx="124" cy="96" r="3" fill="#0f0d0a"></circle>
+  </g>
+  
+  <text x="200" y="108" font-family="&#39;Noto Serif SC&#39;, &#39;Source Han Serif SC&#39;, Georgia, serif" font-size="64" font-weight="500" fill="#0f0d0a" letter-spacing="-1">xiyu</text>
+  <circle cx="340" cy="68" r="6" fill="#e67e22"></circle>
+  
+  <line x1="360" y1="72" x2="360" y2="120" stroke="#e8e1d3" stroke-width="1"></line>
+  <text x="376" y="88" font-family="&#39;JetBrains Mono&#39;, monospace" font-size="12" font-weight="500" fill="#6b6358" letter-spacing="2">LONG · BITCOIN</text>
+  <text x="376" y="108" font-family="&#39;JetBrains Mono&#39;, monospace" font-size="11" fill="#a69e92" letter-spacing="2">EST. 2013</text>
+</svg>

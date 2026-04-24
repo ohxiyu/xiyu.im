@@ -1,0 +1,284 @@
+/* xiyu.im — Design System */
+
+:root {
+  /* Light — warm paper */
+  --bg: #faf7f2;
+  --bg-elev: #fffdf9;
+  --ink: #1a1612;
+  --ink-soft: #2d2720;
+  --ink-mute: #6b6358;
+  --ink-faint: #a69e92;
+  --rule: #e8e1d3;
+  --rule-soft: #f0eade;
+  --accent: #e67e22;      /* bitcoin-ish orange, slightly desaturated */
+  --accent-ink: #b85e10;
+  --tag-bg: #f2ede2;
+  --tag-ink: #5a5046;
+  --selection: #f9dcb6;
+}
+
+[data-theme="dark"] {
+  --bg: #14110d;
+  --bg-elev: #1c1813;
+  --ink: #f2ede2;
+  --ink-soft: #d9d2c3;
+  --ink-mute: #8f877a;
+  --ink-faint: #5e574c;
+  --rule: #2a251e;
+  --rule-soft: #201b15;
+  --accent: #f39c3e;
+  --accent-ink: #f5b565;
+  --tag-bg: #221d16;
+  --tag-ink: #a69d8c;
+  --selection: #4a3a1e;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Noto Sans SC", "PingFang SC", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-feature-settings: "kern", "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  line-height: 1.7;
+}
+
+::selection { background: var(--selection); color: var(--ink); }
+
+/* ——— Type ——— */
+.serif { font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, serif; }
+.sans  { font-family: "Noto Sans SC", "PingFang SC", -apple-system, system-ui, sans-serif; }
+.mono  { font-family: "JetBrains Mono", "Menlo", "Consolas", ui-monospace, monospace; font-feature-settings: "zero", "ss01"; }
+
+/* ——— Page chrome ——— */
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px 56px 96px;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 56px;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.brand-mark {
+  font-family: "Noto Serif SC", serif;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.brand-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  transform: translateY(-4px);
+}
+.brand-tag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-mute);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+.nav-link {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 14px;
+  position: relative;
+  padding: 4px 0;
+  transition: color .15s;
+}
+.nav-link:hover { color: var(--accent-ink); }
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s cubic-bezier(.2,.7,.3,1);
+}
+.nav-link:hover::after { transform: scaleX(1); }
+.nav-link.active { color: var(--ink); }
+.nav-link.active::after { transform: scaleX(1); background: var(--ink); }
+
+.theme-toggle {
+  width: 32px; height: 32px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--ink-mute);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink-mute); }
+
+/* ——— Labels ——— */
+.eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* ——— Article atoms ——— */
+.post-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.post-date {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-mute);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.post-title {
+  font-family: "Noto Serif SC", serif;
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+.post-excerpt {
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--tag-ink);
+  background: var(--tag-bg);
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.02em;
+}
+.tag-dot {
+  color: var(--ink-faint);
+  font-size: 11px;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.04em;
+}
+
+/* ——— Rules ——— */
+.rule { height: 1px; background: var(--rule); border: 0; margin: 0; }
+.rule-soft { height: 1px; background: var(--rule-soft); border: 0; margin: 0; }
+
+/* ——— Links with underline reveal ——— */
+.inline-link {
+  color: var(--ink);
+  text-decoration: none;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+  transition: color .15s;
+}
+.inline-link:hover { color: var(--accent-ink); }
+
+/* ——— Buttons ——— */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  color: var(--ink);
+  background: transparent;
+  font-size: 13px;
+  text-decoration: none;
+  transition: all .2s;
+  font-family: inherit;
+  cursor: pointer;
+}
+.btn-ghost:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* ——— Layout helpers ——— */
+.two-col {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.stack-lg > * + * { margin-top: 48px; }
+.stack-md > * + * { margin-top: 28px; }
+.stack-sm > * + * { margin-top: 14px; }
+
+/* ——— Noise texture overlay (very subtle) ——— */
+.paper-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.8 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+[data-theme="dark"] .paper-grain { opacity: 0.06; mix-blend-mode: screen; }
+
+/* ——— Footer ——— */
+.site-foot {
+  margin-top: 120px;
+  padding-top: 40px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  color: var(--ink-mute);
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.04em;
+}
+
+/* ——— Scroll ——— */
+html { scroll-behavior: smooth; }

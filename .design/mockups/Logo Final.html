@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>xiyu · logo · final</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600&family=Noto+Sans+SC:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#0f0d0a;--yellow:#ffc828;--paper:#faf7f2;--orange:#e67e22;--mute:#6b6358;--rule:#e8e1d3}
+  *{box-sizing:border-box}
+  body{margin:0;background:#ece7dd;font-family:"Noto Sans SC",system-ui,sans-serif;color:var(--ink);padding:56px 48px 96px}
+  .wrap{max-width:1200px;margin:0 auto}
+  h1{font-family:"Noto Serif SC",serif;font-size:44px;font-weight:500;letter-spacing:-.02em;margin:8px 0 12px}
+  .sub{color:var(--mute);font-size:15px;max-width:62ch;line-height:1.75;margin:0 0 48px}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);display:flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:18px;height:1px;background:var(--orange)}
+  .section{margin-bottom:56px}
+  .section-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:14px;margin-bottom:24px}
+  .section-head h2{font-family:"Noto Serif SC",serif;font-size:22px;font-weight:500;margin:0}
+  .section-head .meta{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute);letter-spacing:.08em}
+
+  .hero-stage{background:var(--yellow);padding:64px;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center}
+
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .tile{background:var(--paper);border:1px solid var(--rule);overflow:hidden}
+  .tile .stage{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;padding:20px}
+  .tile.yellow .stage{background:var(--yellow)}
+  .tile.paper .stage{background:var(--paper)}
+  .tile.dark .stage{background:var(--ink)}
+  .tile .cap{padding:12px 16px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-size:12px}
+  .tile .cap .t{font-family:"Noto Serif SC",serif;font-weight:500}
+  .tile .cap .n{font-family:"JetBrains Mono",monospace;color:var(--mute);font-size:10px;letter-spacing:.06em}
+
+  .files{display:grid;grid-template-columns:2fr 1fr 2fr;gap:0;border:1px solid var(--rule);background:var(--paper)}
+  .files > div{padding:14px 18px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);font-size:13px}
+  .files > div:nth-child(3n){border-right:0}
+  .files > div:nth-last-child(-n+3){border-bottom:0}
+  .files .h{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  .files code{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--ink);background:#f0eade;padding:2px 6px;border-radius:3px}
+
+  .install{background:var(--paper);border:1px solid var(--rule);padding:28px 32px;font-size:14px;line-height:1.8;color:#2d2720;max-width:86ch}
+  .install h3{font-family:"Noto Serif SC",serif;font-size:18px;font-weight:500;margin:20px 0 10px;color:var(--ink)}
+  .install h3:first-child{margin-top:0}
+  .install code{font-family:"JetBrains Mono",monospace;font-size:12.5px;background:#f0eade;padding:2px 6px;border-radius:3px}
+  .install pre{background:var(--ink);color:#f3d46a;padding:18px 22px;border-radius:4px;overflow-x:auto;font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.7;margin:12px 0}
+  .install pre code{background:transparent;color:inherit;padding:0}
+
+  /* tab bar mock */
+  .tabbar{background:#d9d2c3;border-radius:10px 10px 0 0;padding:12px 14px 0;max-width:560px}
+  .tab{display:flex;align-items:center;gap:8px;background:var(--paper);padding:10px 14px;border-radius:8px 8px 0 0;width:fit-content;font-size:13px;color:#2d2720}
+  .tab img{width:16px;height:16px;display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">xiyu · logo · 01 Portrait · final</div>
+  <h1>你的 logo</h1>
+  <p class="sub">基于头像的具象化 mark。五种场景的落地文件已经在 <code style="font-family:'JetBrains Mono',monospace;font-size:.92em;background:#f0eade;padding:2px 6px;border-radius:3px">theme-assets/</code> 目录里准备好了，下面是预览与安装指引。</p>
+
+  <!-- Hero -->
+  <section class="section">
+    <div class="section-head"><h2>主 mark</h2><span class="meta">on brand yellow #ffc828</span></div>
+    <div class="hero-stage">
+      <img src="theme-assets/logo-mark.svg" width="320" height="320" alt="xiyu logo" />
+    </div>
+  </section>
+
+  <!-- Variants -->
+  <section class="section">
+    <div class="section-head"><h2>三种配色</h2><span class="meta">light · yellow · dark</span></div>
+    <div class="grid-4">
+      <div class="tile paper">
+        <div class="stage"><img src="theme-assets/logo-mark.svg" width="180" height="180" alt="on paper"/></div>
+        <div class="cap"><span class="t">米底</span><span class="n">logo-mark.svg</span></div>
+      </div>
+      <div class="tile yellow">
+        <div class="stage"><img src="theme-assets/logo-mark.svg" width="180" height="180" alt="on yellow"/></div>
+        <div class="cap"><span class="t">黄底</span><span class="n">logo-mark-yellow.svg</span></div>
+      </div>
+      <div class="tile dark">
+        <div class="stage"><img src="theme-assets/logo-mark-dark.svg" width="180" height="180" alt="on dark"/></div>
+        <div class="cap"><span class="t">深色</span><span class="n">logo-mark-dark.svg</span></div>
+      </div>
+      <div class="tile paper">
+        <div class="stage" style="padding:8px"><img src="theme-assets/logo-lockup.svg" width="260" alt="lockup"/></div>
+        <div class="cap"><span class="t">横向组合</span><span class="n">logo-lockup.svg</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Favicon sizes -->
+  <section class="section">
+    <div class="section-head"><h2>Favicon · 小尺寸</h2><span class="meta">16 / 32 / 180 / 512</span></div>
+    <div style="display:flex;gap:40px;align-items:center;padding:32px;background:var(--paper);border:1px solid var(--rule);flex-wrap:wrap">
+      <div style="text-align:center">
+        <div style="background:var(--yellow);padding:6px;border-radius:4px;display:inline-block"><img src="theme-assets/favicon-16.png" width="16" height="16" alt="16"/></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mute);margin-top:8px;letter-spacing:.06em">16 PX</div>
+      </div>
+      <div style="text-align:center">
+        <div style="background:var(--yellow);padding:8px;border-radius:6px;display:inline-block"><img src="theme-assets/favicon-32.png" width="32" height="32" alt="32"/></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mute);margin-top:8px;letter-spacing:.06em">32 PX</div>
+      </div>
+      <div style="text-align:center">
+        <img src="theme-assets/apple-touch-icon.png" width="90" height="90" style="border-radius:20px" alt="180"/>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mute);margin-top:8px;letter-spacing:.06em">180 PX · iOS</div>
+      </div>
+      <div style="text-align:center">
+        <img src="theme-assets/maskable-512.png" width="120" height="120" style="border-radius:24px" alt="512"/>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mute);margin-top:8px;letter-spacing:.06em">512 PX · MASKABLE</div>
+      </div>
+      <!-- tab bar mock -->
+      <div style="margin-left:auto">
+        <div class="tabbar">
+          <div class="tab"><img src="theme-assets/favicon-32.png" alt=""/>xiyu's Blog — long bitcoin</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Files list -->
+  <section class="section">
+    <div class="section-head"><h2>交付文件</h2><span class="meta">theme-assets/</span></div>
+    <div class="files">
+      <div class="h">路径</div><div class="h">尺寸</div><div class="h">用途</div>
+
+      <div><code>logo-mark.svg</code></div><div>vector</div><div>主 mark，纸底/通用</div>
+      <div><code>logo-mark-yellow.svg</code></div><div>vector</div><div>黄底版（品牌色背景）</div>
+      <div><code>logo-mark-dark.svg</code></div><div>vector</div><div>深色模式反色版</div>
+      <div><code>logo-lockup.svg</code></div><div>520×200</div><div>mark + 字标 + "long · bitcoin" 副标</div>
+      <div><code>favicon.svg</code></div><div>32×32 vector</div><div>现代浏览器 favicon（自适应）</div>
+      <div><code>favicon-16.png</code></div><div>16×16</div><div>老浏览器兜底</div>
+      <div><code>favicon-32.png</code></div><div>32×32</div><div>标签页主尺寸</div>
+      <div><code>apple-touch-icon.png</code></div><div>180×180</div><div>iOS 主屏图标</div>
+      <div><code>maskable-512.png</code></div><div>512×512</div><div>PWA / Android 可 mask 图标</div>
+      <div><code>logo-256.png</code></div><div>256×256</div><div>通用头像尺寸（黄底）</div>
+      <div><code>logo-dark-256.png</code></div><div>256×256</div><div>通用头像尺寸（深色）</div>
+    </div>
+  </section>
+
+  <!-- Install instructions -->
+  <section class="section">
+    <div class="section-head"><h2>接入到 NotionNext 主题</h2><span class="meta">step · by · step</span></div>
+    <div class="install">
+      <h3>1. 把文件放进主题目录</h3>
+      <p>把项目里的 <code>theme-assets/</code> 整个文件夹拷贝到你 fork 的仓库下，放在主题的 <code>public</code> 静态目录：</p>
+<pre><code># 在你 fork 的仓库根目录
+mkdir -p public/images/logo
+cp theme-assets/*.svg  public/images/logo/
+cp theme-assets/*.png  public/images/logo/
+# favicon 系列单独放到根 public 方便引用
+cp theme-assets/favicon.svg            public/favicon.svg
+cp theme-assets/favicon-32.png         public/favicon-32.png
+cp theme-assets/favicon-16.png         public/favicon-16.png
+cp theme-assets/apple-touch-icon.png   public/apple-touch-icon.png
+cp theme-assets/maskable-512.png       public/maskable-512.png</code></pre>
+
+      <h3>2. 在 <code>blog.config.js</code> 改站点配置</h3>
+<pre><code>module.exports = {
+  // ...
+  BLOG_FAVICON: '/favicon.svg',
+  BLOG_AVATAR:  '/images/logo/logo-256.png',
+  BLOG_LOGO:    '/images/logo/logo-mark.svg',      // 导航栏 mark
+  BLOG_LOGO_DARK: '/images/logo/logo-mark-dark.svg',
+  HOME_BANNER_IMAGE: '/images/logo/logo-lockup.svg', // 可选
+  SEO_DEFAULT_IMAGE: '/images/logo/maskable-512.png',
+  // ...
+}</code></pre>
+
+      <h3>3. 在 <code>_document.js</code> 或 <code>Head</code> 注入完整 favicon 族</h3>
+<pre><code>&lt;link rel="icon" type="image/svg+xml" href="/favicon.svg" /&gt;
+&lt;link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" /&gt;
+&lt;link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" /&gt;
+&lt;link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" /&gt;
+&lt;link rel="mask-icon" href="/favicon.svg" color="#ffc828" /&gt;
+&lt;meta name="theme-color" content="#ffc828" /&gt;</code></pre>
+
+      <h3>4. 在 xiyu 主题 <code>SiteNav</code> 组件里替换 brand 块</h3>
+<pre><code>// themes/xiyu/components/SiteNav.js
+import Image from 'next/image'
+
+&lt;a href="/" className="brand"&gt;
+  &lt;Image src="/images/logo/logo-mark.svg" width={36} height={36} alt="xiyu" priority /&gt;
+  &lt;span className="brand-mark"&gt;xiyu&lt;span className="brand-dot" /&gt;&lt;/span&gt;
+  &lt;span className="brand-tag"&gt;long · bitcoin&lt;/span&gt;
+&lt;/a&gt;</code></pre>
+
+      <h3>5. （可选）OG image 与 Notion 头像</h3>
+      <p>登录 Notion，把关于页那张头像 block 也换成 <code>logo-256.png</code>，这样所有入口视觉统一。Vercel 部署后 OG 预览会自动用 <code>SEO_DEFAULT_IMAGE</code>。</p>
+
+      <h3>6. 验证清单</h3>
+      <ul>
+        <li>浏览器 Tab 图标 · 16px 发髻 + 眼镜仍可辨认</li>
+        <li>iOS "添加到主屏" · 黄底圆角无白边</li>
+        <li>深色模式 Nav · 自动切到 <code>logo-mark-dark.svg</code></li>
+        <li>Twitter / 微信分享 · 卡片能抓到 512 px 图</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

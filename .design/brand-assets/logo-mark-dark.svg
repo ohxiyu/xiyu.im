@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="xiyu logo on dark">
+  <rect width="200" height="200" fill="#0f0d0a"></rect>
+  <ellipse cx="88" cy="38" rx="26" ry="22" fill="#ffc828"></ellipse>
+  <rect x="70" y="56" width="36" height="6" rx="2" fill="#a8d8e8"></rect>
+  <path d="M62 70 Q60 66 66 64 L118 64 Q140 64 140 96 L140 130 Q140 145 125 150 L95 156 Q72 156 66 140 L62 130 Z" fill="#ffc828"></path>
+  <path d="M82 118 Q82 150 108 156 Q132 152 132 118 L132 110 Q120 122 108 122 Q94 122 82 110 Z" fill="#ffc828"></path>
+  <circle cx="94" cy="96" r="13" fill="none" stroke="#0f0d0a" stroke-width="3.5"></circle>
+  <circle cx="124" cy="96" r="13" fill="#0f0d0a" stroke="#0f0d0a" stroke-width="3.5"></circle>
+  <line x1="107" y1="96" x2="111" y2="96" stroke="#0f0d0a" stroke-width="3"></line>
+  <circle cx="124" cy="96" r="3" fill="#ffc828"></circle>
+</svg>
