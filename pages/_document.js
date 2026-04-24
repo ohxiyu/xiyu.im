@@ -43,6 +43,24 @@ class MyDocument extends Document {
     return (
       <Html lang={BLOG.LANG}>
         <Head>
+          {/* xiyu 主题品牌 favicon 族 + PWA + 社交分享 */}
+          <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+          <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32.png' />
+          <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16.png' />
+          <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
+          <link rel='mask-icon' href='/favicon.svg' color='#ffc828' />
+          <meta name='theme-color' content='#ffc828' />
+          <meta name='apple-mobile-web-app-title' content='xiyu' />
+          <link rel='manifest' href='/manifest.json' />
+
+          {/* Google Fonts · xiyu 主题字体栈（宋体 + 思源黑体 + JetBrains Mono） */}
+          <link rel='preconnect' href='https://fonts.googleapis.com' />
+          <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='anonymous' />
+          <link
+            rel='stylesheet'
+            href='https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600&family=Noto+Sans+SC:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap'
+          />
+
           {/* 预加载字体 */}
           {BLOG.FONT_AWESOME && (
             <>
