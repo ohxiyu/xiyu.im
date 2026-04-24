@@ -1,11 +1,18 @@
 const CONFIG = {
-  // xiyu 主题配置
-  XIYU_FOOT_QUOTE: 'xiyu.im · 长期主义 · 记录思考', // 页脚副文案
-  XIYU_NAV_TWITTER: process.env.NEXT_PUBLIC_CONTACT_TWITTER || '', // 导航栏 Twitter 链接，空则隐藏
-  XIYU_HOME_SHOW_FEATURED: true, // 首页是否展示第一篇大卡
-  XIYU_HOME_NOW_SLUG: 'now', // 首页 "Now 最近在想" 卡引用的 Notion page slug，读不到时 fallback 到最新文章 summary
-  XIYU_ACCENT: '#e67e22', // 主 accent 色（可在这里改）
-  XIYU_ACCENT_DARK: '#f39c3e' // 深色模式 accent 色
-}
+  NOBELIUM_NAV_NOTION_ICON: true, // 是否读取Notion图标作为站点头像 ; 否则默认显示黑色SVG方块
 
+  // 特殊菜单
+  NOBELIUM_MENU_RANDOM_POST: true, // 是否显示随机跳转文章按钮
+  NOBELIUM_MENU_SEARCH_BUTTON: true, // 是否显示搜索按钮，该按钮支持Algolia搜索
+  NOBELIUM_MENU_DARKMODE_BUTTON: true, // 菜单显示深色模式切换
+
+  // 默认菜单配置 （开启自定义菜单后，以下配置则失效，请在Notion中自行配置菜单）
+  NOBELIUM_MENU_CATEGORY: false, // 显示分类
+  NOBELIUM_MENU_TAG: true, // 显示标签
+  NOBELIUM_MENU_ARCHIVE: false, // 显示归档
+  NOBELIUM_MENU_SEARCH: true, // 显示搜索
+  NOBELIUM_MENU_RSS: false, // 显示订阅
+
+  NOBELIUM_AUTO_COLLAPSE_NAV_BAR: true // 页头导航栏动画
+}
 export default CONFIG
