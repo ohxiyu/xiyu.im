@@ -1,24 +1,11 @@
-/* eslint-disable react/no-unknown-property */
-/* xiyu theme — global styles merged from .design/source/{styles,pages}.css
- * [data-theme="dark"] selectors replaced with html.dark to match NotionNext */
+/* eslint-disable react/no-danger */
+// xiyu theme CSS — 用 dangerouslySetInnerHTML 直接注入 <style>，
+// 绕开 styled-jsx 的处理，避免 build/生产环境下作用域/属性加工导致的 selector 失效
 
-export const Style = () => (
-  <style jsx global>{`
-/* ===== xiyu 主题 reset：抵消 Tailwind preflight 对 xiyu 元素的影响 ===== */
-#theme-xiyu, #theme-xiyu * { box-sizing: border-box; }
-#theme-xiyu h1, #theme-xiyu h2, #theme-xiyu h3, #theme-xiyu h4 {
-  font-size: inherit; font-weight: inherit; margin: 0;
-}
-#theme-xiyu p, #theme-xiyu figure, #theme-xiyu blockquote, #theme-xiyu pre,
-#theme-xiyu ul, #theme-xiyu ol, #theme-xiyu dl, #theme-xiyu dd { margin: 0; }
-#theme-xiyu a { color: inherit; text-decoration: none; }
-#theme-xiyu button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; padding: 0; }
-#theme-xiyu img, #theme-xiyu svg { display: inline-block; vertical-align: middle; max-width: 100%; }
-
-/* ===== styles.css ===== */
+const CSS = `
 /* xiyu.im — Design System */
 
-:root, #theme-xiyu {
+:root {
   /* Light — warm paper */
   --bg: #faf7f2;
   --bg-elev: #fffdf9;
@@ -301,7 +288,6 @@ html.dark .paper-grain { opacity: 0.06; mix-blend-mode: screen; }
 /* ——— Scroll ——— */
 html { scroll-behavior: smooth; }
 
-/* ===== pages.css ===== */
 /* Page-specific styles */
 
 /* ——— Homepage Hero ——— */
@@ -1203,9 +1189,10 @@ body.canvas-mode { overflow: hidden; }
 }
 .page-frame .page { padding-top: 40px; padding-bottom: 56px; }
 
-/* ===== NotionPage 渲染兼容层：让 Notion 输出也能继承 xiyu 正文观感 ===== */
+
+/* ===== NotionPage 渲染兼容层 ===== */
 .article-body .notion { color: inherit; }
-.article-body .notion-text { margin: 0 0 20px; line-height: 1.85; text-wrap: pretty; }
+.article-body .notion-text { margin: 0 0 20px; line-height: 1.85; }
 .article-body .notion-h,
 .article-body .notion-h1,
 .article-body .notion-h2,
@@ -1219,83 +1206,67 @@ body.canvas-mode { overflow: hidden; }
 .article-body .notion-h2 { font-size: 26px; margin: 56px 0 20px; }
 .article-body .notion-h3 { font-size: 19px; margin: 40px 0 14px; }
 .article-body .notion-quote {
-  margin: 28px 0;
-  padding: 4px 0 4px 22px;
+  margin: 28px 0; padding: 4px 0 4px 22px;
   border-left: 2px solid var(--rule);
-  color: var(--ink-mute);
-  font-style: italic;
+  color: var(--ink-mute); font-style: italic;
 }
 .article-body .notion-inline-code,
 .article-body .notion-code-inline {
   font-family: "JetBrains Mono", monospace;
-  font-size: 0.88em;
-  background: var(--tag-bg);
-  color: var(--ink);
-  padding: 2px 6px;
-  border-radius: 3px;
+  font-size: 0.88em; background: var(--tag-bg);
+  color: var(--ink); padding: 2px 6px; border-radius: 3px;
 }
 .article-body .notion-code {
-  background: var(--bg-elev);
-  border: 1px solid var(--rule);
-  padding: 20px 24px;
-  margin: 28px 0;
+  background: var(--bg-elev); border: 1px solid var(--rule);
+  padding: 20px 24px; margin: 28px 0;
   font-family: "JetBrains Mono", monospace;
-  font-size: 13.5px;
-  line-height: 1.7;
-  color: var(--ink-soft);
+  font-size: 13.5px; line-height: 1.7; color: var(--ink-soft);
 }
 .article-body .notion-callout {
-  border: 1px solid var(--rule);
-  background: var(--bg-elev);
-  padding: 20px 24px;
-  margin: 28px 0;
-  position: relative;
+  border: 1px solid var(--rule); background: var(--bg-elev);
+  padding: 20px 24px; margin: 28px 0; position: relative;
 }
 .article-body .notion-callout::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: var(--accent);
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--accent);
 }
-.article-body .notion-hr,
-.article-body hr {
-  border: 0;
-  height: 1px;
-  background: var(--rule);
-  margin: 48px 0;
+.article-body .notion-hr, .article-body hr {
+  border: 0; height: 1px; background: var(--rule); margin: 48px 0;
 }
 .article-body .notion-link {
   color: var(--ink);
   background-image: linear-gradient(var(--accent), var(--accent));
-  background-size: 100% 1px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  padding-bottom: 1px;
-  text-decoration: none;
-  transition: color .15s;
+  background-size: 100% 1px; background-position: 0 100%;
+  background-repeat: no-repeat; padding-bottom: 1px;
+  text-decoration: none; transition: color .15s;
 }
 .article-body .notion-link:hover { color: var(--accent-ink); }
-.article-body .notion-asset-wrapper figcaption,
-.article-body figcaption {
-  font-size: 13px;
-  color: var(--ink-mute);
-  margin-top: 10px;
-  text-align: center;
-  font-family: "JetBrains Mono", monospace;
+.article-body .notion > .notion-text:first-of-type::first-letter,
+.article-body .notion-page-content > .notion-text:first-of-type::first-letter {
+  font-family: "Noto Serif SC", serif; font-size: 3.2em;
+  float: left; line-height: 0.95; padding: 6px 10px 0 0;
+  color: var(--accent-ink); font-weight: 500;
 }
-/* 首字下沉：针对 NotionPage 输出的第一个 notion-text */
-.article-body .notion-page-content > .notion-text:first-of-type::first-letter,
-.article-body .notion > .notion-text:first-of-type::first-letter {
-  font-family: "Noto Serif SC", serif;
-  font-size: 3.2em;
-  float: left;
-  line-height: 0.95;
-  padding: 6px 10px 0 0;
-  color: var(--accent-ink);
-  font-weight: 500;
+
+/* 把 :root 下的 CSS 变量同时挂到 #theme-xiyu，避免被外层覆盖 */
+#theme-xiyu {
+  --bg: #faf7f2; --bg-elev: #fffdf9;
+  --ink: #1a1612; --ink-soft: #2d2720; --ink-mute: #6b6358; --ink-faint: #a69e92;
+  --rule: #e8e1d3; --rule-soft: #f0eade;
+  --accent: #e67e22; --accent-ink: #b85e10;
+  --tag-bg: #f2ede2; --tag-ink: #5a5046; --selection: #f9dcb6;
 }
-`}</style>
+html.dark #theme-xiyu {
+  --bg: #14110d; --bg-elev: #1c1813;
+  --ink: #f2ede2; --ink-soft: #d9d2c3; --ink-mute: #8f877a; --ink-faint: #5e574c;
+  --rule: #2a251e; --rule-soft: #201b15;
+  --accent: #f39c3e; --accent-ink: #f5b565;
+  --tag-bg: #221d16; --tag-ink: #a69d8c; --selection: #4a3a1e;
+}
+`
+
+export const Style = () => (
+  <style dangerouslySetInnerHTML={{ __html: CSS }} />
 )
 
 export default Style
