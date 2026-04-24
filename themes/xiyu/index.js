@@ -278,8 +278,18 @@ const LayoutSlug = props => {
  */
 const LayoutArchive = props => {
   const { archivePosts, postCount } = props
-  const grouped = archivePosts && typeof archivePosts === 'object' ? archivePosts : {}
-  const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a))
+  const rawGrouped = archivePosts && typeof archivePosts === 'object' ? archivePosts : {}
+  // NotionNext 把 archivePosts 按 yyyy-MM 分组；我们需要的是按 yyyy 年二次聚合
+  const byYear = {}
+  for (const [ym, list] of Object.entries(rawGrouped)) {
+    const year = String(ym).slice(0, 4)
+    if (!byYear[year]) byYear[year] = []
+    byYear[year] = byYear[year].concat(list || [])
+  }
+  for (const year of Object.keys(byYear)) {
+    byYear[year].sort((a, b) => (b?.publishDay || '').localeCompare(a?.publishDay || ''))
+  }
+  const years = Object.keys(byYear).sort((a, b) => b.localeCompare(a))
   const author = siteConfig('AUTHOR') || 'xiyu'
   const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
   const years_writing = Math.max(1, new Date().getFullYear() - since + 1)
@@ -293,7 +303,7 @@ const LayoutArchive = props => {
         </p>
       </header>
       {years.map(y => (
-        <ArchiveYear key={y} year={y} posts={grouped[y]} />
+        <ArchiveYear key={y} year={y} posts={byYear[y]} />
       ))}
     </>
   )
