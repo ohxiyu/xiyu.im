@@ -3,7 +3,7 @@ import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import SmartLink from '@/components/SmartLink'
 import { useRouter } from 'next/router'
-import { createContext, useContext, useEffect, useRef } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import CONFIG from './config'
 import { Style } from './style'
@@ -25,10 +25,55 @@ import Colophon from './components/Colophon'
 
 const Comment = dynamic(() => import('@/components/Comment'), { ssr: false })
 const ArticleLock = dynamic(() => import('./components/ArticleLock'), { ssr: false })
+const ShareBar = dynamic(() => import('@/components/ShareBar'), { ssr: false })
+const AlgoliaSearchModal = dynamic(() => import('@/components/AlgoliaSearchModal'), { ssr: false })
 
 // 主题全局状态
 const ThemeGlobalXiyu = createContext()
 export const useXiyuGlobal = () => useContext(ThemeGlobalXiyu)
+
+// 右下浮动"回到顶部"按钮
+const JumpToTop = () => {
+  const [show, setShow] = useState(false)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const onScroll = () => setShow(window.scrollY > 600)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+  if (!show) return null
+  return (
+    <button
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      aria-label='回到顶部'
+      className='theme-toggle'
+      style={{ position: 'fixed', right: 24, bottom: 24, zIndex: 50 }}>
+      <svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+        <line x1='12' y1='19' x2='12' y2='5' />
+        <polyline points='5 12 12 5 19 12' />
+      </svg>
+    </button>
+  )
+}
+
+// 首页文章列表按年份分组
+const groupByYear = posts => {
+  if (!Array.isArray(posts)) return []
+  const groups = []
+  let currentYear = null
+  let currentGroup = null
+  for (const post of posts) {
+    const year = (post?.publishDay || post?.date?.start_date || '').slice(0, 4)
+    if (year !== currentYear) {
+      currentYear = year
+      currentGroup = { year, posts: [] }
+      groups.push(currentGroup)
+    }
+    currentGroup.posts.push(post)
+  }
+  return groups
+}
 
 /**
  * 全局外壳：.page 容器 + Nav + children + Footer
@@ -49,6 +94,8 @@ const LayoutBase = props => {
           </div>
           <Footer {...props} />
         </div>
+        <JumpToTop />
+        <AlgoliaSearchModal cRef={searchModal} {...props} />
       </div>
     </ThemeGlobalXiyu.Provider>
   )
@@ -63,6 +110,8 @@ const LayoutIndex = props => {
   const total = typeof postCount === 'number' ? postCount : list.length
   const [featured, ...rest] = list
   const currentYear = new Date().getFullYear()
+  const grouped = groupByYear(rest)
+  let runningIdx = 1 // featured 占用 idx 0
 
   return (
     <>
@@ -74,8 +123,19 @@ const LayoutIndex = props => {
         </div>
         {featured && <FeaturedCard post={featured} totalCount={total} index={0} />}
         <div>
-          {rest.map((p, idx) => (
-            <BlogPost key={p.id || p.slug} post={p} totalCount={total} index={idx + 1} />
+          {grouped.map(group => (
+            <div key={group.year || 'no-year'}>
+              {group.year && (
+                <h3 className='eyebrow' style={{ margin: '32px 0 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span>{group.year}</span>
+                  <span style={{ flex: 1, height: 1, background: 'var(--rule)' }}></span>
+                </h3>
+              )}
+              {group.posts.map(p => {
+                const idx = runningIdx++
+                return <BlogPost key={p.id || p.slug} post={p} totalCount={total} index={idx} />
+              })}
+            </div>
           ))}
         </div>
         <LayoutPagination {...props} />
@@ -202,6 +262,7 @@ const LayoutSlug = props => {
               {tags.map(t => <span key={t} className='tag'>{t}</span>)}
             </div>
           )}
+          <ShareBar post={post} />
           <PrevNext prev={prev} next={next} />
         </footer>
         <Comment frontMatter={post} />
