@@ -1,383 +1,344 @@
-import Comment from '@/components/Comment'
-import Live2D from '@/components/Live2D'
-import replaceSearchResult from '@/components/Mark'
 import NotionPage from '@/components/NotionPage'
-import ShareBar from '@/components/ShareBar'
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
-import { deepClone, isBrowser } from '@/lib/utils'
-import { Transition } from '@headlessui/react'
-import dynamic from 'next/dynamic'
 import SmartLink from '@/components/SmartLink'
 import { useRouter } from 'next/router'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import Announcement from './components/Announcement'
-import { ArticleFooter } from './components/ArticleFooter'
-import { ArticleInfo } from './components/ArticleInfo'
-import { ArticleLock } from './components/ArticleLock'
-import BlogArchiveItem from './components/BlogArchiveItem'
-import BlogListBar from './components/BlogListBar'
-import { BlogListPage } from './components/BlogListPage'
-import { BlogListScroll } from './components/BlogListScroll'
-import Catalog from './components/Catalog'
-import { Footer } from './components/Footer'
-import Hero from './components/Hero'
-import JumpToTopButton from './components/JumpToTopButton'
-import Nav from './components/Nav'
-import SearchNavBar from './components/SearchNavBar'
+import { createContext, useContext, useEffect, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import CONFIG from './config'
 import { Style } from './style'
 
-const AlgoliaSearchModal = dynamic(
-  () => import('@/components/AlgoliaSearchModal'),
-  { ssr: false }
-)
+// —— xiyu 主题组件 ——
+import Nav from './components/Nav'
+import Footer from './components/Footer'
+import Hero from './components/Hero'
+import FeaturedCard from './components/FeaturedCard'
+import BlogPost from './components/BlogPost'
+import TOC from './components/TOC'
+import ArticleSide from './components/ArticleSide'
+import PrevNext from './components/PrevNext'
+import ArchiveYear from './components/ArchiveYear'
+import AboutHero from './components/AboutHero'
+import AboutFacts from './components/AboutFacts'
+import Topics from './components/Topics'
+import Colophon from './components/Colophon'
+
+const Comment = dynamic(() => import('@/components/Comment'), { ssr: false })
+const ArticleLock = dynamic(() => import('./components/ArticleLock'), { ssr: false })
 
 // 主题全局状态
-const ThemeGlobalNobelium = createContext()
-export const useNobeliumGlobal = () => useContext(ThemeGlobalNobelium)
+const ThemeGlobalXiyu = createContext()
+export const useXiyuGlobal = () => useContext(ThemeGlobalXiyu)
 
 /**
- * 基础布局 采用左右两侧布局，移动端使用顶部导航栏
-
- * @returns {JSX.Element}
- * @constructor
+ * 全局外壳：.page 容器 + Nav + children + Footer
  */
 const LayoutBase = props => {
-  const { children, post } = props
-  const fullWidth = post?.fullWidth ?? false
-  const { onLoading } = useGlobal()
+  const { children } = props
+  const { onLoading } = useGlobal() || {}
   const searchModal = useRef(null)
-  // 在列表中进行实时过滤
-  const [filterKey, setFilterKey] = useState('')
-  const topSlot = <BlogListBar {...props} />
-
   return (
-    <ThemeGlobalNobelium.Provider
-      value={{ searchModal, filterKey, setFilterKey }}>
-      <div
-        id='theme-nobelium'
-        className={`${siteConfig('FONT_STYLE')} nobelium relative dark:text-gray-300  w-full  bg-white dark:bg-black min-h-screen flex flex-col scroll-smooth transition-colors duration-300`}>
+    <ThemeGlobalXiyu.Provider value={{ searchModal }}>
+      <div id='theme-xiyu'>
         <Style />
-
-        {/* 顶部导航栏 */}
-        <Nav {...props} />
-
-        {/* 主区 */}
-        <main
-          id='out-wrapper'
-          className={`relative m-auto flex-grow w-full transition-all ${!fullWidth ? 'max-w-4xl px-4' : 'px-4 md:px-24'}`}>
-          <Transition
-            show={!onLoading}
-            appear={true}
-            enter='transition ease-in-out duration-700 transform order-first'
-            enterFrom='opacity-0 translate-y-16'
-            enterTo='opacity-100'
-            leave='transition ease-in-out duration-300 transform'
-            leaveFrom='opacity-100 translate-y-0'
-            leaveTo='opacity-0 -translate-y-16'
-            unmount={false}>
-            {/* 顶部插槽 */}
-            {topSlot}
+        <div className='page'>
+          <Nav {...props} />
+          <div style={{ opacity: onLoading ? 0.6 : 1, transition: 'opacity .2s' }}>
             {children}
-            {post && <Catalog toc={post?.toc} />}
-          </Transition>
-        </main>
-
-        {/* 页脚 */}
-        <Footer {...props} />
-
-        {/* 右下悬浮 */}
-        <div className='fixed right-4 bottom-4'>
-          <JumpToTopButton />
+          </div>
+          <Footer {...props} />
         </div>
-
-        {/* 左下悬浮 */}
-        <div className='bottom-4 -left-14 fixed justify-end z-40'>
-          <Live2D />
-        </div>
-
-        {/* 搜索框 */}
-        <AlgoliaSearchModal cRef={searchModal} {...props} />
       </div>
-    </ThemeGlobalNobelium.Provider>
+    </ThemeGlobalXiyu.Provider>
   )
 }
 
 /**
- * 首页
- * 首页是个博客列表，加上顶部嵌入一个公告
- * @param {*} props
- * @returns
+ * 首页：Hero + 最新写作 section（FeaturedCard + ArticleRow list + 分页）
  */
 const LayoutIndex = props => {
+  const { posts, postCount, allNavPages } = props
+  const list = Array.isArray(posts) ? posts : []
+  const total = typeof postCount === 'number' ? postCount : list.length
+  const [featured, ...rest] = list
+  const currentYear = new Date().getFullYear()
+
   return (
-    <LayoutPostList
-      {...props}
-      topSlot={
-        <>
-          <Hero siteInfo={props.siteInfo} />
-          <Announcement {...props} />
-        </>
-      }
-    />
+    <>
+      <Hero posts={list} postCount={total} allNavPages={allNavPages} />
+      <section>
+        <div className='section-head'>
+          <h2 className='section-title'>最新写作</h2>
+          <span className='section-count'>{currentYear} · {list.length} posts shown</span>
+        </div>
+        {featured && <FeaturedCard post={featured} totalCount={total} index={0} />}
+        <div>
+          {rest.map((p, idx) => (
+            <BlogPost key={p.id || p.slug} post={p} totalCount={total} index={idx + 1} />
+          ))}
+        </div>
+        <LayoutPagination {...props} />
+      </section>
+    </>
   )
 }
 
 /**
- * 博客列表
- * @param {*} props
- * @returns
+ * 通用列表（分类/标签/搜索复用）
  */
 const LayoutPostList = props => {
-  const { posts, topSlot, tag } = props
-  const { filterKey } = useNobeliumGlobal()
-  let filteredBlogPosts = []
-  if (filterKey && posts) {
-    filteredBlogPosts = posts.filter(post => {
-      const tagContent = post?.tags ? post?.tags.join(' ') : ''
-      const searchContent = post.title + post.summary + tagContent
-      return searchContent.toLowerCase().includes(filterKey.toLowerCase())
-    })
-  } else {
-    filteredBlogPosts = deepClone(posts)
-  }
-
+  const { posts, postCount, tag, category, keyword } = props
+  const list = Array.isArray(posts) ? posts : []
+  const total = typeof postCount === 'number' ? postCount : list.length
+  const title = tag ? `# ${tag}` : category ? `分类 · ${category}` : keyword ? `搜索 · ${keyword}` : '文章'
   return (
-    <>
-      {topSlot}
-      {tag && <SearchNavBar {...props} />}
-      {siteConfig('POST_LIST_STYLE') === 'page' ? (
-        <BlogListPage {...props} posts={filteredBlogPosts} />
-      ) : (
-        <BlogListScroll {...props} posts={filteredBlogPosts} />
-      )}
-    </>
-  )
-}
-
-/**
- * 搜索
- * 页面是博客列表，上方嵌入一个搜索引导条
- * @param {*} props
- * @returns
- */
-const LayoutSearch = props => {
-  const { keyword, posts } = props
-  useEffect(() => {
-    if (isBrowser) {
-      replaceSearchResult({
-        doms: document.getElementById('posts-wrapper'),
-        search: keyword,
-        target: {
-          element: 'span',
-          className: 'text-red-500 border-b border-dashed'
-        }
-      })
-    }
-  }, [])
-
-  // 在列表中进行实时过滤
-  const { filterKey } = useNobeliumGlobal()
-  let filteredBlogPosts = []
-  if (filterKey && posts) {
-    filteredBlogPosts = posts.filter(post => {
-      const tagContent = post?.tags ? post?.tags.join(' ') : ''
-      const searchContent = post.title + post.summary + tagContent
-      return searchContent.toLowerCase().includes(filterKey.toLowerCase())
-    })
-  } else {
-    filteredBlogPosts = deepClone(posts)
-  }
-
-  return (
-    <>
-      <SearchNavBar {...props} />
-      {siteConfig('POST_LIST_STYLE') === 'page' ? (
-        <BlogListPage {...props} posts={filteredBlogPosts} />
-      ) : (
-        <BlogListScroll {...props} posts={filteredBlogPosts} />
-      )}
-    </>
-  )
-}
-
-/**
- * 归档
- * @param {*} props
- * @returns
- */
-const LayoutArchive = props => {
-  const { archivePosts } = props
-  return (
-    <>
-      <div className='mb-10 pb-20 md:py-12 p-3  min-h-screen w-full'>
-        {Object.keys(archivePosts).map(archiveTitle => (
-          <BlogArchiveItem
-            key={archiveTitle}
-            archiveTitle={archiveTitle}
-            archivePosts={archivePosts}
-          />
+    <section>
+      <div className='section-head'>
+        <h2 className='section-title'>{title}</h2>
+        <span className='section-count'>{list.length} posts</span>
+      </div>
+      <div>
+        {list.length === 0 && <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>还没有文章。</p>}
+        {list.map((p, idx) => (
+          <BlogPost key={p.id || p.slug} post={p} totalCount={total} index={idx} />
         ))}
       </div>
-    </>
+      <LayoutPagination {...props} />
+    </section>
   )
 }
 
 /**
- * 文章详情
- * @param {*} props
- * @returns
+ * 分页（内部组件）
+ */
+const LayoutPagination = ({ page = 1, postCount }) => {
+  const router = useRouter()
+  const POSTS_PER_PAGE = parseInt(siteConfig('POSTS_PER_PAGE', 12)) || 12
+  const totalPage = Math.max(1, Math.ceil((postCount || 0) / POSTS_PER_PAGE))
+  const currentPage = +page || 1
+  if (totalPage <= 1) return null
+  const showPrev = currentPage > 1
+  const showNext = currentPage < totalPage
+  const prefix = (router?.asPath || '/').split('?')[0].replace(/\/page\/[1-9]\d*/, '').replace(/\/$/, '').replace('.html', '')
+  const prevHref = currentPage - 1 === 1 ? `${prefix || ''}/` : `${prefix}/page/${currentPage - 1}`
+  const nextHref = `${prefix}/page/${currentPage + 1}`
+  return (
+    <nav className='pagination'>
+      {showPrev ? (
+        <SmartLink href={prevHref} className='page-link'>← 更新的文章</SmartLink>
+      ) : (
+        <span className='page-link disabled'>← 更新的文章</span>
+      )}
+      <span className='page-indicator'>page {currentPage} / {totalPage}</span>
+      {showNext ? (
+        <SmartLink href={nextHref} className='page-link'>更早的文章 →</SmartLink>
+      ) : (
+        <span className='page-link disabled'>更早的文章 →</span>
+      )}
+    </nav>
+  )
+}
+
+/**
+ * 文章详情：左 TOC · 中正文 · 右 ArticleSide
  */
 const LayoutSlug = props => {
-  const { post, lock, validPassword } = props
+  const { post, lock, validPassword, prev, next } = props
+  const { fullWidth } = useGlobal() || {}
   const router = useRouter()
-  const waiting404 = siteConfig('POST_WAITING_TIME_FOR_404') * 1000
+  const waiting404 = parseInt(siteConfig('POST_WAITING_TIME_FOR_404') || 0) * 1000
+
   useEffect(() => {
-    // 404
-    if (!post) {
-      setTimeout(
-        () => {
-          if (isBrowser) {
-            const article = document.querySelector('#article-wrapper #notion-article')
-            if (!article) {
-              router.push('/404').then(() => {
-                console.warn('找不到页面', router.asPath)
-              })
-            }
-          }
-        },
-        waiting404
-      )
+    if (!post && waiting404) {
+      const t = setTimeout(() => {
+        if (typeof document !== 'undefined' && !document.querySelector('#article-wrapper #notion-article')) {
+          router.push('/404')
+        }
+      }, waiting404)
+      return () => clearTimeout(t)
     }
   }, [post])
+
+  if (lock) return <ArticleLock validPassword={validPassword} />
+  if (!post) return null
+
+  const rawNum = post?.pageProperties?.num ?? post?.pageProperties?.Num
+  const num = rawNum ? String(rawNum).padStart(4, '0') : ''
+  const tags = Array.isArray(post.tags) ? post.tags : []
+  const dateISO = post.publishDay || post.date?.start_date || ''
+  const dateFmt = (() => {
+    if (!dateISO) return ''
+    const d = new Date(dateISO + 'T00:00:00')
+    if (isNaN(d.getTime())) return dateISO
+    return `${d.toLocaleString('en-US', { month: 'short' })} ${d.getDate()}, ${d.getFullYear()}`
+  })()
+
+  return (
+    <div className='article-layout'>
+      <TOC toc={post.toc} />
+      <article>
+        <header className='article-hero'>
+          <div className='article-head-meta'>
+            {num && <span className='post-num'>#{num}</span>}
+            {dateFmt && <span className='post-date'>{dateFmt}</span>}
+            {tags.length > 0 && <span className='tag-dot'>·</span>}
+            {tags.map((t, i) => (
+              <span key={t}>
+                {i > 0 && <span className='tag-dot'>·</span>}
+                <span className='tag-plain'>{t}</span>
+              </span>
+            ))}
+          </div>
+          <h1 className='article-h1'>{post.title}</h1>
+          {post.summary && <p className='article-lead'>{post.summary}</p>}
+        </header>
+        <div id='article-wrapper' className='article-body'>
+          <NotionPage post={post} />
+        </div>
+        <footer className='article-foot'>
+          {tags.length > 0 && (
+            <div className='article-foot-tags'>
+              {tags.map(t => <span key={t} className='tag'>{t}</span>)}
+            </div>
+          )}
+          <PrevNext prev={prev} next={next} />
+        </footer>
+        <Comment frontMatter={post} />
+      </article>
+      <ArticleSide post={post} />
+    </div>
+  )
+}
+
+/**
+ * 归档页
+ */
+const LayoutArchive = props => {
+  const { archivePosts, postCount } = props
+  const grouped = archivePosts && typeof archivePosts === 'object' ? archivePosts : {}
+  const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a))
+  const author = siteConfig('AUTHOR') || 'xiyu'
+  const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
+  const years_writing = Math.max(1, new Date().getFullYear() - since + 1)
   return (
     <>
-      {lock && <ArticleLock validPassword={validPassword} />}
-
-      {!lock && post && (
-        <div className='px-2'>
-          <>
-            <ArticleInfo post={post} />
-            <div id='article-wrapper'>
-              <NotionPage post={post} />
-            </div>
-            <ShareBar post={post} />
-            <Comment frontMatter={post} />
-            <ArticleFooter />
-          </>
-        </div>
-      )}
+      <header className='archive-head'>
+        <div className='eyebrow'>Archive · {years_writing} 年的文字</div>
+        <h1 className='archive-title'>所有写过的字，按年陈列。</h1>
+        <p className='archive-sub'>
+          从 {since} 到现在，一共 {postCount || 0} 篇文章。早期的幼稚和近年的克制，都在这里——{author} 不删旧文，因为那也是我。
+        </p>
+      </header>
+      {years.map(y => (
+        <ArchiveYear key={y} year={y} posts={grouped[y]} />
+      ))}
     </>
   )
 }
 
 /**
- * 404 页面
- * @param {*} props
- * @returns
+ * 搜索 / 分类 / 标签 · 复用 LayoutPostList
  */
-const Layout404 = props => {
-  const router = useRouter()
-  useEffect(() => {
-    // 延时3秒如果加载失败就返回首页
-    setTimeout(() => {
-      const article = isBrowser && document.getElementById('article-wrapper')
-      if (!article) {
-        router.push('/').then(() => {
-          // console.log('找不到页面', router.asPath)
-        })
-      }
-    }, 3000)
-  }, [])
+const LayoutSearch = props => <LayoutPostList {...props} />
 
-  return <>
-        <div className='md:-mt-20 text-black w-full h-screen text-center justify-center content-center items-center flex flex-col'>
-            <div className='dark:text-gray-200'>
-                <h2 className='inline-block border-r-2 border-gray-600 mr-2 px-3 py-2 align-top'><i className='mr-2 fas fa-spinner animate-spin' />404</h2>
-                <div className='inline-block text-left h-32 leading-10 items-center'>
-                    <h2 className='m-0 p-0'>页面无法加载，即将返回首页</h2>
-                </div>
-            </div>
-        </div>
-    </>
-}
-
-/**
- * 文章分类列表
- * @param {*} props
- * @returns
- */
 const LayoutCategoryIndex = props => {
   const { categoryOptions } = props
-
+  const list = Array.isArray(categoryOptions) ? categoryOptions : []
   return (
-    <>
-      <div id='category-list' className='duration-200 flex flex-wrap'>
-        {categoryOptions?.map(category => {
-          return (
-            <SmartLink
-              key={category.name}
-              href={`/category/${category.name}`}
-              passHref
-              legacyBehavior>
-              <div
-                className={
-                  'hover:text-black dark:hover:text-white dark:text-gray-300 dark:hover:bg-gray-600 px-5 cursor-pointer py-2 hover:bg-gray-100'
-                }>
-                <i className='mr-4 fas fa-folder' />
-                {category.name}({category.count})
-              </div>
-            </SmartLink>
-          )
-        })}
+    <section>
+      <div className='section-head'>
+        <h2 className='section-title'>Categories · 分类</h2>
+        <span className='section-count'>{list.length} categories</span>
       </div>
-    </>
+      <div className='topics-grid'>
+        {list.map(c => (
+          <SmartLink key={c.name} href={`/category/${encodeURIComponent(c.name)}`} className='topic-cell'>
+            <span className='topic-name'>{c.name}</span>
+            <span className='topic-count'>{c.count} posts</span>
+          </SmartLink>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+const LayoutTagIndex = props => {
+  const { tagOptions } = props
+  const list = Array.isArray(tagOptions) ? tagOptions : []
+  return (
+    <section>
+      <div className='section-head'>
+        <h2 className='section-title'>Tags · 标签</h2>
+        <span className='section-count'>{list.length} tags</span>
+      </div>
+      <div className='topics-grid'>
+        {list.map(t => (
+          <SmartLink key={t.name} href={`/tag/${encodeURIComponent(t.name)}`} className='topic-cell'>
+            <span className='topic-name'>{t.name}</span>
+            <span className='topic-count'>{t.count} posts</span>
+          </SmartLink>
+        ))}
+      </div>
+    </section>
   )
 }
 
 /**
- * 文章标签列表
- * @param {*} props
- * @returns
+ * 独立页面 · slug=about 用定制布局，其它用 NotionPage 渲染
  */
-const LayoutTagIndex = props => {
-  const { tagOptions } = props
-  return (
-    <>
-      <div>
-        <div id='tags-list' className='duration-200 flex flex-wrap'>
-          {tagOptions.map(tag => {
-            return (
-              <div key={tag.name} className='p-2'>
-                <SmartLink
-                  key={tag}
-                  href={`/tag/${encodeURIComponent(tag.name)}`}
-                  passHref
-                  className={`cursor-pointer inline-block rounded hover:bg-gray-500 hover:text-white duration-200 mr-2 py-1 px-2 text-xs whitespace-nowrap dark:hover:text-white text-gray-600 hover:shadow-xl dark:border-gray-400 notion-${tag.color}_background dark:bg-gray-800`}>
-                  <div className='font-light dark:text-gray-400'>
-                    <i className='mr-1 fas fa-tag' />{' '}
-                    {tag.name + (tag.count ? `(${tag.count})` : '')}{' '}
-                  </div>
-                </SmartLink>
-              </div>
-            )
-          })}
+const LayoutPage = props => {
+  const { post, tagOptions, postCount } = props
+  if (!post) return null
+  if (post.slug === 'about') {
+    return (
+      <>
+        <AboutHero />
+        <div className='about-body'>
+          <NotionPage post={post} />
         </div>
+        <AboutFacts postCount={postCount} />
+        <Topics tagOptions={tagOptions} />
+        <Colophon />
+      </>
+    )
+  }
+  return (
+    <article>
+      <header className='article-hero'>
+        <h1 className='article-h1'>{post.title}</h1>
+        {post.summary && <p className='article-lead'>{post.summary}</p>}
+      </header>
+      <div className='article-body'>
+        <NotionPage post={post} />
       </div>
-    </>
+    </article>
   )
 }
 
+/**
+ * 404
+ */
+const Layout404 = () => (
+  <section style={{ padding: '120px 0', textAlign: 'center' }}>
+    <div className='eyebrow' style={{ justifyContent: 'center' }}>404 · 页面未找到</div>
+    <h1 className='archive-title' style={{ margin: '24px 0 16px' }}>迷路了？</h1>
+    <p className='archive-sub' style={{ margin: '0 auto 32px', maxWidth: '40ch' }}>
+      这里没有你要找的内容。也许它已经被我删了，也许从来就没存在过。
+    </p>
+    <SmartLink href='/' className='btn-ghost'>← 回首页</SmartLink>
+  </section>
+)
+
 export {
-  Layout404,
-  LayoutArchive,
+  CONFIG as THEME_CONFIG,
   LayoutBase,
-  LayoutCategoryIndex,
   LayoutIndex,
   LayoutPostList,
-  LayoutSearch,
   LayoutSlug,
+  LayoutArchive,
+  LayoutSearch,
+  LayoutCategoryIndex,
   LayoutTagIndex,
-  CONFIG as THEME_CONFIG
+  LayoutPage,
+  Layout404
 }
