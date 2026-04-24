@@ -386,13 +386,15 @@ const renderAboutPage = props => {
           现在我只做一件事：<em>长期持有比特币，观察市场，不参与，不预测。</em>
         </p>
         <p>
-          近两年我把大部分精力放在 AI 上。帮我我处理日常、写交易报告、盯盘、做周报——<strong>我做减法，它做加法</strong>。
+          近两年我把大部分精力放在 AI Agent 上。做了一个叫 OpenClaw 的开源框架，
+          让非程序员也能搭一个 7×24 小时替自己干活的数字助理。
+          它替我处理邮件、写交易报告、盯盘、做周报——<strong>我做减法，它做加法</strong>。
         </p>
       </div>
       <AboutFacts postCount={postCount} />
       <div className='about-body'>
         <p>
-          如果你也在长期看好比特币，或者在折腾 AI Agent，或者只是喜欢一些思考——
+          如果你也在长期持有比特币，或者在折腾 AI Agent，或者只是喜欢一些反直觉的思考——
           欢迎通过下面的链接找我。我尽量回每一封邮件，不保证立刻。
         </p>
       </div>
