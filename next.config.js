@@ -1,4 +1,4 @@
-const { THEME } = require('./blog.config')
+const { THEME: REQUESTED_THEME } = require('./blog.config')
 const fs = require('node:fs')
 const path = require('node:path')
 const BLOG = require('./blog.config')
@@ -12,6 +12,13 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 // 扫描项目 /themes下的目录名
 const themes = scanSubdirectories(path.resolve(__dirname, 'themes'))
+
+// 防御：如果配置的 THEME 在 themes/ 下不存在（如 Vercel 有遗留 NEXT_PUBLIC_THEME=heo），
+// 回退到第一个可用主题，避免 build 因为别名指向空目录而失败
+const THEME = themes.includes(REQUESTED_THEME) ? REQUESTED_THEME : (themes[0] || 'xiyu')
+if (THEME !== REQUESTED_THEME) {
+  console.warn(`[主题回退] 请求的主题 "${REQUESTED_THEME}" 不存在，回退到 "${THEME}"。可用主题: ${themes.join(', ')}`)
+}
 // 检测用户开启的多语言
 const locales = (function () {
   // 根据BLOG_NOTION_PAGE_ID 检查支持多少种语言数据.
