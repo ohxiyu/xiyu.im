@@ -4,6 +4,29 @@ import SmartLink from '@/components/SmartLink'
 import { useRouter } from 'next/router'
 import BlogPost from './BlogPost'
 
+/**
+ * 将按时间倒序的文章按年份分组
+ */
+const groupPostsByYear = posts => {
+  if (!Array.isArray(posts)) return []
+  const groups = []
+  let currentYear = null
+  let currentGroup = null
+  for (const post of posts) {
+    const year =
+      (post?.publishDay || '').slice(0, 4) ||
+      (post?.date?.start_date || '').slice(0, 4) ||
+      ''
+    if (year !== currentYear) {
+      currentYear = year
+      currentGroup = { year, posts: [] }
+      groups.push(currentGroup)
+    }
+    currentGroup.posts.push(post)
+  }
+  return groups
+}
+
 export const BlogListPage = props => {
   const { page = 1, posts, postCount } = props
   const { locale } = useGlobal()
@@ -21,11 +44,23 @@ export const BlogListPage = props => {
     .replace(/\/$/, '')
     .replace('.html', '')
 
+  const grouped = groupPostsByYear(posts)
+
   return (
     <div className='w-full md:pr-12 my-6'>
       <div id='posts-wrapper'>
-        {posts?.map(post => (
-          <BlogPost key={post.id} post={post} />
+        {grouped.map(group => (
+          <section key={group.year || 'no-year'}>
+            {group.year && (
+              <h3 className='text-xs font-semibold tracking-widest uppercase text-gray-400 dark:text-gray-500 mb-6 mt-2 flex items-center gap-3'>
+                <span>{group.year}</span>
+                <span className='flex-1 h-px bg-gray-200 dark:bg-gray-700'></span>
+              </h3>
+            )}
+            {group.posts.map(post => (
+              <BlogPost key={post.id} post={post} />
+            ))}
+          </section>
         ))}
       </div>
 
