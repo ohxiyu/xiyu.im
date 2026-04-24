@@ -1,11 +1,11 @@
 import { useGlobal } from '@/lib/global'
 
 const ThemeToggle = () => {
-  const { isDarkMode, updateDarkMode } = useGlobal()
+  const { isDarkMode, toggleDarkMode } = useGlobal()
   return (
     <button
       className='theme-toggle'
-      onClick={() => updateDarkMode(!isDarkMode)}
+      onClick={toggleDarkMode}
       aria-label='Toggle theme'>
       {isDarkMode ? (
         <svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
