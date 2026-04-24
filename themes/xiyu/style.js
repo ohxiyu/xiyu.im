@@ -4,10 +4,21 @@
 
 export const Style = () => (
   <style jsx global>{`
+/* ===== xiyu 主题 reset：抵消 Tailwind preflight 对 xiyu 元素的影响 ===== */
+#theme-xiyu, #theme-xiyu * { box-sizing: border-box; }
+#theme-xiyu h1, #theme-xiyu h2, #theme-xiyu h3, #theme-xiyu h4 {
+  font-size: inherit; font-weight: inherit; margin: 0;
+}
+#theme-xiyu p, #theme-xiyu figure, #theme-xiyu blockquote, #theme-xiyu pre,
+#theme-xiyu ul, #theme-xiyu ol, #theme-xiyu dl, #theme-xiyu dd { margin: 0; }
+#theme-xiyu a { color: inherit; text-decoration: none; }
+#theme-xiyu button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; padding: 0; }
+#theme-xiyu img, #theme-xiyu svg { display: inline-block; vertical-align: middle; max-width: 100%; }
+
 /* ===== styles.css ===== */
 /* xiyu.im — Design System */
 
-:root {
+:root, #theme-xiyu {
   /* Light — warm paper */
   --bg: #faf7f2;
   --bg-elev: #fffdf9;
