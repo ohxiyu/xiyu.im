@@ -293,9 +293,11 @@ const nextConfig = {
       THEME
     )
 
-    // 性能优化配置
-    if (!dev) {
-      // 生产环境优化
+    // 性能优化配置：仅对客户端 bundle 生效
+    // 服务端打包用 Next.js 默认策略，避免把含有 self/window 的浏览器库打进 server vendors chunk
+    // （已知坑：自定义 splitChunks + chunks:'all' 会让客户端库进 server bundle，运行时 'self is not defined'）
+    if (!dev && !isServer) {
+      // 生产环境 + 客户端
       config.optimization = {
         ...config.optimization,
         splitChunks: {
