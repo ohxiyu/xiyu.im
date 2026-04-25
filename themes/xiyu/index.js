@@ -149,10 +149,13 @@ const LayoutIndex = props => {
  * 通用列表（分类/标签/搜索复用）
  */
 const LayoutPostList = props => {
-  const { posts, postCount, tag, category, keyword } = props
+  const { posts, postCount, tag, category, keyword, page = 1 } = props
   const list = Array.isArray(posts) ? posts : []
   const total = typeof postCount === 'number' ? postCount : list.length
   const title = tag ? `# ${tag}` : category ? `分类 · ${category}` : keyword ? `搜索 · ${keyword}` : '文章'
+  const POSTS_PER_PAGE = parseInt(siteConfig('POSTS_PER_PAGE', 12)) || 12
+  // 全局 idx：前几页累计 + 当前页内 idx，保证 BlogPost.formatNum(total - idx) 跨页连续
+  const startIdx = (Math.max(1, +page) - 1) * POSTS_PER_PAGE
   return (
     <section>
       <div className='section-head'>
@@ -162,7 +165,7 @@ const LayoutPostList = props => {
       <div>
         {list.length === 0 && <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>还没有文章。</p>}
         {list.map((p, idx) => (
-          <BlogPost key={p.id || p.slug} post={p} totalCount={total} index={idx} />
+          <BlogPost key={p.id || p.slug} post={p} totalCount={total} index={startIdx + idx} />
         ))}
       </div>
       <LayoutPagination {...props} />
