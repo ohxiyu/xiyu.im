@@ -1319,6 +1319,32 @@ html.dark #theme-xiyu {
    移动端适配：≤ 1024 / ≤ 768 / ≤ 480
    ============================================================ */
 
+/* ——— 全局长内容兜底：阻止 Notion 渲染的代码块/表格/图片/嵌入内容撑破移动视口 ——— */
+.article-body { overflow-wrap: break-word; word-break: break-word; }
+.article-body img,
+.article-body video,
+.article-body iframe,
+.article-body .notion-asset-wrapper,
+.article-body .notion-asset-wrapper img,
+.about-body img,
+.about-body video,
+.about-body iframe { max-width: 100%; height: auto; }
+.article-body pre,
+.article-body .notion-code,
+.article-body code { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.article-body table,
+.article-body .notion-table,
+.article-body .notion-simple-table,
+.article-body .notion-collection-row { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.article-body .notion-code pre,
+.article-body .notion-code code { white-space: pre; word-break: normal; overflow-wrap: normal; }
+.article-body .notion-bookmark,
+.article-body .notion-bookmark-link { max-width: 100%; box-sizing: border-box; }
+.article-body .notion-asset-wrapper-video,
+.article-body .notion-asset-wrapper-embed { max-width: 100%; }
+.article-body .notion-asset-wrapper-video > div,
+.article-body .notion-asset-wrapper-embed > div { max-width: 100% !important; }
+
 /* —— 平板 (≤1024px) —— */
 @media (max-width: 1024px) {
   .page { padding: 32px 28px 80px; }
@@ -1429,19 +1455,38 @@ html.dark #theme-xiyu {
   .archive-item:hover { padding-left: 0; }
 
   /* 文章详情 */
-  .article-hero { padding: 0 0 36px; }
+  .article-layout { padding: 0; gap: 0; max-width: 100%; }
+  .article-hero { padding: 0 0 28px; max-width: 100%; }
   .article-head-meta { flex-wrap: wrap; gap: 8px 14px; margin-bottom: 18px; }
-  .article-h1 { font-size: 30px; line-height: 1.25; margin-bottom: 18px; }
-  .article-lead { font-size: 16px; padding-left: 16px; margin-bottom: 32px; }
-  .article-body { font-size: 16px; }
-  .article-body h2 { font-size: 22px; margin: 40px 0 14px; }
-  .article-body h3 { font-size: 17px; margin: 28px 0 10px; }
-  .article-body .notion-h1 { font-size: 24px; margin: 40px 0 14px; }
-  .article-body .notion-h2 { font-size: 22px; margin: 40px 0 14px; }
-  .article-body .notion-h3 { font-size: 17px; margin: 28px 0 10px; }
+  .article-h1 { font-size: 28px; line-height: 1.25; margin-bottom: 16px; letter-spacing: -0.01em; }
+  .article-lead { font-size: 15.5px; line-height: 1.7; padding-left: 14px; margin-bottom: 28px; }
+  .article-body { font-size: 15.5px; line-height: 1.8; max-width: 100%; }
+  .article-body h2 { font-size: 21px; margin: 36px 0 12px; }
+  .article-body h3 { font-size: 17px; margin: 26px 0 10px; }
+  .article-body p { margin: 0 0 16px; }
+  .article-body p:first-of-type::first-letter { font-size: 2.6em; padding: 4px 8px 0 0; }
+  .article-body blockquote { margin: 20px 0; padding: 4px 0 4px 16px; }
+  .article-body pre { padding: 14px 16px; font-size: 13px; }
+  .article-body .notion-text { margin: 0 0 16px; line-height: 1.8; font-size: 15.5px; }
+  .article-body .notion-h1 { font-size: 22px; margin: 36px 0 12px; }
+  .article-body .notion-h2 { font-size: 20px; margin: 32px 0 12px; }
+  .article-body .notion-h3 { font-size: 17px; margin: 26px 0 10px; }
+  .article-body .notion-code { padding: 14px 16px; font-size: 13px; }
+  .article-body .notion-callout { padding: 16px 18px; margin: 20px 0; font-size: 14.5px; }
+  .article-body figure, .article-body .notion-asset-wrapper { margin: 20px 0; }
 
-  .prev-next { grid-template-columns: 1fr; gap: 12px; margin-top: 28px; }
+  /* 文章 footer */
+  .article-foot { padding-top: 24px; margin-top: 40px; }
+  .article-foot-tags { gap: 6px; margin-bottom: 20px; }
+
+  .prev-next { grid-template-columns: 1fr; gap: 10px; margin-top: 24px; }
+  .pn-card { padding: 16px 18px; }
+  .pn-title { font-size: 14.5px; }
   .pn-right { text-align: left; }
+
+  /* 文章 side（≤1024 时已横排，≤768 时再紧凑） */
+  .article-side { gap: 20px 28px; padding-top: 18px; margin-top: 32px; }
+  .article-side .side-stat-value { font-size: 16px; }
 
   /* 关于 */
   .about-hero {
@@ -1500,6 +1545,20 @@ html.dark #theme-xiyu {
   .about-h1 { font-size: 36px; }
   .feature-title { font-size: 22px; }
   .article-h1 { font-size: 24px; }
+  .article-lead { font-size: 15px; padding-left: 12px; }
+  .article-body { font-size: 15px; line-height: 1.78; }
+  .article-body .notion-text { font-size: 15px; }
+  .article-body h2, .article-body .notion-h1, .article-body .notion-h2 { font-size: 19px; margin: 30px 0 10px; }
+  .article-body h3, .article-body .notion-h3 { font-size: 16px; margin: 22px 0 8px; }
+  .article-body pre, .article-body .notion-code { padding: 12px 14px; font-size: 12.5px; }
+  .article-body .notion-callout { padding: 14px 16px; font-size: 14px; }
+  .article-foot-tags .tag { font-size: 10px; padding: 2px 6px; }
+  .pn-card { padding: 14px 16px; }
+  .pn-title { font-size: 13.5px; }
+  .pn-label { font-size: 9px; }
+  .article-side { gap: 16px 24px; }
+  .article-side .side-stat-label { font-size: 9px; }
+  .article-side .side-stat-value { font-size: 15px; }
   .about-facts { grid-template-columns: 1fr; }
   .fact { border-right: 0 !important; border-bottom: 1px solid var(--rule); }
   .fact:last-child { border-bottom: 0; }
