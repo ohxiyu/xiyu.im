@@ -319,9 +319,68 @@ const LayoutArchive = props => {
 }
 
 /**
- * 搜索 / 分类 / 标签 · 复用 LayoutPostList
+ * 搜索 · 顶部一个输入框 + 过滤后的文章列表
+ * NotionNext 的 /search 路由按 ?s=KEYWORD 过滤 posts
  */
-const LayoutSearch = props => <LayoutPostList {...props} />
+const LayoutSearch = props => {
+  const router = useRouter()
+  const keyword = (router?.query?.s || '').toString()
+  const [input, setInput] = useState(keyword)
+  useEffect(() => { setInput(keyword) }, [keyword])
+
+  const onSubmit = e => {
+    e.preventDefault()
+    const v = (input || '').trim()
+    if (v) router.push(`/search?s=${encodeURIComponent(v)}`)
+    else router.push('/search')
+  }
+
+  const list = Array.isArray(props.posts) ? props.posts : []
+
+  return (
+    <section>
+      <header className='archive-head' style={{ marginBottom: 32 }}>
+        <div className='eyebrow'>Search · 搜索</div>
+        <form onSubmit={onSubmit} role='search' style={{ marginTop: 18 }}>
+          <input
+            type='search'
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            placeholder='输入关键词，回车搜索…'
+            autoFocus
+            style={{
+              width: '100%',
+              padding: '14px 18px',
+              fontSize: 17,
+              fontFamily: 'inherit',
+              color: 'var(--ink)',
+              background: 'var(--bg-elev)',
+              border: '1px solid var(--rule)',
+              borderRadius: 2,
+              outline: 'none'
+            }}
+          />
+        </form>
+        {keyword && (
+          <p className='archive-sub' style={{ marginTop: 14, fontSize: 14 }}>
+            "<strong style={{ color: 'var(--ink)' }}>{keyword}</strong>" · 找到 {list.length} 篇
+          </p>
+        )}
+      </header>
+      {keyword
+        ? (list.length === 0
+          ? <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>没有匹配结果。</p>
+          : (
+              <div>
+                {list.map((p, idx) => (
+                  <BlogPost key={p.id || p.slug} post={p} totalCount={list.length} index={idx} />
+                ))}
+              </div>
+            ))
+        : <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>输入关键词开始搜索。</p>}
+    </section>
+  )
+}
 
 const LayoutCategoryIndex = props => {
   const { categoryOptions } = props
