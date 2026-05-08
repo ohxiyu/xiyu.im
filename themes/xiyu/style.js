@@ -51,6 +51,14 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   line-height: 1.7;
+  /* 防御：极端情况下任何子元素出血都不会让整页能横向滚动 */
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* 主题容器 box-sizing 兜底（避免 padding 让子元素超出） */
+#theme-xiyu, #theme-xiyu *, #theme-xiyu *::before, #theme-xiyu *::after {
+  box-sizing: border-box;
 }
 
 ::selection { background: var(--selection); color: var(--ink); }

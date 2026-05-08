@@ -207,8 +207,8 @@ const SEO = props => {
       <link rel='dns-prefetch' href='//www.googletagmanager.com' />
       <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='anonymous' />
 
-      {/* 预加载关键资源 */}
-      <link rel='preload' href='/fonts/inter-var.woff2' as='font' type='font/woff2' crossOrigin='anonymous' />
+      {/* 不再 preload /fonts/inter-var.woff2：xiyu 主题用 Google Fonts 的 Noto Serif SC + Noto Sans SC + JetBrains Mono，
+          inter-var.woff2 在 public/fonts/ 下不存在，preload 会触发 502 + 'preloaded but not used' 警告 */}
 
       {children}
     </Head>
