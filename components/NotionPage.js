@@ -229,13 +229,16 @@ function getMediumZoomMargin() {
   }
 }
 
-// 代码
+// 代码（启用 SSR + 同款 loading placeholder，避免移动端打开文章时出现"先无高亮、后跳到高亮"的视觉跳变）
 const Code = dynamic(
   () =>
     import('react-notion-x/build/third-party/code').then(m => {
       return m.Code
     }),
-  { ssr: false }
+  {
+    ssr: true,
+    loading: () => null
+  }
 )
 
 // 公式
@@ -261,6 +264,7 @@ const Pdf = dynamic(() => import('@/components/Pdf').then(m => m.Pdf), {
 })
 
 // 美化代码 from: https://github.com/txs
+// 必须 ssr:false：PrismMac 用 window / document 操作 DOM 添加 toolbar，server 端没这些 API
 const PrismMac = dynamic(() => import('@/components/PrismMac'), {
   ssr: false
 })
