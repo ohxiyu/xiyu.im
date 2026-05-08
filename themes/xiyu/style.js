@@ -51,15 +51,17 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   line-height: 1.7;
-  /* 防御：极端情况下任何子元素出血都不会让整页能横向滚动 */
+  /* 防御：宽度边界（不再 overflow-x:hidden，避免内容被裁掉用户也滑不到） */
+  width: 100%;
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
-/* 主题容器 box-sizing 兜底（避免 padding 让子元素超出） */
+/* 主题容器 + 所有后代统一 box-sizing，padding 不再让子元素超出 */
 #theme-xiyu, #theme-xiyu *, #theme-xiyu *::before, #theme-xiyu *::after {
   box-sizing: border-box;
 }
+#theme-xiyu { width: 100%; max-width: 100vw; }
 
 ::selection { background: var(--selection); color: var(--ink); }
 
@@ -1406,7 +1408,29 @@ html.dark #theme-xiyu {
 /* —— 手机 (≤768px) —— */
 @media (max-width: 768px) {
   html, body { line-height: 1.65; }
-  .page { padding: 20px 18px 64px; }
+  /* 关键：每层容器都明确不超出视口 */
+  .page {
+    padding: 20px 18px 64px;
+    max-width: 100vw;
+    width: 100%;
+  }
+  .article-layout, .article-body, .article-hero, .article-foot {
+    max-width: 100% !important;
+    width: 100%;
+    min-width: 0;  /* 让 flex/grid 子元素可以收缩，不被内容撑出去 */
+  }
+  /* Notion 渲染容器 #notion-article 也兜底 */
+  #notion-article {
+    max-width: 100% !important;
+    width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+  }
+  /* 极端情况下任何 Notion block 都不许撑出去 */
+  .article-body > *, .article-body .notion-page-content > * {
+    max-width: 100%;
+    min-width: 0;
+  }
 
   /* Nav 变紧凑 + 换行支持 */
   .site-nav {
