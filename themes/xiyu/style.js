@@ -1290,6 +1290,28 @@ body.canvas-mode { overflow: hidden; }
   color: var(--accent-ink); font-weight: 500;
 }
 
+/* ===== 隐藏 react-notion-x 默认渲染的"页面属性区"（类型/分类/标题/日期 等） =====
+   有些文章的 Notion blockMap 会带 page-header / properties block，
+   渲染出来就是用户看到的 '和 notion 一样的页面 类型 分类 标题'。
+   xiyu 主题已经在 LayoutSlug 自己的 .article-hero 里提供了 #编号/日期/标签/标题/lead，
+   所以 .article-body 内部不再需要 Notion 自带的页面头。 */
+.article-body .notion-page-no-cover,
+.article-body .notion-page-cover-wrapper,
+.article-body .notion-page-cover,
+.article-body .notion-collection-header,
+.article-body .notion-collection-page-properties,
+.article-body .notion-page-properties,
+.article-body .notion-page-property,
+.article-body .notion-property-title-page,
+.article-body > .notion-page-header,
+.article-body .notion-page-header,
+.article-body > .notion-title,
+.article-body > h1.notion-h1:first-child {
+  display: none !important;
+}
+/* 顶部 Cover image 也不需要（xiyu 是文字博客没有大图风格） */
+.article-body .notion-page-cover-hero { display: none !important; }
+
 /* 把 :root 下的 CSS 变量同时挂到 #theme-xiyu，避免被外层覆盖 */
 #theme-xiyu {
   --bg: #faf7f2; --bg-elev: #fffdf9;
