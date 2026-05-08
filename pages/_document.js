@@ -44,6 +44,11 @@ class MyDocument extends Document {
     return (
       <Html lang={BLOG.LANG}>
         <Head>
+          {/* viewport：必须！没有这条，手机默认按 980px 渲染，整页缩放需要左右拖动 */}
+          <meta
+            name='viewport'
+            content='width=device-width, initial-scale=1, viewport-fit=cover'
+          />
           {/* xiyu 主题品牌 favicon 族 + PWA + 社交分享 */}
           <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
           <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32.png' />
