@@ -2,7 +2,7 @@
 // xiyu theme CSS — 用 dangerouslySetInnerHTML 直接注入 <style>，
 // 绕开 styled-jsx 的处理，避免 build/生产环境下作用域/属性加工导致的 selector 失效
 
-const CSS = `
+export const CSS = `
 /* xiyu.im — Design System */
 
 :root {
@@ -1484,9 +1484,14 @@ html.dark #theme-xiyu {
   .pn-title { font-size: 14.5px; }
   .pn-right { text-align: left; }
 
-  /* 文章 side（≤1024 时已横排，≤768 时再紧凑） */
-  .article-side { gap: 20px 28px; padding-top: 18px; margin-top: 32px; }
-  .article-side .side-stat-value { font-size: 16px; }
+  /* 移动端：把 ArticleSide 整个隐藏（字数/时长/分享在小屏价值不大，占空间还分散注意力）
+     需要分享时引导到 footer 的 ShareBar */
+  .article-side { display: none; }
+
+  /* 移动端文章 head meta 紧凑：去掉超出 4 个的标签，避免顶部信息条占两行 */
+  .article-head-meta { font-size: 11px; gap: 6px 10px; }
+  .article-head-meta .tag-plain:nth-of-type(n+5) { display: none; }
+  .article-head-meta .tag-dot:nth-of-type(n+5) { display: none; }
 
   /* 关于 */
   .about-hero {
@@ -1568,8 +1573,8 @@ html.dark #theme-xiyu {
 }
 `
 
-export const Style = () => (
-  <style dangerouslySetInnerHTML={{ __html: CSS }} />
-)
+// CSS 现在通过 pages/_document.js 注入到 <head>，避免 FOUC（首屏闪现 Notion 默认样式）。
+// 这里保留 Style 占位组件保持兼容，渲染 null 不重复注入。
+export const Style = () => null
 
 export default Style
