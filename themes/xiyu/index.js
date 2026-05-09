@@ -3,7 +3,7 @@ import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import SmartLink from '@/components/SmartLink'
 import { useRouter } from 'next/router'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import CONFIG from './config'
 import { Style } from './style'
@@ -319,23 +319,59 @@ const LayoutArchive = props => {
 }
 
 /**
- * 搜索 · 顶部一个输入框 + 过滤后的文章列表
- * NotionNext 的 /search 路由按 ?s=KEYWORD 过滤 posts
+ * 搜索 · 客户端实时过滤
+ * - 输入即过滤，无需回车 / 跳页
+ * - 字段：title + summary + tags + category（数组/字符串都兼容）
+ * - 大小写不敏感
  */
 const LayoutSearch = props => {
   const router = useRouter()
-  const keyword = (router?.query?.s || '').toString()
-  const [input, setInput] = useState(keyword)
-  useEffect(() => { setInput(keyword) }, [keyword])
+  const initialKeyword = (router?.query?.s || '').toString()
+  const [input, setInput] = useState(initialKeyword)
 
+  // 路由变了同步 input
+  useEffect(() => { setInput(initialKeyword) }, [initialKeyword])
+
+  // pages/search 把 props.posts 设为按 ?s 过滤后的结果，
+  // 但我们用 input 实时过滤，需要拿原始全量列表。
+  // props.allPages 在 processPostData 里被 delete 了，retry 用 latestPosts 兜底；
+  // 实在没全量就退回 props.posts（至少是按 URL 关键词过滤的）。
+  const allList = useMemo(() => {
+    const candidates = [
+      props.allPosts,           // 自定义传入
+      props.allPages,           // 偶尔保留
+      props.latestPosts,        // 总是有
+      props.posts               // 兜底
+    ]
+    for (const c of candidates) {
+      if (Array.isArray(c) && c.length > 0) return c
+    }
+    return []
+  }, [props.allPosts, props.allPages, props.latestPosts, props.posts])
+
+  const tokens = (input || '').trim().toLowerCase().split(/\s+/).filter(Boolean)
+
+  const filtered = useMemo(() => {
+    if (!tokens.length) return []
+    return allList.filter(p => {
+      if (!p) return false
+      // 只搜已发布的 Post（避免菜单 / 草稿 / Notice 进结果）
+      if (p.type && p.type !== 'Post') return false
+      if (p.status && p.status !== 'Published') return false
+      const tags = Array.isArray(p.tags) ? p.tags.join(' ') : (p.tags || '')
+      const category = Array.isArray(p.category) ? p.category.join(' ') : (p.category || '')
+      const haystack = `${p.title || ''} ${p.summary || ''} ${tags} ${category}`.toLowerCase()
+      return tokens.every(t => haystack.includes(t))
+    })
+  }, [allList, tokens.join(' ')])
+
+  // 同步 URL（不重新拉数据，只 shallow push 让浏览器记住搜索词，便于分享/回退）
   const onSubmit = e => {
     e.preventDefault()
     const v = (input || '').trim()
-    if (v) router.push(`/search?s=${encodeURIComponent(v)}`)
-    else router.push('/search')
+    const url = v ? `/search?s=${encodeURIComponent(v)}` : '/search'
+    router.push(url, undefined, { shallow: true })
   }
-
-  const list = Array.isArray(props.posts) ? props.posts : []
 
   return (
     <section>
@@ -346,7 +382,7 @@ const LayoutSearch = props => {
             type='search'
             value={input}
             onChange={e => setInput(e.target.value)}
-            placeholder='输入关键词，回车搜索…'
+            placeholder='输入关键词，输入即过滤…'
             autoFocus
             style={{
               width: '100%',
@@ -361,23 +397,23 @@ const LayoutSearch = props => {
             }}
           />
         </form>
-        {keyword && (
+        {input.trim() && (
           <p className='archive-sub' style={{ marginTop: 14, fontSize: 14 }}>
-            "<strong style={{ color: 'var(--ink)' }}>{keyword}</strong>" · 找到 {list.length} 篇
+            "<strong style={{ color: 'var(--ink)' }}>{input.trim()}</strong>" · 找到 {filtered.length} 篇
           </p>
         )}
       </header>
-      {keyword
-        ? (list.length === 0
-          ? <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>没有匹配结果。</p>
+      {!input.trim()
+        ? <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>输入关键词开始搜索（标题、摘要、标签、分类都会匹配）。</p>
+        : filtered.length === 0
+          ? <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>没有匹配结果。试试别的词？</p>
           : (
               <div>
-                {list.map((p, idx) => (
-                  <BlogPost key={p.id || p.slug} post={p} totalCount={list.length} index={idx} />
+                {filtered.map((p, idx) => (
+                  <BlogPost key={p.id || p.slug} post={p} totalCount={filtered.length} index={idx} />
                 ))}
               </div>
-            ))
-        : <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>输入关键词开始搜索。</p>}
+            )}
     </section>
   )
 }
