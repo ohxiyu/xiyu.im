@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import SmartLink from '@/components/SmartLink'
 
 // 日期 CN 格式：YYYY · MM · DD
@@ -52,4 +53,4 @@ const BlogPost = ({ post, totalCount, index = 0 }) => {
   )
 }
 
-export default BlogPost
+export default memo(BlogPost)

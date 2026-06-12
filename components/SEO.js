@@ -139,6 +139,9 @@ const SEO = props => {
       <meta httpEquiv='content-language' content={siteConfig('LANG')} />
       <meta name='geo.region' content={siteConfig('GEO_REGION', 'CN')} />
       <meta name='geo.country' content={siteConfig('GEO_COUNTRY', 'CN')} />
+      {/* canonical：避免 /xxx 和 /xxx.html 等多版本 URL 被搜索引擎当成重复内容 */}
+      {url && <link rel='canonical' href={url} />}
+
       {/* Open Graph 元数据 */}
       <meta property='og:locale' content={lang} />
       <meta property='og:title' content={title} />

@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import SmartLink from '@/components/SmartLink'
 
 // 归档按年份的一块
@@ -28,4 +29,4 @@ const ArchiveYear = ({ year, posts }) => {
   )
 }
 
-export default ArchiveYear
+export default memo(ArchiveYear)
