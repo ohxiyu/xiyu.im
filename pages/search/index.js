@@ -16,11 +16,13 @@ const Search = props => {
   const keyword = router?.query?.s
 
   let filteredPosts
-  // 静态过滤
+  // 静态过滤（兼容 category 为字符串或数组；URL 带 ?s= 时预过滤，供不支持客户端过滤的主题用）
   if (keyword) {
     filteredPosts = posts.filter(post => {
-      const tagContent = post?.tags ? post?.tags.join(' ') : ''
-      const categoryContent = post.category ? post.category.join(' ') : ''
+      const tagContent = Array.isArray(post?.tags) ? post.tags.join(' ') : (post?.tags || '')
+      const categoryContent = Array.isArray(post?.category)
+        ? post.category.join(' ')
+        : (post?.category || '')
       const searchContent =
         post.title + post.summary + tagContent + categoryContent
       return searchContent.toLowerCase().includes(keyword.toLowerCase())
@@ -29,7 +31,8 @@ const Search = props => {
     filteredPosts = []
   }
 
-  props = { ...props, posts: filteredPosts }
+  // allPosts 始终是全量已发布文章，供主题做客户端实时过滤（xiyu LayoutSearch 用）
+  props = { ...props, posts: filteredPosts, allPosts: posts }
 
   const theme = siteConfig('THEME', BLOG.THEME, props.NOTION_CONFIG)
   return <DynamicLayout theme={theme} layoutName='LayoutSearch' {...props} />
