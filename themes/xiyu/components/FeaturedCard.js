@@ -10,12 +10,13 @@ const formatNum = (post, totalCount, idx) => {
   return ''
 }
 
+// 用 UTC 解析 + 输出，避免 SSR 与客户端时区不一致导致 hydration mismatch
+const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const formatDate = iso => {
   if (!iso) return ''
-  const d = new Date(iso + 'T00:00:00')
+  const d = new Date(iso + 'T00:00:00Z')
   if (isNaN(d.getTime())) return iso
-  const mo = d.toLocaleString('en-US', { month: 'short' })
-  return `${mo} ${d.getDate()}, ${d.getFullYear()}`
+  return `${MONTHS_EN[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`
 }
 
 // 首篇文章大卡（feature-card）

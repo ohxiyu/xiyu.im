@@ -239,9 +239,11 @@ const LayoutSlug = props => {
   const dateISO = post.publishDay || post.date?.start_date || ''
   const dateFmt = (() => {
     if (!dateISO) return ''
-    const d = new Date(dateISO + 'T00:00:00')
+    // UTC 解析 + 输出，避免 SSR/客户端时区差异
+    const d = new Date(dateISO + 'T00:00:00Z')
     if (isNaN(d.getTime())) return dateISO
-    return `${d.toLocaleString('en-US', { month: 'short' })} ${d.getDate()}, ${d.getFullYear()}`
+    const MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    return `${MO[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`
   })()
 
   return (
