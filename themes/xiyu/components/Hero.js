@@ -6,7 +6,7 @@ import NowCard from './NowCard'
 // 首页 Hero 区：大标题 + 自动副文案（最近写了 + 在想）+ 三个数字 + Now 卡
 // 副文案完全从 props.posts 计算，零外部依赖、零维护
 const Hero = props => {
-  const { posts, postCount, allNavPages } = props
+  const { posts, postCount, allNavPages, heroLines, heroIdx } = props
   const author = siteConfig('AUTHOR') || 'xiyu'
   const total = typeof postCount === 'number' ? postCount : (posts?.length ?? 0)
   const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
@@ -34,8 +34,19 @@ const Hero = props => {
       <div>
         <div className='eyebrow hero-eyebrow'>{author}'s notebook · est. {since}</div>
         <h1 className='hero-title'>
-          在喧嚣与噪声里，<br />
-          写点<em>经得住时间</em>的东西。
+          {Array.isArray(heroLines) && heroLines.length > 0 && heroLines[heroIdx || 0]
+            ? (heroLines[heroIdx || 0].spans || []).map((span, i) =>
+                span.bold
+                  ? <em key={i}>{span.text}</em>
+                  : <span key={i}>{span.text}</span>
+              )
+            : (
+                <>
+                  在喧嚣与噪声里，<br />
+                  写点<em>经得住时间</em>的东西。
+                </>
+              )
+          }
         </h1>
         {(latest || topics.length > 0) && (
           <div className='hero-status'>

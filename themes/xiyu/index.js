@@ -116,7 +116,13 @@ const LayoutIndex = props => {
 
   return (
     <>
-      <Hero posts={list} postCount={total} allNavPages={allNavPages} />
+      <Hero
+        posts={list}
+        postCount={total}
+        allNavPages={allNavPages}
+        heroLines={props.heroLines}
+        heroIdx={props.heroIdx}
+      />
       <section>
         <div className='section-head'>
           <h2 className='section-title'>最新写作</h2>
