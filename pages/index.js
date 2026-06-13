@@ -1,12 +1,51 @@
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
 import { fetchGlobalAllData, getPostBlocks } from '@/lib/db/SiteDataApi'
+import { fetchNotionPageBlocks } from '@/lib/db/notion/getPostBlocks'
 import { generateRobotsTxt } from '@/lib/utils/robots.txt'
 import { generateRss } from '@/lib/utils/rss'
 import { generateSitemapXml } from '@/lib/utils/sitemap.xml'
 import { DynamicLayout } from '@/themes/theme'
 import { generateRedirectJson } from '@/lib/utils/redirect'
 import { checkDataFromAlgolia } from '@/lib/plugins/algolia'
+
+/**
+ * 读 Notion 里 slug='hero' 的 page，解析每个段落为一行 hero 大字
+ * 每段的 **加粗** 文本会变成橙色 <em>
+ * 返回 [{ spans: [{text, bold}, ...] }, ...]
+ */
+async function loadHeroLines(heroPageId) {
+  if (!heroPageId) return []
+  try {
+    const blockMap = await fetchNotionPageBlocks(heroPageId, 'hero-page')
+    const blocks = blockMap?.block || {}
+    const root = blocks[heroPageId]?.value
+    const contentIds = root?.content || []
+    const lines = []
+    for (const id of contentIds) {
+      const b = blocks[id]?.value
+      if (!b) continue
+      if (!['text', 'header', 'sub_header', 'sub_sub_header'].includes(b.type)) continue
+      const title = b.properties?.title
+      if (!Array.isArray(title)) continue
+      const spans = title
+        .map(span => {
+          const text = String(span?.[0] ?? '')
+          const fmt = Array.isArray(span?.[1]) ? span[1] : []
+          const bold = fmt.some(f => Array.isArray(f) && f[0] === 'b')
+          return { text, bold }
+        })
+        .filter(s => s.text.length > 0)
+      if (spans.length > 0 && spans.some(s => s.text.trim())) {
+        lines.push({ spans })
+      }
+    }
+    return lines
+  } catch (e) {
+    console.warn('[hero page] load failed:', e?.message || e)
+    return []
+  }
+}
 
 /**
  * 首页布局
@@ -48,6 +87,20 @@ export async function getStaticProps(req) {
       siteConfig('POSTS_PER_PAGE', 12, props?.NOTION_CONFIG)
     )
   }
+
+  // 大字 slogan 池：读 Notion slug='hero' 的 page 内容，每段一句
+  // 同时计算今天的 day-of-year idx（确定性、SSR 与客户端一致）
+  const heroPage = props.allPages?.find(p => p?.slug === 'hero')
+  const heroLines = await loadHeroLines(heroPage?.id)
+  let heroIdx = 0
+  if (heroLines.length > 0) {
+    const d = new Date()
+    const start = Date.UTC(d.getUTCFullYear(), 0, 0)
+    const day = Math.floor((d.getTime() - start) / 86400000)
+    heroIdx = day % heroLines.length
+  }
+  props.heroLines = heroLines
+  props.heroIdx = heroIdx
 
   // 预览文章内容（并行抓取以加速构建）
   if (siteConfig('POST_LIST_PREVIEW', false, props?.NOTION_CONFIG)) {
