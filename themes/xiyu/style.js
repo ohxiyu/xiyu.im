@@ -325,6 +325,15 @@ html { scroll-behavior: smooth; }
   color: var(--accent-ink);
   font-family: "Noto Serif SC", Georgia, serif;
 }
+/* 大字本身是链接：去掉默认下划线，hover 时 em 段加深 */
+.hero-title-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+}
+.hero-title-link:hover .hero-title em { color: var(--accent); }
+.hero-title-link:hover .hero-title { transition: opacity .15s; }
+
 .hero-subtitle {
   font-size: 17px;
   line-height: 1.75;
