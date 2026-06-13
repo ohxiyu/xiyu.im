@@ -120,8 +120,8 @@ const LayoutIndex = props => {
         posts={list}
         postCount={total}
         allNavPages={allNavPages}
-        heroLines={props.heroLines}
-        heroIdx={props.heroIdx}
+        heroPickedIdx={props.heroPickedIdx}
+        heroPoolSize={props.heroPoolSize}
       />
       <section>
         <div className='section-head'>
