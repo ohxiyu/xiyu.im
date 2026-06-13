@@ -333,6 +333,24 @@ html { scroll-behavior: smooth; }
   margin: 0 0 32px;
   text-wrap: pretty;
 }
+/* 轮换语录 hover 时颜色加深，行末加一个橙色脉冲点示意可点击 */
+.hero-tagline { position: relative; display: inline-block; max-width: 42ch; }
+.hero-tagline:hover { color: var(--ink); }
+.hero-tagline-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  margin-left: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: middle;
+  transform: translateY(-1px);
+  animation: hero-tagline-pulse 2s ease-in-out infinite;
+}
+@keyframes hero-tagline-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
 .hero-meta {
   display: flex;
   gap: 48px;
