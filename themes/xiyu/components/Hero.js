@@ -1,7 +1,8 @@
 import { siteConfig } from '@/lib/config'
 import NowCard from './NowCard'
+import RotatingTagline from './RotatingTagline'
 
-// 首页 Hero 区：大标题 + 副文案 + 三个数字 + Now 卡
+// 首页 Hero 区：大标题 + 轮换语录 + 三个数字 + Now 卡
 const Hero = props => {
   const { posts, postCount, allNavPages } = props
   const author = siteConfig('AUTHOR') || 'xiyu'
@@ -19,7 +20,7 @@ const Hero = props => {
           在喧嚣与噪声里，<br />
           写点<em>经得住时间</em>的东西。
         </h1>
-        <p className='hero-subtitle'>{description}</p>
+        <RotatingTagline fallback={description} />
         <div className='hero-meta'>
           <div>
             <span className='hero-meta-num'>{total}</span>
