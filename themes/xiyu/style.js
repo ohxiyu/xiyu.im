@@ -333,23 +333,59 @@ html { scroll-behavior: smooth; }
   margin: 0 0 32px;
   text-wrap: pretty;
 }
-/* 轮换语录 hover 时颜色加深，行末加一个橙色脉冲点示意可点击 */
-.hero-tagline { position: relative; display: inline-block; max-width: 42ch; }
-.hero-tagline:hover { color: var(--ink); }
-.hero-tagline-dot {
-  display: inline-block;
-  width: 6px; height: 6px;
-  margin-left: 8px;
-  border-radius: 50%;
+/* 自动副文案：最近写了 + 在想 —— 数据从 props.posts 算，零维护 */
+.hero-status {
+  margin: 0 0 32px;
+  max-width: 48ch;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.hero-status-line {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-status-label {
+  flex: 0 0 auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  position: relative;
+  padding-left: 24px;
+}
+.hero-status-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 16px;
+  height: 1px;
   background: var(--accent);
-  vertical-align: middle;
-  transform: translateY(-1px);
-  animation: hero-tagline-pulse 2s ease-in-out infinite;
 }
-@keyframes hero-tagline-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+.hero-status-latest {
+  flex: 1 1 auto;
+  color: var(--ink);
+  text-decoration: none;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size .25s ease, color .15s;
 }
+.hero-status-latest:hover {
+  color: var(--accent-ink);
+  background-size: 100% 1px;
+}
+.hero-status-topics { flex: 1 1 auto; }
+.hero-status-dot { color: var(--ink-faint); margin: 0 2px; }
 
 .hero-meta {
   display: flex;
