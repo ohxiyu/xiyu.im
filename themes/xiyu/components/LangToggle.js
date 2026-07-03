@@ -32,12 +32,40 @@ const loadSDK = async () => {
   return null
 }
 
+// 顶部"翻译中"横幅：管理预期，避免用户以为点了没反应
+const BANNER_ID = 'xiyu-translating-banner'
+const showBanner = () => {
+  if (document.getElementById(BANNER_ID)) return
+  const el = document.createElement('div')
+  el.id = BANNER_ID
+  el.textContent = 'Translating… 翻译中，长文章可能需要几秒'
+  el.style.cssText = [
+    'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:9999',
+    'padding:8px 16px', 'text-align:center',
+    'font-size:12px', 'letter-spacing:0.05em',
+    'background:var(--accent, #e67e22)', 'color:#fff',
+    'opacity:0.95', 'transition:opacity .4s'
+  ].join(';')
+  document.body.appendChild(el)
+}
+const hideBanner = (delay = 0) => {
+  setTimeout(() => {
+    const el = document.getElementById(BANNER_ID)
+    if (!el) return
+    el.style.opacity = '0'
+    setTimeout(() => el.remove(), 450)
+  }, delay)
+}
+
 // 翻到英文（幂等）
-const runTranslate = async () => {
+const runTranslate = async ({ silent = false } = {}) => {
   const t = await loadSDK()
   if (!t) throw new Error('translate.js unavailable')
+  if (!silent) showBanner()
   t.language.setLocal('chinese_simplified')
-  t.service.use('client.edge') // 免费微软翻译通道，无需 key
+  // 官方聚合服务器通道：批量整页翻译专用，比 client.edge（小批量串行请求微软接口）快数倍
+  // 不显式 service.use 时默认就是官方通道；这里显式写出便于日后切换
+  t.service.use('translate.service')
   t.selectLanguageTag.show = false // 禁用它自带的语言下拉
   // 代码块和等宽内容不翻译
   for (const cls of ['notion-code', 'post-num', 'post-date', 'brand-tag', 'hero-meta-num']) {
@@ -46,6 +74,8 @@ const runTranslate = async () => {
   t.listener.start() // 客户端路由跳转后的新内容也自动翻
   // changeLanguage 是官方的一键切换 API：设置目标语言并立即执行翻译
   t.changeLanguage('english')
+  // 官方通道整页通常 1-3 秒；横幅最多挂 8 秒自动消失
+  if (!silent) hideBanner(8000)
 }
 
 /**
@@ -58,12 +88,12 @@ const LangToggle = () => {
   const [isEn, setIsEn] = useState(false)
   const [busy, setBusy] = useState(false)
 
-  // 回访恢复：上次选了 EN 就自动翻
+  // 回访恢复：上次选了 EN 就自动翻（静默，不打横幅）
   useEffect(() => {
     if (typeof window === 'undefined') return
     if (localStorage.getItem(LANG_KEY) === 'en') {
       setIsEn(true)
-      runTranslate().catch(e => console.warn('[LangToggle]', e))
+      runTranslate({ silent: true }).catch(e => console.warn('[LangToggle]', e))
     }
   }, [])
 
@@ -82,6 +112,7 @@ const LangToggle = () => {
         setIsEn(true)
       } catch (e) {
         console.warn('[LangToggle] translate failed:', e)
+        hideBanner()
         alert('翻译服务加载失败，请稍后重试 / Translation service failed, please retry.')
       } finally {
         setBusy(false)
