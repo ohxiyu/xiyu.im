@@ -3,6 +3,7 @@ import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import { useRouter } from 'next/router'
 import ThemeToggle from './ThemeToggle'
+import LangToggle from './LangToggle'
 import CONFIG from '../config'
 
 // xiyu 主题顶部导航（对应 .design/source/shared.jsx 的 SiteNav）
@@ -59,6 +60,7 @@ const Nav = props => {
           </svg>
         </SmartLink>
         <ThemeToggle />
+        <LangToggle />
       </div>
     </nav>
   )
