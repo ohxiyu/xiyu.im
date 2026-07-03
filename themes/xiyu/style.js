@@ -155,6 +155,15 @@ html, body {
 }
 .theme-toggle:hover { color: var(--ink); border-color: var(--ink-mute); }
 
+/* 中/英切换按钮：复用 theme-toggle 圆形外观，内容是等宽小字 */
+.lang-toggle-text {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
 /* ——— Labels ——— */
 .eyebrow {
   font-family: "JetBrains Mono", monospace;
