@@ -57,14 +57,15 @@ const hideBanner = (delay = 0) => {
   }, delay)
 }
 
-// 翻到英文（幂等）
+// 翻到英文（幂等，绝不触发页面刷新）
+// ⚠️ 千万不要用 t.changeLanguage()：它的实现会 location.reload()，
+//    配合"页面加载时自动恢复英文"的逻辑就是无限刷新循环（已踩坑）。
 const runTranslate = async ({ silent = false } = {}) => {
   const t = await loadSDK()
   if (!t) throw new Error('translate.js unavailable')
   if (!silent) showBanner()
   t.language.setLocal('chinese_simplified')
-  // 官方聚合服务器通道：批量整页翻译专用，比 client.edge（小批量串行请求微软接口）快数倍
-  // 不显式 service.use 时默认就是官方通道；这里显式写出便于日后切换
+  // 官方聚合服务器通道：批量整页翻译，比 client.edge 快数倍
   t.service.use('translate.service')
   t.selectLanguageTag.show = false // 禁用它自带的语言下拉
   // 代码块和等宽内容不翻译
@@ -72,15 +73,32 @@ const runTranslate = async ({ silent = false } = {}) => {
     if (!t.ignore.class.includes(cls)) t.ignore.class.push(cls)
   }
   t.listener.start() // 客户端路由跳转后的新内容也自动翻
-  // changeLanguage 是官方的一键切换 API：设置目标语言并立即执行翻译
-  t.changeLanguage('english')
+  // 直接写目标语言（translate.js 官方存储 key 是 'to'）+ 实例变量双保险，
+  // 然后 execute() 就地翻译——不触发 reload
+  try { localStorage.setItem('to', 'english') } catch (e) {}
+  t.to = 'english'
+  t.execute()
   // 官方通道整页通常 1-3 秒；横幅最多挂 8 秒自动消失
   if (!silent) hideBanner(8000)
 }
 
+// 刷新循环熔断：5 秒内第 3 次加载视为异常循环，自动回退中文并停止一切翻译
+const isReloadLoop = () => {
+  try {
+    const now = Date.now()
+    const hist = JSON.parse(sessionStorage.getItem('xiyu_lang_loads') || '[]')
+      .filter(ts => now - ts < 5000)
+    hist.push(now)
+    sessionStorage.setItem('xiyu_lang_loads', JSON.stringify(hist))
+    return hist.length >= 3
+  } catch (e) {
+    return false
+  }
+}
+
 /**
  * 中/英一键切换按钮（ThemeToggle 右边）
- * - 点 EN：动态加载 translate.js 就地翻译整页
+ * - 点 EN：动态加载 translate.js 就地翻译整页（无刷新）
  * - 点 中：清状态刷新回原文
  * - localStorage 持久化，翻页/回访保持
  */
@@ -88,16 +106,27 @@ const LangToggle = () => {
   const [isEn, setIsEn] = useState(false)
   const [busy, setBusy] = useState(false)
 
-  // 回访恢复：上次选了 EN 就自动翻（静默，不打横幅）
   useEffect(() => {
     if (typeof window === 'undefined') return
+
+    // 熔断：检测到刷新循环 → 强制回中文，清掉所有翻译状态
+    if (isReloadLoop()) {
+      console.warn('[LangToggle] reload loop detected, resetting to Chinese')
+      try {
+        localStorage.setItem(LANG_KEY, 'zh')
+        localStorage.removeItem('to')
+      } catch (e) {}
+      return
+    }
+
+    // 回访恢复：上次选了 EN 就自动翻（静默、就地翻译，不刷新）
     if (localStorage.getItem(LANG_KEY) === 'en') {
       setIsEn(true)
       runTranslate({ silent: true }).catch(e => console.warn('[LangToggle]', e))
       return
     }
-    // 空闲时预取 SDK 到浏览器 HTTP 缓存（低优先级，不执行脚本、不阻塞任何东西）
-    // 点 EN 时 loadExternalResource 再插 <script>，直接命中缓存，省掉 1-3 秒下载
+
+    // 空闲时预取 SDK 到浏览器 HTTP 缓存（只下载不执行），点 EN 时零下载延迟
     const prefetch = () => {
       try {
         const link = document.createElement('link')
@@ -118,9 +147,11 @@ const LangToggle = () => {
   const toggle = async () => {
     if (busy) return
     if (isEn) {
-      localStorage.setItem(LANG_KEY, 'zh')
-      // 清掉 translate.js 自己记住的目标语言，否则刷新后它可能自动再翻
-      try { localStorage.removeItem('to') } catch (e) {}
+      try {
+        localStorage.setItem(LANG_KEY, 'zh')
+        // 清掉 translate.js 的目标语言，避免刷新后它自己又翻回英文
+        localStorage.removeItem('to')
+      } catch (e) {}
       window.location.reload()
     } else {
       setBusy(true)
