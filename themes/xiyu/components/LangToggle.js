@@ -94,7 +94,25 @@ const LangToggle = () => {
     if (localStorage.getItem(LANG_KEY) === 'en') {
       setIsEn(true)
       runTranslate({ silent: true }).catch(e => console.warn('[LangToggle]', e))
+      return
     }
+    // 空闲时预取 SDK 到浏览器 HTTP 缓存（低优先级，不执行脚本、不阻塞任何东西）
+    // 点 EN 时 loadExternalResource 再插 <script>，直接命中缓存，省掉 1-3 秒下载
+    const prefetch = () => {
+      try {
+        const link = document.createElement('link')
+        link.rel = 'prefetch'
+        link.as = 'script'
+        link.href = SDK_URLS[0]
+        document.head.appendChild(link)
+      } catch (e) { /* 预取失败无所谓，点击时正常加载 */ }
+    }
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(prefetch, { timeout: 5000 })
+      return () => window.cancelIdleCallback(id)
+    }
+    const t = setTimeout(prefetch, 3000)
+    return () => clearTimeout(t)
   }, [])
 
   const toggle = async () => {
