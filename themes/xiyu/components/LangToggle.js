@@ -38,7 +38,7 @@ const showBanner = () => {
   if (document.getElementById(BANNER_ID)) return
   const el = document.createElement('div')
   el.id = BANNER_ID
-  el.textContent = 'Translating… 翻译中，长文章可能需要几秒'
+  el.textContent = 'Translating… 翻译中，内容将逐步替换为英文'
   el.style.cssText = [
     'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:9999',
     'padding:8px 16px', 'text-align:center',
@@ -57,6 +57,25 @@ const hideBanner = (delay = 0) => {
   }, delay)
 }
 
+// 智能收横幅：监听 DOM 文本变化（翻译逐块替换），静默 2.5s 视为翻译完成
+// 兜底 25s 强制收起（极端慢网）
+const watchTranslationDone = () => {
+  let idleTimer = null
+  const done = () => {
+    observer.disconnect()
+    clearTimeout(hardStop)
+    hideBanner()
+  }
+  const bump = () => {
+    clearTimeout(idleTimer)
+    idleTimer = setTimeout(done, 2500)
+  }
+  const observer = new MutationObserver(bump)
+  observer.observe(document.body, { childList: true, subtree: true, characterData: true })
+  const hardStop = setTimeout(done, 25000)
+  bump() // 万一根本没有任何变化（全缓存瞬间完成），2.5s 后也会收
+}
+
 // 翻到英文（幂等，绝不触发页面刷新）
 // ⚠️ 千万不要用 t.changeLanguage()：它的实现会 location.reload()，
 //    配合"页面加载时自动恢复英文"的逻辑就是无限刷新循环（已踩坑）。
@@ -65,8 +84,10 @@ const runTranslate = async ({ silent = false } = {}) => {
   if (!t) throw new Error('translate.js unavailable')
   if (!silent) showBanner()
   t.language.setLocal('chinese_simplified')
-  // 官方聚合服务器通道：批量整页翻译，比 client.edge 快数倍
-  t.service.use('translate.service')
+  // client.edge：微软翻译接口，小批量并发请求，实测比官方公益通道
+  // （单请求限量、多批串行、长文要等 10s+）快。
+  // 注：此前 edge '点了没反应'是 changeLanguage/SDK 就绪 bug，与通道无关，均已修复。
+  t.service.use('client.edge')
   t.selectLanguageTag.show = false // 禁用它自带的语言下拉
   // 代码块和等宽内容不翻译
   for (const cls of ['notion-code', 'post-num', 'post-date', 'brand-tag', 'hero-meta-num']) {
@@ -78,8 +99,8 @@ const runTranslate = async ({ silent = false } = {}) => {
   try { localStorage.setItem('to', 'english') } catch (e) {}
   t.to = 'english'
   t.execute()
-  // 官方通道整页通常 1-3 秒；横幅最多挂 8 秒自动消失
-  if (!silent) hideBanner(8000)
+  // 智能收横幅：DOM 静默 2.5s（翻译完成）自动消失，25s 兜底
+  if (!silent) watchTranslationDone()
 }
 
 // 刷新循环熔断：5 秒内第 3 次加载视为异常循环，自动回退中文并停止一切翻译
