@@ -1,7 +1,7 @@
 import { siteConfig } from '@/lib/config'
 
-// 四宫格 stats
-const AboutFacts = ({ postCount }) => {
+// 四宫格 stats（全部动态：写作年数 / 文章数 / 持有比特币年数 / 主题数）
+const AboutFacts = ({ postCount, tagCount }) => {
   const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
   const years = Math.max(1, new Date().getFullYear() - since + 1)
   const bitcoinYears = parseInt(siteConfig('XIYU_BITCOIN_YEARS')) || 7
@@ -20,8 +20,8 @@ const AboutFacts = ({ postCount }) => {
         <div className='fact-label'>Long bitcoin</div>
       </div>
       <div className='fact'>
-        <div className='fact-num'>1</div>
-        <div className='fact-label'>Open-source project</div>
+        <div className='fact-num'>{tagCount ?? '—'}</div>
+        <div className='fact-label'>Topics</div>
       </div>
     </section>
   )
