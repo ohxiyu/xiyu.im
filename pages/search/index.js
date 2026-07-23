@@ -1,5 +1,6 @@
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
+import { slimPostsForList } from '@/lib/utils/post'
 import { fetchGlobalAllData } from '@/lib/db/SiteDataApi'
 import { DynamicLayout } from '@/themes/theme'
 import { useRouter } from 'next/router'
@@ -47,8 +48,10 @@ export async function getStaticProps({ locale }) {
     locale
   })
   const { allPages } = props
-  props.posts = allPages?.filter(
-    page => page.type === 'Post' && page.status === 'Published'
+  props.posts = slimPostsForList(
+    allPages?.filter(
+      page => page.type === 'Post' && page.status === 'Published'
+    )
   )
   return {
     props,

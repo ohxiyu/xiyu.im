@@ -2,6 +2,7 @@ import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
 import { fetchGlobalAllData, getPostBlocks } from '@/lib/db/SiteDataApi'
 import { generateRobotsTxt } from '@/lib/utils/robots.txt'
+import { slimPostsForList } from '@/lib/utils/post'
 import { generateRss } from '@/lib/utils/rss'
 import { generateSitemapXml } from '@/lib/utils/sitemap.xml'
 import { DynamicLayout } from '@/themes/theme'
@@ -107,6 +108,8 @@ export async function getStaticProps(req) {
   // 生成全文索引 - 仅在 yarn build 时执行 && process.env.npm_lifecycle_event === 'build'
 
   delete props.allPages
+  // 列表数据瘦身：去掉 content[]/全量 pageProperties 等大字段，page data ~253kB -> ~40kB
+  props.posts = slimPostsForList(props.posts)
 
   return {
     props,
