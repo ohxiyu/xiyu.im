@@ -3,6 +3,7 @@ import { compressImage, mapImgUrl } from '@/lib/db/notion/mapImage'
 import { isBrowser, loadExternalResource } from '@/lib/utils'
 import mediumZoom from '@fisch0920/medium-zoom'
 import 'katex/dist/katex.min.css'
+import 'react-notion-x/src/styles.css' // 仅文章页加载 react-notion-x 基础样式
 import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
 import { NotionRenderer } from 'react-notion-x'

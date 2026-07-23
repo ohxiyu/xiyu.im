@@ -1,7 +1,6 @@
 // eslint-disable-next-line @next/next/no-document-import-in-page
 import BLOG from '@/blog.config'
 import Document, { Head, Html, Main, NextScript } from 'next/document'
-import { CSS as XIYU_CSS } from '@/themes/xiyu/style'
 
 // 预先设置深色模式的脚本内容
 const darkModeScript = `
@@ -85,8 +84,8 @@ class MyDocument extends Document {
             </>
           )}
 
-          {/* xiyu 主题 CSS · 在 <head> 注入避免 FOUC（Notion 默认样式短暂闪现） */}
-          <style dangerouslySetInnerHTML={{ __html: XIYU_CSS }} />
+          {/* xiyu 主题 CSS · 外置静态文件（head 中 link 为渲染阻塞，无 FOUC；可跨页缓存，HTML 减重 ~44KB） */}
+          <link rel='stylesheet' href='/css/xiyu.css' />
 
           {/* 预先设置深色模式，避免闪烁 */}
           <script dangerouslySetInnerHTML={{ __html: darkModeScript }} />
