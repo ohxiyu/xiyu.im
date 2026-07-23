@@ -1,22 +1,6 @@
 import { memo } from 'react'
 import SmartLink from '@/components/SmartLink'
-
-// 日期 CN 格式：YYYY · MM · DD（用 UTC 避免 SSR 与客户端时区不一致导致 hydration 不匹配 / 日期偏 1 天）
-const formatDateCN = iso => {
-  if (!iso) return ''
-  const d = new Date(iso + 'T00:00:00Z')
-  if (isNaN(d.getTime())) return iso
-  return `${d.getUTCFullYear()} · ${String(d.getUTCMonth() + 1).padStart(2, '0')} · ${String(d.getUTCDate()).padStart(2, '0')}`
-}
-
-const formatNum = (post, totalCount, idx) => {
-  const raw = post?.pageProperties?.num ?? post?.pageProperties?.Num
-  if (raw) return String(raw).padStart(4, '0')
-  if (typeof totalCount === 'number' && typeof idx === 'number') {
-    return String(totalCount - idx).padStart(4, '0')
-  }
-  return ''
-}
+import { formatNum, formatDateCN } from '../lib/format'
 
 // 文章列表行（ArticleRow）
 const BlogPost = ({ post, totalCount, index = 0 }) => {

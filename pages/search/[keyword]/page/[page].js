@@ -1,6 +1,7 @@
 import BLOG from '@/blog.config'
 import { getDataFromCache } from '@/lib/cache/cache_manager'
 import { siteConfig } from '@/lib/config'
+import { slimPostsForList } from '@/lib/utils/post'
 import { fetchGlobalAllData } from '@/lib/db/SiteDataApi'
 import { DynamicLayout } from '@/themes/theme'
 
@@ -35,6 +36,8 @@ export async function getStaticProps({ params: { keyword, page }, locale }) {
     POSTS_PER_PAGE * (page - 1),
     POSTS_PER_PAGE * page
   )
+  // 全量已发布文章（瘦身版）：供 xiyu LayoutSearch 客户端实时过滤，与 /search 行为一致
+  props.allPosts = slimPostsForList(allPosts)
   props.keyword = keyword
   props.page = page
   delete props.allPages

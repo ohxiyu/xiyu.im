@@ -1,6 +1,7 @@
 import BLOG from '@/blog.config'
 import { getDataFromCache } from '@/lib/cache/cache_manager'
 import { siteConfig } from '@/lib/config'
+import { slimPostsForList } from '@/lib/utils/post'
 import { fetchGlobalAllData } from '@/lib/db/SiteDataApi'
 import { DynamicLayout } from '@/themes/theme'
 import { getPageContentText } from '@/lib/db/notion/getPageContentText'
@@ -39,7 +40,10 @@ export async function getStaticProps({ params: { keyword }, locale }) {
   } else if (POST_LIST_STYLE) {
     props.posts = props.posts?.slice(0, POSTS_PER_PAGE)
   }
+  // 全量已发布文章（瘦身版）：供 xiyu LayoutSearch 客户端实时过滤，与 /search 行为一致
+  props.allPosts = slimPostsForList(allPosts)
   props.keyword = keyword
+  delete props.allPages // 修：此路由一直漏删，全量 allPages 被序列化进 page data
   return {
     props,
     revalidate: process.env.EXPORT

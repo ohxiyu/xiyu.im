@@ -1,9 +1,7 @@
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
-import { loadExternalResource } from '@/lib/utils'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 
 /**
  * 页面的Head头，有用于SEO
@@ -19,26 +17,8 @@ const SEO = props => {
   let image
   const router = useRouter()
   const meta = getSEOMeta(props, router, useGlobal()?.locale)
-  const webFontUrl = siteConfig('FONT_URL')
-
-  useEffect(() => {
-    // 使用WebFontLoader字体加载
-    loadExternalResource(
-      'https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js',
-      'js'
-    ).then(url => {
-      const WebFont = window?.WebFont
-      if (WebFont) {
-        // console.log('LoadWebFont', webFontUrl)
-        WebFont.load({
-          custom: {
-            // families: ['"LXGW WenKai"'],
-            urls: webFontUrl
-          }
-        })
-      }
-    })
-  }, [webFontUrl])
+  // 字体由 pages/_document.js 的 Google Fonts <link> 统一加载，
+  // 原 WebFontLoader（每页从 cdnjs 拉脚本再拉字体）重复且拖累 LCP，已删除。
 
   // SEO关键词
   const KEYWORDS = siteConfig('KEYWORDS')
@@ -56,7 +36,6 @@ const SEO = props => {
   const type = meta?.type || 'website'
   const lang = siteConfig('LANG').replace('-', '_') // Facebook OpenGraph 要 zh_CN 這樣的格式才抓得到語言
   const category = meta?.category || KEYWORDS // section 主要是像是 category 這樣的分類，Facebook 用這個來抓連結的分類
-  const favicon = siteConfig('BLOG_FAVICON')
   const BACKGROUND_DARK = siteConfig('BACKGROUND_DARK', '', NOTION_CONFIG)
 
   const SEO_BAIDU_SITE_VERIFICATION = siteConfig(
@@ -70,8 +49,6 @@ const SEO = props => {
     null,
     NOTION_CONFIG
   )
-
-  const BLOG_FAVICON = siteConfig('BLOG_FAVICON', null, NOTION_CONFIG)
 
   const COMMENT_WEBMENTION_ENABLE = siteConfig(
     'COMMENT_WEBMENTION_ENABLE',
@@ -100,13 +77,8 @@ const SEO = props => {
   const AUTHOR = siteConfig('AUTHOR')
   return (
     <Head>
-      <link rel='icon' href={favicon} />
       <title>{title}</title>
       <meta name='theme-color' content={BACKGROUND_DARK} />
-      <meta
-        name='viewport'
-        content='width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0'
-      />
       <meta name='robots' content='follow, index, max-snippet:-1, max-image-preview:large, max-video-preview:-1' />
       <meta charSet='UTF-8' />
       <meta name='format-detection' content='telephone=no' />
@@ -162,8 +134,6 @@ const SEO = props => {
       <meta name='twitter:description' content={description} />
       <meta name='twitter:image' content={image} />
       <meta name='twitter:image:alt' content={title} />
-
-      <link rel='icon' href={BLOG_FAVICON} />
 
       {COMMENT_WEBMENTION_ENABLE && (
         <>
@@ -383,9 +353,10 @@ const getSEOMeta = (props, router, locale) => {
       }
     default:
       return {
+        // 文章名在前、站名在后：利于 SEO 与浏览器标签辨识
         title: post
-          ? `${siteInfo?.title} | ${post?.title}`
-          : `${siteInfo?.title} | loading`,
+          ? `${post?.title} | ${siteInfo?.title}`
+          : `${siteInfo?.title}`,
         description: post?.summary,
         type: post?.type,
         slug: post?.slug,

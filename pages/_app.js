@@ -2,9 +2,9 @@
 import '@/styles/globals.css'
 import '@/styles/utility-patterns.css'
 
-// core styles shared by all of react-notion-x (required)
-import '@/styles/notion.css' //  重写部分notion样式
-import 'react-notion-x/src/styles.css' // 原版的react-notion-x
+// notion 样式覆盖（本地全局 CSS，Next.js 要求在 _app 顶层）
+import '@/styles/notion.css'
+// react-notion-x 原版基础样式已移到 components/NotionPage.js（仅文章页加载，首页/列表不再白背这份体积）
 
 import useAdjustStyle from '@/hooks/useAdjustStyle'
 import { GlobalContextProvider } from '@/lib/global'

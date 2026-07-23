@@ -1,5 +1,6 @@
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
+import { slimPostsForList } from '@/lib/utils/post'
 import { fetchGlobalAllData } from '@/lib/db/SiteDataApi'
 import { DynamicLayout } from '@/themes/theme'
 
@@ -37,6 +38,7 @@ export async function getStaticProps({ params: { tag }, locale }) {
 
   props.tag = tag
   delete props.allPages
+  props.posts = slimPostsForList(props.posts)
   return {
     props,
     revalidate: process.env.EXPORT

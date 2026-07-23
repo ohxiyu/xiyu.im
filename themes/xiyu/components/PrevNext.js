@@ -1,11 +1,8 @@
 import SmartLink from '@/components/SmartLink'
+import { formatNum } from '../lib/format'
 
 // 文章底部上一篇/下一篇卡
 const PrevNext = ({ prev, next }) => {
-  const formatNum = p => {
-    const raw = p?.pageProperties?.num ?? p?.pageProperties?.Num
-    return raw ? String(raw).padStart(4, '0') : ''
-  }
   return (
     <div className='prev-next'>
       {prev ? (

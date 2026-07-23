@@ -43,7 +43,8 @@ const showBanner = () => {
     'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:9999',
     'padding:8px 16px', 'text-align:center',
     'font-size:12px', 'letter-spacing:0.05em',
-    'background:var(--accent, #e67e22)', 'color:#fff',
+    // 横幅挂在 #theme-xiyu 外，取不到主题 CSS 变量，故用固定橙色（浅/深模式都协调）
+    'background:#e67e22', 'color:#fff',
     'opacity:0.95', 'transition:opacity .4s'
   ].join(';')
   document.body.appendChild(el)

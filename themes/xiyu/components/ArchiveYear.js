@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import SmartLink from '@/components/SmartLink'
+import { formatNum } from '../lib/format'
 
 // 归档按年份的一块
 const ArchiveYear = ({ year, posts }) => {
@@ -13,8 +14,7 @@ const ArchiveYear = ({ year, posts }) => {
       </div>
       <div className='year-list'>
         {list.map(p => {
-          const rawNum = p?.pageProperties?.num ?? p?.pageProperties?.Num
-          const num = rawNum ? String(rawNum).padStart(4, '0') : ''
+          const num = formatNum(p)
           const mmdd = (p.publishDay || '').slice(5).replace('-', ' / ')
           return (
             <SmartLink key={p.id || p.slug} href={p.href || `/${p.slug}`} className='archive-item'>

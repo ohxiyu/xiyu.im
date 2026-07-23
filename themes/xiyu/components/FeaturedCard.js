@@ -1,23 +1,5 @@
 import SmartLink from '@/components/SmartLink'
-
-// 文章编号格式化：优先 pageProperties.num，缺省用总数-idx 推算
-const formatNum = (post, totalCount, idx) => {
-  const raw = post?.pageProperties?.num ?? post?.pageProperties?.Num
-  if (raw) return String(raw).padStart(4, '0')
-  if (typeof totalCount === 'number' && typeof idx === 'number') {
-    return String(totalCount - idx).padStart(4, '0')
-  }
-  return ''
-}
-
-// 用 UTC 解析 + 输出，避免 SSR 与客户端时区不一致导致 hydration mismatch
-const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-const formatDate = iso => {
-  if (!iso) return ''
-  const d = new Date(iso + 'T00:00:00Z')
-  if (isNaN(d.getTime())) return iso
-  return `${MONTHS_EN[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`
-}
+import { formatNum, formatDateEN } from '../lib/format'
 
 // 首篇文章大卡（feature-card）
 const FeaturedCard = ({ post, totalCount, index = 0 }) => {
@@ -28,7 +10,7 @@ const FeaturedCard = ({ post, totalCount, index = 0 }) => {
     <article className='feature-card'>
       <div className='feature-meta'>
         {num && <span className='post-num'>#{num}</span>}
-        <span className='post-date'>{formatDate(post.publishDay || post.date?.start_date)}</span>
+        <span className='post-date'>{formatDateEN(post.publishDay || post.date?.start_date)}</span>
       </div>
       <div className='feature-body'>
         <h2 className='post-title feature-title'>

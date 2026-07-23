@@ -1,5 +1,6 @@
 import { siteConfig } from '@/lib/config'
 import CONFIG from '../config'
+import { formatNum } from '../lib/format'
 
 const CN_MONTHS = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
 
@@ -11,8 +12,7 @@ const NowCard = ({ posts, allNavPages }) => {
   const latest = posts?.[0]
   const mm = latest?.publishDay ? parseInt(latest.publishDay.slice(5, 7), 10) : 0
   const monthLabel = mm >= 1 && mm <= 12 ? CN_MONTHS[mm - 1] : ''
-  const rawNum = latest?.pageProperties?.num ?? latest?.pageProperties?.Num
-  const num = rawNum ? String(rawNum).padStart(4, '0') : ''
+  const num = latest ? formatNum(latest) : ''
   const attr = num
     ? `— #${num}${monthLabel ? ', ' + monthLabel : ''}`
     : monthLabel

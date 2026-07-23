@@ -1,9 +1,8 @@
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
 import { fetchGlobalAllData, getPostBlocks } from '@/lib/db/SiteDataApi'
-import { generateRobotsTxt } from '@/lib/utils/robots.txt'
+import { slimPostsForList } from '@/lib/utils/post'
 import { generateRss } from '@/lib/utils/rss'
-import { generateSitemapXml } from '@/lib/utils/sitemap.xml'
 import { DynamicLayout } from '@/themes/theme'
 import { generateRedirectJson } from '@/lib/utils/redirect'
 import { checkDataFromAlgolia } from '@/lib/plugins/algolia'
@@ -89,12 +88,8 @@ export async function getStaticProps(req) {
     }
   }
 
-  // 生成robotTxt
-  await runSafeTask('generateRobotsTxt', () => generateRobotsTxt(props))
   // 生成Feed订阅
   await runSafeTask('generateRss', () => generateRss(props))
-  // 生成站点地图
-  await runSafeTask('generateSitemapXml', () => generateSitemapXml(props))
   // 检查数据是否需要从algolia删除
   await runSafeTask('checkDataFromAlgolia', () => checkDataFromAlgolia(props))
   if (siteConfig('UUID_REDIRECT', false, props?.NOTION_CONFIG)) {
@@ -107,6 +102,8 @@ export async function getStaticProps(req) {
   // 生成全文索引 - 仅在 yarn build 时执行 && process.env.npm_lifecycle_event === 'build'
 
   delete props.allPages
+  // 列表数据瘦身：去掉 content[]/全量 pageProperties 等大字段，page data ~253kB -> ~40kB
+  props.posts = slimPostsForList(props.posts)
 
   return {
     props,
