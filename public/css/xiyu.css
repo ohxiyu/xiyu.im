@@ -1115,13 +1115,7 @@ html.dark .portrait {
   color: var(--ink-mute);
 }
 
-/* Topics wall */
-.topics-wrap {
-  padding: 56px 0;
-}
-.topics-head {
-  margin-bottom: 36px;
-}
+
 .topics-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -1157,116 +1151,7 @@ html.dark .portrait {
   margin-top: 12px;
 }
 
-/* ——— Colophon / tech stack ——— */
-.colophon {
-  padding: 56px 0 24px;
-  border-top: 1px solid var(--rule);
-  margin-top: 40px;
-}
-.colophon-head { margin-bottom: 36px; }
 
-.stack-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0;
-  border-top: 1px solid var(--rule);
-  border-left: 1px solid var(--rule);
-}
-.stack-item {
-  padding: 32px 32px 36px;
-  border-right: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  position: relative;
-}
-.stack-num {
-  position: absolute;
-  top: 24px;
-  right: 28px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  color: var(--ink-faint);
-  letter-spacing: 0.08em;
-}
-.stack-role {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  margin-bottom: 10px;
-}
-.stack-name {
-  font-family: "Noto Serif SC", serif;
-  font-size: 28px;
-  color: var(--ink);
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  margin-bottom: 14px;
-}
-.stack-note {
-  font-size: 14.5px;
-  color: var(--ink-soft);
-  line-height: 1.75;
-  margin: 0;
-  max-width: 42ch;
-  text-wrap: pretty;
-}
-
-.workflow {
-  margin-top: 40px;
-  padding: 28px 32px;
-  border: 1px solid var(--rule);
-  background: var(--bg-elev);
-}
-.workflow-label {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  margin-bottom: 18px;
-}
-.workflow-line {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
-}
-.wf-step {
-  font-family: "Noto Serif SC", serif;
-  font-size: 15px;
-  color: var(--ink);
-  padding: 6px 12px;
-  background: var(--bg);
-  border: 1px solid var(--rule);
-}
-.wf-step.accent {
-  border-color: var(--accent);
-  color: var(--accent-ink);
-}
-.wf-arrow {
-  font-family: "JetBrains Mono", monospace;
-  color: var(--ink-faint);
-  font-size: 14px;
-}
-.workflow-note {
-  margin: 0;
-  font-size: 13.5px;
-  color: var(--ink-mute);
-  line-height: 1.7;
-}
-
-/* ——— Canvas rig ——— */
-body.canvas-mode { overflow: hidden; }
-.page-frame {
-  width: 1320px;
-  background: var(--bg);
-  color: var(--ink);
-  position: relative;
-  overflow: hidden;
-}
-.page-frame .page { padding-top: 40px; padding-bottom: 56px; }
 
 
 /* ===== NotionPage 渲染兼容层 ===== */
@@ -1482,7 +1367,6 @@ html.dark #theme-xiyu {
   .about-hero { gap: 48px; }
   .hero { gap: 48px; }
   .topics-grid { grid-template-columns: repeat(3, 1fr); }
-  .stack-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
@@ -1626,16 +1510,9 @@ html.dark #theme-xiyu {
   .elsewhere { margin: 40px 0; }
   .link-list { grid-template-columns: 1fr; }
   .link-platform { font-size: 16px; }
-  .topics-wrap { padding: 36px 0; }
   .topics-grid { grid-template-columns: repeat(2, 1fr); }
   .topic-cell { padding: 16px 14px; min-height: 84px; }
   .topic-name { font-size: 16px; }
-  .colophon { padding: 36px 0 16px; margin-top: 24px; }
-  .stack-item { padding: 22px 18px; }
-  .stack-name { font-size: 22px; }
-  .workflow { padding: 18px 20px; }
-  .workflow-line { gap: 8px; }
-  .wf-step { font-size: 13px; padding: 4px 8px; }
 
   /* —— 页脚 —— */
   .site-foot {

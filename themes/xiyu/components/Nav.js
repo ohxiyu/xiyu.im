@@ -29,7 +29,7 @@ const Nav = props => {
   const author = siteConfig('AUTHOR') || 'xiyu'
 
   return (
-    <nav className='site-nav'>
+    <nav className='site-nav' aria-label='主导航'>
       <SmartLink href='/' className='brand'>
         {logo && (
           <img

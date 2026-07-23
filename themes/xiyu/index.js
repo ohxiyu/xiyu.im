@@ -3,6 +3,7 @@ import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import SmartLink from '@/components/SmartLink'
 import { useRouter } from 'next/router'
+import { formatNum, formatDateEN } from './lib/format'
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import CONFIG from './config'
@@ -107,10 +108,11 @@ const LayoutIndex = props => {
   const { posts, postCount, allNavPages } = props
   const list = Array.isArray(posts) ? posts : []
   const total = typeof postCount === 'number' ? postCount : list.length
-  const [featured, ...rest] = list
+  const [featured] = list
   const currentYear = new Date().getFullYear()
-  const grouped = groupByYear(rest)
-  let runningIdx = 1 // featured 占用 idx 0
+  // 全部文章（含 featured）一起按年份分组：featured 与同年文章归入同一「年份」标题下，
+  // 不再游离于分隔线之外。featured 用 index 0 大卡渲染，其余用 BlogPost 行。
+  const grouped = groupByYear(list)
 
   return (
     <>
@@ -126,7 +128,6 @@ const LayoutIndex = props => {
           <h2 className='section-title'>最新写作</h2>
           <span className='section-count'>{currentYear} · {list.length} posts shown</span>
         </div>
-        {featured && <FeaturedCard post={featured} totalCount={total} index={0} />}
         <div>
           {grouped.map(group => (
             <div key={group.year || 'no-year'}>
@@ -137,8 +138,10 @@ const LayoutIndex = props => {
                 </h3>
               )}
               {group.posts.map(p => {
-                const idx = runningIdx++
-                return <BlogPost key={p.id || p.slug} post={p} totalCount={total} index={idx} />
+                const idx = list.indexOf(p)
+                return p === featured
+                  ? <FeaturedCard key={p.id || p.slug} post={p} totalCount={total} index={0} />
+                  : <BlogPost key={p.id || p.slug} post={p} totalCount={total} index={idx} />
               })}
             </div>
           ))}
@@ -192,7 +195,7 @@ const LayoutPagination = ({ page = 1, postCount }) => {
   const prevHref = currentPage - 1 === 1 ? `${prefix || ''}/` : `${prefix}/page/${currentPage - 1}`
   const nextHref = `${prefix}/page/${currentPage + 1}`
   return (
-    <nav className='pagination'>
+    <nav className='pagination' aria-label='分页导航'>
       {showPrev ? (
         <SmartLink href={prevHref} className='page-link'>← 更新的文章</SmartLink>
       ) : (
@@ -237,18 +240,9 @@ const LayoutSlug = props => {
     return renderAboutPage(props)
   }
 
-  const rawNum = post?.pageProperties?.num ?? post?.pageProperties?.Num
-  const num = rawNum ? String(rawNum).padStart(4, '0') : ''
+  const num = formatNum(post)
   const tags = Array.isArray(post.tags) ? post.tags : []
-  const dateISO = post.publishDay || post.date?.start_date || ''
-  const dateFmt = (() => {
-    if (!dateISO) return ''
-    // UTC 解析 + 输出，避免 SSR/客户端时区差异
-    const d = new Date(dateISO + 'T00:00:00Z')
-    if (isNaN(d.getTime())) return dateISO
-    const MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    return `${MO[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`
-  })()
+  const dateFmt = formatDateEN(post.publishDay || post.date?.start_date || '')
 
   return (
     <div className='article-layout'>

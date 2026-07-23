@@ -179,13 +179,12 @@ const ExternalPlugin = props => {
   }, [router])
 
   useEffect(() => {
-    // 执行注入脚本
-    // eslint-disable-next-line no-eval
+    // 仅在配置了 GLOBAL_JS 时执行注入脚本（原来无条件每次 render 都 eval('')，浪费）
     if (GLOBAL_JS && GLOBAL_JS.trim() !== '') {
-      // console.log('Inject JS:', GLOBAL_JS);
+      // eslint-disable-next-line no-eval
+      eval(GLOBAL_JS)
     }
-    eval(GLOBAL_JS)
-  })
+  }, [GLOBAL_JS])
 
   if (DISABLE_PLUGIN) {
     return null
