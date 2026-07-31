@@ -17,6 +17,21 @@ import { signToken, verifyToken } from '@/lib/paywall/token'
 import { isTxUsed, recordOrder } from '@/lib/paywall/orders'
 import { CHAINS } from '@/lib/paywall/chains'
 
+// slug 来自请求体，限制长度与段数，避免异常输入一路带进下游
+const MAX_SLUG_LEN = 200
+const MAX_SLUG_SEGMENTS = 6
+
+/** 请求体里的 slug 是否是合理的文章路径 */
+function isValidSlug(slug) {
+  if (typeof slug !== 'string') return false
+  const s = slug.trim()
+  if (!s || s.length > MAX_SLUG_LEN) return false
+  // 不允许控制字符、反斜杠、以及 ../ 之类的路径穿越
+  if (/[\x00-\x1f\x7f\\]/.test(s)) return false
+  if (s.includes('..')) return false
+  return s.split('/').filter(Boolean).length <= MAX_SLUG_SEGMENTS
+}
+
 /** 按 slug 找到这篇文章（未剥离的原始数据） */
 async function findPaidPost(slug) {
   const segments = String(slug || '').split('/').filter(Boolean)
@@ -47,6 +62,9 @@ export default async function handler(req, res) {
   try {
     const { slug, chain, txHash, token } = req.body || {}
     if (!slug) return res.status(400).json({ ok: false, error: '缺少 slug' })
+    if (!isValidSlug(slug)) {
+      return res.status(400).json({ ok: false, error: '文章路径不合法' })
+    }
 
     const post = await findPaidPost(slug)
     if (!post) return res.status(404).json({ ok: false, error: '文章不存在' })
