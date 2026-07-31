@@ -4,7 +4,13 @@ const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'
 
 // 文章编号 #0155：优先 pageProperties.num，缺省用 totalCount - idx 推算
 export function formatNum(post, totalCount, idx) {
-  const raw = post?.pageProperties?.num ?? post?.pageProperties?.Num
+  // Notion 自定义列由 getPageProperties 直接挂在 post 上（post[列名]），
+  // pageProperties 是历史兼容路径
+  const raw =
+    post?.num ??
+    post?.Num ??
+    post?.pageProperties?.num ??
+    post?.pageProperties?.Num
   if (raw !== undefined && raw !== null && raw !== '') return String(raw).padStart(4, '0')
   if (typeof totalCount === 'number' && typeof idx === 'number') {
     return String(totalCount - idx).padStart(4, '0')
