@@ -7,6 +7,7 @@ const BlogPost = ({ post, totalCount, index = 0 }) => {
   if (!post) return null
   const num = formatNum(post, totalCount, index)
   const flag = post.flag || post.pageProperties?.flag || ''
+  const isPaid = parseFloat(String(post.price ?? '')) > 0
   const tags = Array.isArray(post.tags) ? post.tags : []
   return (
     <article className='article-row'>
@@ -17,6 +18,7 @@ const BlogPost = ({ post, totalCount, index = 0 }) => {
         <h3 className='post-title row-title'>
           <SmartLink href={post.href || `/${post.slug}`} className='row-link'>
             {flag && <span className='row-flag'>{flag}</span>}
+            {isPaid && <span className='post-paid'>付费</span>}
             {post.title}
           </SmartLink>
         </h3>
