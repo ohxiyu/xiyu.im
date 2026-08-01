@@ -49,8 +49,8 @@ export async function getStaticProps({ params: { keyword }, locale }) {
     revalidate: process.env.EXPORT
       ? undefined
       : siteConfig(
-          'NEXT_REVALIDATE_SECOND',
-          BLOG.NEXT_REVALIDATE_SECOND,
+          'SEARCH_REVALIDATE_SECOND',
+          BLOG.SEARCH_REVALIDATE_SECOND,
           props.NOTION_CONFIG
         )
   }
