@@ -11,6 +11,10 @@ export const getServerSideProps = async ({ res }) => {
   const content = [
     'User-agent: *',
     'Allow: /',
+    // 搜索结果页的关键词空间是无界的，爬虫每抓一个新关键词就会触发一次
+    // ISR 现场生成+写入。这类页面本身也没有收录价值，直接禁止抓取。
+    'Disallow: /search/',
+    'Disallow: /search$',
     '',
     `Host: ${LINK}`,
     `Sitemap: ${LINK}/sitemap.xml`
