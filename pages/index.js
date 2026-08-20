@@ -105,15 +105,27 @@ export async function getStaticProps(req) {
   // 列表数据瘦身：去掉 content[]/全量 pageProperties 等大字段，page data ~253kB -> ~40kB
   props.posts = slimPostsForList(props.posts)
 
+  // 首页一篇文章都没有，基本只有两种可能：Notion 这次没拉到，或者配置出了问题。
+  // 无论哪种都不该按正常间隔静态化——那会把一次抖动固化成长时间的空首页。
+  // 这里给一个很短的 revalidate 让它尽快自愈（正常间隔现在是 1 小时）。
+  const isEmpty = !Array.isArray(props.posts) || props.posts.length === 0
+  if (isEmpty) {
+    console.warn(
+      '[index:getStaticProps] 首页文章列表为空，改用 30s 短间隔重试，不做长时间静态化'
+    )
+  }
+
   return {
     props,
     revalidate: process.env.EXPORT
       ? undefined
-      : siteConfig(
-          'NEXT_REVALIDATE_SECOND',
-          BLOG.NEXT_REVALIDATE_SECOND,
-          props.NOTION_CONFIG
-        )
+      : isEmpty
+        ? 30
+        : siteConfig(
+            'NEXT_REVALIDATE_SECOND',
+            BLOG.NEXT_REVALIDATE_SECOND,
+            props.NOTION_CONFIG
+          )
   }
 }
 
