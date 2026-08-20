@@ -22,7 +22,6 @@ import ArchiveYear from './components/ArchiveYear'
 import AboutHero from './components/AboutHero'
 import AboutFacts from './components/AboutFacts'
 import Elsewhere from './components/Elsewhere'
-import Paywall from './components/Paywall'
 
 const Comment = dynamic(() => import('@/components/Comment'), { ssr: false })
 const ArticleLock = dynamic(() => import('./components/ArticleLock'), { ssr: false })
@@ -220,8 +219,6 @@ const LayoutSlug = props => {
   const { fullWidth } = useGlobal() || {}
   const router = useRouter()
   const waiting404 = parseInt(siteConfig('POST_WAITING_TIME_FOR_404') || 0) * 1000
-  // 付费文章解锁后由 /api/unlock 返回正文，存在这里（必须在所有 early return 之前声明）
-  const [unlockedBlockMap, setUnlockedBlockMap] = useState(null)
 
   useEffect(() => {
     if (!post && waiting404) {
@@ -246,11 +243,6 @@ const LayoutSlug = props => {
   const num = formatNum(post)
   const tags = Array.isArray(post.tags) ? post.tags : []
   const dateFmt = formatDateEN(post.publishDay || post.date?.start_date || '')
-  // 付费文章：服务端已剥离 blockMap，只有解锁拿到正文后才渲染 NotionPage
-  const isPaywalled = Boolean(post.paywall) && !unlockedBlockMap
-  const readablePost = unlockedBlockMap
-    ? { ...post, blockMap: unlockedBlockMap }
-    : post
 
   return (
     <div className='article-layout'>
@@ -272,9 +264,7 @@ const LayoutSlug = props => {
           {post.summary && <p className='article-lead'>{post.summary}</p>}
         </header>
         <div id='article-wrapper' className='article-body'>
-          {isPaywalled
-            ? <Paywall post={post} onUnlock={setUnlockedBlockMap} />
-            : <NotionPage post={readablePost} />}
+          <NotionPage post={post} />
         </div>
         <footer className='article-foot'>
           {tags.length > 0 && (
