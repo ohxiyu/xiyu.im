@@ -6,6 +6,14 @@ const BLOG = {
   NOTION_PAGE_ID:
     process.env.NOTION_PAGE_ID ||
     '02ab3b8678004aa69e9e415905ef32a5,en:7c1d570661754c8fbc568e00a01fd70e',
+  // 非官方 API 的登录态（可选）。
+  // 正常情况下博客数据库「分享到网络」后无需鉴权即可读取；但如果页面不公开、
+  // 或 Notion 对机房 IP 返回 403，就需要带上登录态才能读。
+  // getNotionAPI.js 一直在读这两个字段，此前 blog.config 里没定义，等于永远为空。
+  // NOTION_TOKEN_V2：浏览器登录 notion.so 后 Cookie 里的 token_v2
+  // NOTION_ACTIVE_USER：对应的 Notion 用户 ID（多账号时必填）
+  NOTION_TOKEN_V2: process.env.NOTION_TOKEN_V2 || null,
+  NOTION_ACTIVE_USER: process.env.NOTION_ACTIVE_USER || null,
   THEME: process.env.NEXT_PUBLIC_THEME || 'xiyu', // 当前主题（xiyu.im 专用，其他主题已清理）
   LANG: process.env.NEXT_PUBLIC_LANG || 'zh-CN', // e.g 'zh-CN','en-US'  see /lib/lang.js for more.
   SINCE: process.env.NEXT_PUBLIC_SINCE || 2021, // e.g if leave this empty, current year will be used.
