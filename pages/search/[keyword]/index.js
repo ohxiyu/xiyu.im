@@ -1,3 +1,4 @@
+import { isFullStatic } from '@/lib/utils/buildMode'
 import BLOG from '@/blog.config'
 import { getDataFromCache } from '@/lib/cache/cache_manager'
 import { siteConfig } from '@/lib/config'
@@ -46,7 +47,7 @@ export async function getStaticProps({ params: { keyword }, locale }) {
   delete props.allPages // 修：此路由一直漏删，全量 allPages 被序列化进 page data
   return {
     props,
-    revalidate: process.env.EXPORT
+    revalidate: isFullStatic()
       ? undefined
       : siteConfig(
           'SEARCH_REVALIDATE_SECOND',

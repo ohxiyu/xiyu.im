@@ -19,15 +19,12 @@ const BLOG = {
   SINCE: process.env.NEXT_PUBLIC_SINCE || 2021, // e.g if leave this empty, current year will be used.
 
   PSEUDO_STATIC: process.env.NEXT_PUBLIC_PSEUDO_STATIC || false, // 伪静态路径，开启后所有文章URL都以 .html 结尾。
-  // 更新缓存间隔 单位(秒)：每个页面在此期间是纯静态的，不会回源 Notion。
-  // ⚠️ 这个值直接决定 Vercel 的 ISR 写入次数：一个持续有流量的页面每 revalidate 秒
-  // 就会重新生成并写一次缓存。设 60 时单页每天约 1440 次写入，几个页面就能打满
-  // 免费额度（200,000 次/月）。设 3600 后同样流量下写入量降到 1/60。
-  // 文章更新最多延迟 1 小时；需要立刻生效就调 /api/revalidate（见 docs/isr-cost.md）。
+  // ⚠️ 以下两个间隔仅在 FULL_STATIC=false（回退到 ISR 模式）时才生效。
+  // 默认走全量静态，构建期一次性生成所有页面，运行时不再回源 Notion，
+  // ISR 写入为零。详见 docs/static-build.md。
   NEXT_REVALIDATE_SECOND: process.env.NEXT_PUBLIC_REVALIDATE_SECOND || 3600,
   // 搜索结果页专用间隔。/search/[keyword] 的关键词空间是无界的，
-  // 每个新关键词都会被 fallback 现场生成并写一次缓存，爬虫可以无限制地制造写入。
-  // 这类页面内容完全由客户端过滤，没有频繁再生的意义，单独给一个很长的间隔。
+  // 每个新关键词都会被 fallback 现场生成并写一次缓存。
   SEARCH_REVALIDATE_SECOND:
     process.env.NEXT_PUBLIC_SEARCH_REVALIDATE_SECOND || 86400,
   APPEARANCE: process.env.NEXT_PUBLIC_APPEARANCE || 'light', // ['light', 'dark', 'auto'], // light 日间模式 ， dark夜间模式， auto根据时间和主题自动夜间模式

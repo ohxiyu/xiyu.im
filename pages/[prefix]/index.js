@@ -12,7 +12,7 @@ import md5 from 'js-md5'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
-import { isExport } from '@/lib/utils/buildMode'
+import { isFullStatic } from '@/lib/utils/buildMode'
 import { getPriorityPages, prefetchAllBlockMaps } from '@/lib/build/prefetch'
 
 /**
@@ -116,7 +116,7 @@ export async function getStaticPaths() {
   const { allPages } = await fetchGlobalAllData({ from })
 
   // Export 模式：全量预生成
-  if (isExport()) {
+  if (isFullStatic()) {
     await prefetchAllBlockMaps(allPages)
     return {
       paths: allPages
@@ -146,7 +146,7 @@ export async function getStaticProps({ params: { prefix }, locale }) {
 
   return {
     props,
-    revalidate: isExport()
+    revalidate: isFullStatic()
       ? undefined
       : siteConfig(
         'NEXT_REVALIDATE_SECOND',
