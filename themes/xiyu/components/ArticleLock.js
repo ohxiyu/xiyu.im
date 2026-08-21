@@ -43,7 +43,19 @@ export const ArticleLock = props => {
                     className='outline-none w-full text-sm pl-5 rounded-l transition focus:shadow-lg font-light leading-10 text-black dark:bg-gray-500 bg-gray-50'
                 ></input>
                 <div onClick={submitPassword} className="px-3 whitespace-nowrap cursor-pointer items-center justify-center py-2 rounded-r duration-300 bg-gray-300" >
-                    <i className={'duration-200 cursor-pointer fas fa-key dark:text-black'} >&nbsp;{locale.COMMON.SUBMIT}</i>
+                    {/* 内联 SVG 钥匙图标。
+                        原先用的是 FontAwesome 的 fa-key——全站仅此一处用到，
+                        却要为它加载一个渲染阻塞的 CDN 样式表和 944K 字体文件。 */}
+                    <span className='duration-200 cursor-pointer dark:text-black inline-flex items-center gap-1'>
+                        <svg width='14' height='14' viewBox='0 0 24 24' fill='none'
+                            stroke='currentColor' strokeWidth='2' strokeLinecap='round'
+                            strokeLinejoin='round' aria-hidden='true'>
+                            <circle cx='7.5' cy='15.5' r='4.5' />
+                            <path d='M10.7 12.3 21 2' />
+                            <path d='m17 6 3 3' />
+                        </svg>
+                        {locale.COMMON.SUBMIT}
+                    </span>
                 </div>
             </div>
             <div id='tips'>
