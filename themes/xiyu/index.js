@@ -503,14 +503,20 @@ const renderAboutPage = props => {
   const paras = notionParas.length > 0 ? notionParas : fallbackParas
 
   return (
-    <>
+    <div className='about-page'>
       <AboutHero />
-      <div className='about-body'>
-        {paras.map((p, i) => <p key={i}>{p}</p>)}
-      </div>
+      <section className='about-story' aria-labelledby='about-story-title'>
+        <div className='about-section-label'>
+          <span className='about-section-index'>01</span>
+          <h2 id='about-story-title'>Notes behind the work</h2>
+        </div>
+        <div className='about-body'>
+          {paras.map((p, i) => <p key={i}>{p}</p>)}
+        </div>
+      </section>
       <AboutFacts postCount={postCount} tagCount={tagOptions?.length} />
       <Elsewhere />
-    </>
+    </div>
   )
 }
 
