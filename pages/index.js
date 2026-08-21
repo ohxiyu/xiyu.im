@@ -1,12 +1,19 @@
-import { isFullStatic } from '@/lib/utils/buildMode'
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
-import { fetchGlobalAllData, getPostBlocks } from '@/lib/db/SiteDataApi'
-import { slimPostsForList } from '@/lib/utils/post'
-import { generateRss } from '@/lib/utils/rss'
+import {
+  cleanPostSummaries,
+  fetchGlobalAllData,
+  getPostBlocks
+} from '@/lib/db/SiteDataApi'
+import { formatNotionBlock } from '@/lib/db/notion/getPostBlocks'
+import { generateRobotsTxt } from '@/lib/utils/robots.txt'
+import { generateRss, shouldGenerateRssForLocale } from '@/lib/utils/rss'
+import { generateSitemapXml } from '@/lib/utils/sitemap.xml'
 import { DynamicLayout } from '@/themes/theme'
 import { generateRedirectJson } from '@/lib/utils/redirect'
 import { checkDataFromAlgolia } from '@/lib/plugins/algolia'
+import pLimit from 'p-limit'
+import { adapterNotionBlockMap } from '@/lib/utils/notion.util'
 
 /**
  * 首页布局
@@ -26,118 +33,113 @@ export async function getStaticProps(req) {
   const { locale } = req
   const from = 'index'
   const props = await fetchGlobalAllData({ from, locale })
+  if (process.env.NODE_ENV === 'development') {
+    const configTheme = BLOG.THEME
+    const notionTheme = props?.NOTION_CONFIG?.THEME || null
+    const finalTheme = siteConfig('THEME', BLOG.THEME, props?.NOTION_CONFIG)
+    const source = notionTheme ? 'notion:config' : 'blog/env:config'
+    console.log(
+      '[ThemeResolver][server-static-props]',
+      JSON.stringify({
+        route: '/',
+        configTheme,
+        notionTheme,
+        finalTheme,
+        source
+      })
+    )
+  }
   const POST_PREVIEW_LINES = siteConfig(
     'POST_PREVIEW_LINES',
-    12,
+    8,
     props?.NOTION_CONFIG
   )
-  props.posts = props.allPages
-    ?.filter(page => page.type === 'Post' && page.status === 'Published')
-    ?.sort((a, b) => {
-      const dateA = new Date(a?.publishDate || 0).getTime()
-      const dateB = new Date(b?.publishDate || 0).getTime()
-      return dateB - dateA
-    })
+  const POST_PREVIEW_MAX_COUNT = siteConfig(
+    'POST_PREVIEW_MAX_COUNT',
+    4,
+    props?.NOTION_CONFIG
+  )
+  const POST_LIST_PREVIEW = siteConfig(
+    'POST_LIST_PREVIEW',
+    false,
+    props?.NOTION_CONFIG
+  )
+  props.posts = props.allPages?.filter(
+    page => page.type === 'Post' && page.status === 'Published'
+  )
 
   // 处理分页
-  if (siteConfig('POST_LIST_STYLE') === 'scroll') {
+  const POST_LIST_STYLE = siteConfig(
+    'POST_LIST_STYLE',
+    'page',
+    props?.NOTION_CONFIG
+  )
+  if (POST_LIST_STYLE === 'scroll') {
     // 滚动列表默认给前端返回所有数据
-  } else if (siteConfig('POST_LIST_STYLE') === 'page') {
+  } else if (POST_LIST_STYLE === 'page') {
     props.posts = props.posts?.slice(
       0,
       siteConfig('POSTS_PER_PAGE', 12, props?.NOTION_CONFIG)
     )
   }
 
-  // 首页大字 slogan：从最近 N 篇文章里按 day-of-year 选一篇的标题
-  // 数据完全用 props.posts（已 sort 过），server 计算 idx 写进 props 避免 hydration mismatch
-  const HERO_POOL_SIZE = 20
-  const heroPool = (props.posts || []).slice(0, HERO_POOL_SIZE)
-  let heroPickedIdx = 0
-  if (heroPool.length > 0) {
-    const d = new Date()
-    const start = Date.UTC(d.getUTCFullYear(), 0, 0)
-    const day = Math.floor((d.getTime() - start) / 86400000)
-    heroPickedIdx = day % heroPool.length
-  }
-  props.heroPickedIdx = heroPickedIdx
-  props.heroPoolSize = HERO_POOL_SIZE
-
-  // 预览文章内容（并行抓取以加速构建）
-  if (siteConfig('POST_LIST_PREVIEW', false, props?.NOTION_CONFIG)) {
+  // 预览文章内容
+  if (POST_LIST_PREVIEW) {
+    const previewLimit = pLimit(
+      siteConfig('POST_PREVIEW_CONCURRENCY', 5, props?.NOTION_CONFIG)
+    )
+    const previewTargets = props.posts.filter(
+      post => !post.password || post.password === ''
+    ).slice(0, POST_PREVIEW_MAX_COUNT)
     await Promise.all(
-      (props.posts || []).map(async post => {
-        if (post.password && post.password !== '') return
-        try {
-          post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
-        } catch (error) {
-          console.warn(
-            `[index:getStaticProps] getPostBlocks failed for post ${post?.id}:`,
-            error
-          )
-        }
-      })
+      previewTargets.map(post =>
+        previewLimit(async () => {
+          const rawBlockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+          post.blockMap = adapterNotionBlockMap(rawBlockMap)
+          if (post.blockMap?.block) {
+            post.blockMap.block = formatNotionBlock(post.blockMap.block)
+          }
+        })
+      )
     )
   }
-
-  // 非关键副作用任务（失败不应阻塞首页渲染，避免ISR失败后首页长期停留旧内容）
-  const runSafeTask = async (taskName, task) => {
-    try {
-      await Promise.resolve(task())
-    } catch (error) {
-      console.warn(`[index:getStaticProps] ${taskName} failed:`, error)
+  const isBuildLifecycle = ['build', 'export'].includes(
+    process.env.npm_lifecycle_event
+  )
+  if (isBuildLifecycle) {
+    // 生成robotTxt
+    generateRobotsTxt(props)
+    // 生成Feed订阅
+    if (shouldGenerateRssForLocale({ locale })) {
+      await generateRss(props)
     }
-  }
-
-  // 生成Feed订阅
-  await runSafeTask('generateRss', () => generateRss(props))
-  // 检查数据是否需要从algolia删除
-  await runSafeTask('checkDataFromAlgolia', () => checkDataFromAlgolia(props))
-  if (siteConfig('UUID_REDIRECT', false, props?.NOTION_CONFIG)) {
-    // 生成重定向 JSON
-    await runSafeTask('generateRedirectJson', () =>
+    // 生成
+    generateSitemapXml(props)
+    // 检查数据是否需要从algolia删除
+    await checkDataFromAlgolia(props)
+    if (siteConfig('UUID_REDIRECT', false, props?.NOTION_CONFIG)) {
+      // 生成重定向 JSON
       generateRedirectJson(props)
-    )
+    }
   }
 
   // 生成全文索引 - 仅在 yarn build 时执行 && process.env.npm_lifecycle_event === 'build'
 
+  if (!POST_LIST_PREVIEW) {
+    props.posts = cleanPostSummaries(props.posts)
+  }
+  props.latestPosts = cleanPostSummaries(props.latestPosts)
   delete props.allPages
-  // 列表数据瘦身：去掉 content[]/全量 pageProperties 等大字段，page data ~253kB -> ~40kB
-  props.posts = slimPostsForList(props.posts)
-
-  // 首页一篇文章都没有，基本只有两种可能：Notion 这次没拉到，或者配置出了问题。
-  const isEmpty = !Array.isArray(props.posts) || props.posts.length === 0
-
-  if (isEmpty && isFullStatic()) {
-    // 全量静态下产物是永久的：一旦把空首页构建出来，它会一直空到下次构建。
-    // 所以这里直接让构建失败——Vercel 会保留上一个成功的部署，
-    // 站点继续正常服务旧内容，而不是上线一个空站点。
-    throw new Error(
-      '[index:getStaticProps] 首页文章列表为空，中止构建。' +
-        '通常是 Notion 未返回数据（检查日志里的 NOTION_ACCESS_DENIED / ' +
-        'ALLPAGES_EMPTY），或 NOTION_PAGE_ID 配置有误。' +
-        '构建失败不影响线上：Vercel 会保留上一个成功的部署。'
-    )
-  }
-
-  if (isEmpty) {
-    console.warn(
-      '[index:getStaticProps] 首页文章列表为空，改用 30s 短间隔重试，不做长时间静态化'
-    )
-  }
 
   return {
     props,
-    revalidate: isFullStatic()
+    revalidate: process.env.EXPORT
       ? undefined
-      : isEmpty
-        ? 30
-        : siteConfig(
-            'NEXT_REVALIDATE_SECOND',
-            BLOG.NEXT_REVALIDATE_SECOND,
-            props.NOTION_CONFIG
-          )
+      : siteConfig(
+          'NEXT_REVALIDATE_SECOND',
+          BLOG.NEXT_REVALIDATE_SECOND,
+          props.NOTION_CONFIG
+        )
   }
 }
 

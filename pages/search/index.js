@@ -1,7 +1,5 @@
-import { isFullStatic } from '@/lib/utils/buildMode'
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
-import { slimPostsForList } from '@/lib/utils/post'
 import { fetchGlobalAllData } from '@/lib/db/SiteDataApi'
 import { DynamicLayout } from '@/themes/theme'
 import { useRouter } from 'next/router'
@@ -18,13 +16,11 @@ const Search = props => {
   const keyword = router?.query?.s
 
   let filteredPosts
-  // 静态过滤（兼容 category 为字符串或数组；URL 带 ?s= 时预过滤，供不支持客户端过滤的主题用）
+  // 静态过滤
   if (keyword) {
     filteredPosts = posts.filter(post => {
-      const tagContent = Array.isArray(post?.tags) ? post.tags.join(' ') : (post?.tags || '')
-      const categoryContent = Array.isArray(post?.category)
-        ? post.category.join(' ')
-        : (post?.category || '')
+      const tagContent = post?.tags ? post?.tags.join(' ') : ''
+      const categoryContent = post.category ? post.category.join(' ') : ''
       const searchContent =
         post.title + post.summary + tagContent + categoryContent
       return searchContent.toLowerCase().includes(keyword.toLowerCase())
@@ -33,8 +29,7 @@ const Search = props => {
     filteredPosts = []
   }
 
-  // allPosts 始终是全量已发布文章，供主题做客户端实时过滤（xiyu LayoutSearch 用）
-  props = { ...props, posts: filteredPosts, allPosts: posts }
+  props = { ...props, posts: filteredPosts }
 
   const theme = siteConfig('THEME', BLOG.THEME, props.NOTION_CONFIG)
   return <DynamicLayout theme={theme} layoutName='LayoutSearch' {...props} />
@@ -49,18 +44,16 @@ export async function getStaticProps({ locale }) {
     locale
   })
   const { allPages } = props
-  props.posts = slimPostsForList(
-    allPages?.filter(
-      page => page.type === 'Post' && page.status === 'Published'
-    )
+  props.posts = allPages?.filter(
+    page => page.type === 'Post' && page.status === 'Published'
   )
   return {
     props,
-    revalidate: isFullStatic()
+    revalidate: process.env.EXPORT
       ? undefined
       : siteConfig(
-          'SEARCH_REVALIDATE_SECOND',
-          BLOG.SEARCH_REVALIDATE_SECOND,
+          'NEXT_REVALIDATE_SECOND',
+          BLOG.NEXT_REVALIDATE_SECOND,
           props.NOTION_CONFIG
         )
   }

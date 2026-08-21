@@ -2,6 +2,10 @@
 import BLOG from '@/blog.config'
 import Document, { Head, Html, Main, NextScript } from 'next/document'
 
+const isLocalFontAwesome = BLOG.FONT_AWESOME?.startsWith(
+  '/vendor/fontawesome/'
+)
+
 // 预先设置深色模式的脚本内容
 const darkModeScript = `
 (function() {
@@ -43,32 +47,60 @@ class MyDocument extends Document {
     return (
       <Html lang={BLOG.LANG}>
         <Head>
-          {/* viewport：必须！没有这条，手机默认按 980px 渲染，整页缩放需要左右拖动 */}
-          <meta
-            name='viewport'
-            content='width=device-width, initial-scale=1, viewport-fit=cover'
-          />
-          {/* xiyu 主题品牌 favicon 族 + PWA + 社交分享 */}
-          <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
-          <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32.png' />
-          <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16.png' />
-          <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
-          <link rel='mask-icon' href='/favicon.svg' color='#ffc828' />
-          <meta name='theme-color' content='#ffc828' />
-          <meta name='apple-mobile-web-app-title' content='xiyu' />
-          <link rel='manifest' href='/manifest.json' />
+          <link rel='preconnect' href='https://images.unsplash.com' />
+          <link rel='dns-prefetch' href='//images.unsplash.com' />
 
-          {/* Google Fonts · xiyu 主题字体栈（宋体 + 思源黑体 + JetBrains Mono） */}
-          <link rel='preconnect' href='https://fonts.googleapis.com' />
-          <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='anonymous' />
-          <link
-            rel='stylesheet'
-            href='https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600&family=Noto+Sans+SC:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap'
-          />
-
-
-          {/* xiyu 主题 CSS · 外置静态文件（head 中 link 为渲染阻塞，无 FOUC；可跨页缓存，HTML 减重 ~44KB） */}
-          <link rel='stylesheet' href='/css/xiyu.css' />
+          {/* 预加载字体 */}
+          {BLOG.FONT_AWESOME && (
+            <>
+              {isLocalFontAwesome && (
+                <>
+                  <link
+                    rel='preload'
+                    href='/vendor/fontawesome/webfonts/fa-solid-900.woff2'
+                    as='font'
+                    type='font/woff2'
+                    crossOrigin='anonymous'
+                  />
+                  <link
+                    rel='preload'
+                    href='/vendor/fontawesome/webfonts/fa-regular-400.woff2'
+                    as='font'
+                    type='font/woff2'
+                    crossOrigin='anonymous'
+                  />
+                  <link
+                    rel='preload'
+                    href='/vendor/fontawesome/webfonts/fa-brands-400.woff2'
+                    as='font'
+                    type='font/woff2'
+                    crossOrigin='anonymous'
+                  />
+                </>
+              )}
+              <style
+                dangerouslySetInnerHTML={{
+                  __html:
+                    '.fa,.fas,.far,.fab,.fa-solid,.fa-regular,.fa-brands{display:inline-flex;width:1.25em;min-width:1.25em;height:1em;align-items:center;justify-content:center;text-align:center;line-height:1}'
+                }}
+              />
+              <link
+                id='font-awesome-css'
+                rel='preload'
+                as='style'
+                href={BLOG.FONT_AWESOME}
+              />
+              <script
+                dangerouslySetInnerHTML={{
+                  __html:
+                    "requestAnimationFrame(function(){var l=document.getElementById('font-awesome-css');if(l)l.rel='stylesheet'})"
+                }}
+              />
+              <noscript>
+                <link rel='stylesheet' href={BLOG.FONT_AWESOME} />
+              </noscript>
+            </>
+          )}
 
           {/* 预先设置深色模式，避免闪烁 */}
           <script dangerouslySetInnerHTML={{ __html: darkModeScript }} />
