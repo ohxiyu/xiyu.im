@@ -52,9 +52,8 @@ module.exports = {
     '"Segoe UI Symbol"',
     '"Apple Color Emoji"'
   ],
-  FONT_AWESOME:
-    process.env.NEXT_PUBLIC_FONT_AWESOME_PATH ||
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css' // font-awesome 字体图标地址; 可选 /css/all.min.css ， https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css
+  // FONT_AWESOME 已移除：全站仅 ArticleLock 一处用到 fa-key，已换成内联 SVG。
+  // 为一个图标加载渲染阻塞的 CDN 样式表 + 944K 字体不划算。
 
   // END ************网站字体*****************
 }

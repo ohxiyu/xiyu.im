@@ -66,23 +66,6 @@ class MyDocument extends Document {
             href='https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600&family=Noto+Sans+SC:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap'
           />
 
-          {/* 预加载字体 */}
-          {BLOG.FONT_AWESOME && (
-            <>
-              <link
-                rel='preload'
-                href={BLOG.FONT_AWESOME}
-                as='style'
-                crossOrigin='anonymous'
-              />
-              <link
-                rel='stylesheet'
-                href={BLOG.FONT_AWESOME}
-                crossOrigin='anonymous'
-                referrerPolicy='no-referrer'
-              />
-            </>
-          )}
 
           {/* xiyu 主题 CSS · 外置静态文件（head 中 link 为渲染阻塞，无 FOUC；可跨页缓存，HTML 减重 ~44KB） */}
           <link rel='stylesheet' href='/css/xiyu.css' />
