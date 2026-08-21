@@ -1,10 +1,9 @@
-import { isFullStatic } from '@/lib/utils/buildMode'
 import BLOG from '@/blog.config'
 import { getDataFromCache } from '@/lib/cache/cache_manager'
 import { siteConfig } from '@/lib/config'
-import { slimPostsForList } from '@/lib/utils/post'
 import { fetchGlobalAllData } from '@/lib/db/SiteDataApi'
 import { DynamicLayout } from '@/themes/theme'
+import { getPageBlockCacheKey } from '@/lib/db/notion/getPostBlocks'
 
 const Index = props => {
   const { keyword } = props
@@ -37,18 +36,16 @@ export async function getStaticProps({ params: { keyword, page }, locale }) {
     POSTS_PER_PAGE * (page - 1),
     POSTS_PER_PAGE * page
   )
-  // 全量已发布文章（瘦身版）：供 xiyu LayoutSearch 客户端实时过滤，与 /search 行为一致
-  props.allPosts = slimPostsForList(allPosts)
   props.keyword = keyword
   props.page = page
   delete props.allPages
   return {
     props,
-    revalidate: isFullStatic()
+    revalidate: process.env.EXPORT
       ? undefined
       : siteConfig(
-          'SEARCH_REVALIDATE_SECOND',
-          BLOG.SEARCH_REVALIDATE_SECOND,
+          'NEXT_REVALIDATE_SECOND',
+          BLOG.NEXT_REVALIDATE_SECOND,
           props.NOTION_CONFIG
         )
   }
@@ -117,7 +114,7 @@ async function filterByMemCache(allPosts, keyword) {
     keyword = keyword.trim()
   }
   for (const post of allPosts) {
-    const cacheKey = 'page_block_' + post.id
+    const cacheKey = getPageBlockCacheKey(post.id, post.lastEditedDate)
     const page = await getDataFromCache(cacheKey, true)
     const tagContent =
       post?.tags && Array.isArray(post?.tags) ? post?.tags.join(' ') : ''

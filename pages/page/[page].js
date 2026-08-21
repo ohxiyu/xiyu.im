@@ -1,8 +1,8 @@
-import { isFullStatic } from '@/lib/utils/buildMode'
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
-import { slimPostsForList } from '@/lib/utils/post'
 import { fetchGlobalAllData, getPostBlocks } from '@/lib/db/SiteDataApi'
+import { formatNotionBlock } from '@/lib/db/notion/getPostBlocks'
+import { adapterNotionBlockMap } from '@/lib/utils/notion.util'
 import { DynamicLayout } from '@/themes/theme'
 
 /**
@@ -40,13 +40,9 @@ export async function getStaticProps({ params: { page }, locale }) {
     props?.NOTION_CONFIG
   )
 
-  const allPosts = allPages
-    ?.filter(page => page.type === 'Post' && page.status === 'Published')
-    ?.sort((a, b) => {
-      const dateA = new Date(a?.publishDate || 0).getTime()
-      const dateB = new Date(b?.publishDate || 0).getTime()
-      return dateB - dateA
-    })
+  const allPosts = allPages?.filter(
+    page => page.type === 'Post' && page.status === 'Published'
+  )
   const POSTS_PER_PAGE = siteConfig('POSTS_PER_PAGE', 12, props?.NOTION_CONFIG)
   // 处理分页
   props.posts = allPosts.slice(
@@ -55,28 +51,25 @@ export async function getStaticProps({ params: { page }, locale }) {
   )
   props.page = page
 
-  // 处理预览（并行抓取以加速构建）
+  // 处理预览
   if (siteConfig('POST_LIST_PREVIEW', false, props?.NOTION_CONFIG)) {
-    await Promise.all(
-      (props.posts || []).map(async post => {
-        if (post.password && post.password !== '') return
-        try {
-          post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
-        } catch (error) {
-          console.warn(
-            `[page-${page}:getStaticProps] getPostBlocks failed for post ${post?.id}:`,
-            error
-          )
-        }
-      })
-    )
+    for (const i in props.posts) {
+      const post = props.posts[i]
+      if (post.password && post.password !== '') {
+        continue
+      }
+      const rawBlockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+      post.blockMap = adapterNotionBlockMap(rawBlockMap)
+      if (post.blockMap?.block) {
+        post.blockMap.block = formatNotionBlock(post.blockMap.block)
+      }
+    }
   }
 
   delete props.allPages
-  props.posts = slimPostsForList(props.posts)
   return {
     props,
-    revalidate: isFullStatic()
+    revalidate: process.env.EXPORT
       ? undefined
       : siteConfig(
           'NEXT_REVALIDATE_SECOND',
