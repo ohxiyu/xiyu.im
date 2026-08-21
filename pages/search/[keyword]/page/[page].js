@@ -1,3 +1,4 @@
+import { isFullStatic } from '@/lib/utils/buildMode'
 import BLOG from '@/blog.config'
 import { getDataFromCache } from '@/lib/cache/cache_manager'
 import { siteConfig } from '@/lib/config'
@@ -43,7 +44,7 @@ export async function getStaticProps({ params: { keyword, page }, locale }) {
   delete props.allPages
   return {
     props,
-    revalidate: process.env.EXPORT
+    revalidate: isFullStatic()
       ? undefined
       : siteConfig(
           'SEARCH_REVALIDATE_SECOND',

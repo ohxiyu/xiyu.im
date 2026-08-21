@@ -1115,7 +1115,6 @@ html.dark .portrait {
   color: var(--ink-mute);
 }
 
-
 .topics-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -1150,9 +1149,6 @@ html.dark .portrait {
   color: var(--ink-mute);
   margin-top: 12px;
 }
-
-
-
 
 /* ===== NotionPage 渲染兼容层 ===== */
 .article-body .notion { color: inherit; }
@@ -1331,178 +1327,9 @@ html.dark #theme-xiyu {
 .article-body .notion-asset-wrapper-video > div,
 .article-body .notion-asset-wrapper-embed > div { max-width: 100% !important; }
 
-
 /* ===== 付费墙 ===== */
-.paywall-preview {
-  position: relative;
-  max-height: 12em;
-  overflow: hidden;
-}
-.paywall-preview::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 6em;
-  background: linear-gradient(to bottom, transparent, var(--bg));
-  pointer-events: none;
-}
-.paywall-card {
-  border: 1px solid var(--rule);
-  background: var(--bg-elev);
-  padding: 32px;
-  margin: 8px 0 32px;
-  position: relative;
-}
-.paywall-card::before {
-  content: "";
-  position: absolute;
-  top: -1px; left: -1px;
-  width: 12px; height: 12px;
-  border-top: 1px solid var(--accent);
-  border-left: 1px solid var(--accent);
-}
-.paywall-card::after {
-  content: "";
-  position: absolute;
-  bottom: -1px; right: -1px;
-  width: 12px; height: 12px;
-  border-bottom: 1px solid var(--accent);
-  border-right: 1px solid var(--accent);
-}
-.paywall-price {
-  font-family: "Noto Serif SC", serif;
-  font-size: 42px;
-  font-weight: 500;
-  color: var(--ink);
-  margin: 16px 0 8px;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.paywall-currency {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 14px;
-  color: var(--ink-mute);
-  margin-left: 8px;
-  letter-spacing: 0.06em;
-}
-.paywall-desc {
-  font-size: 14.5px;
-  color: var(--ink-soft);
-  margin: 0 0 24px;
-}
-.paywall-tabs {
-  display: flex;
-  gap: 0;
-  border: 1px solid var(--rule);
-  margin-bottom: 20px;
-  overflow: hidden;
-}
-.paywall-tab {
-  flex: 1;
-  padding: 10px 12px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: var(--ink-mute);
-  background: transparent;
-  border: 0;
-  border-right: 1px solid var(--rule);
-  cursor: pointer;
-  transition: background .15s, color .15s;
-}
-.paywall-tab:last-child { border-right: 0; }
-.paywall-tab:hover { color: var(--ink); }
-.paywall-tab.active {
-  background: var(--accent);
-  color: #fff;
-}
-.paywall-field {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px dashed var(--rule);
-}
-.paywall-field-label {
-  flex: 0 0 64px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-}
-.paywall-addr {
-  flex: 1 1 auto;
-  min-width: 0;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 12px;
-  color: var(--ink);
-  word-break: break-all;
-  background: none;
-  padding: 0;
-}
-.paywall-copy {
-  flex: 0 0 auto;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  padding: 4px 10px;
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  background: transparent;
-  color: var(--ink-mute);
-  cursor: pointer;
-  transition: all .15s;
-}
-.paywall-copy:hover { border-color: var(--ink-mute); color: var(--ink); }
-.paywall-form {
-  display: flex;
-  gap: 10px;
-  margin-top: 24px;
-  flex-wrap: wrap;
-}
-.paywall-input {
-  flex: 1 1 260px;
-  min-width: 0;
-  padding: 11px 14px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 12px;
-  color: var(--ink);
-  background: var(--bg);
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  outline: none;
-  transition: border-color .15s;
-}
-.paywall-input:focus { border-color: var(--accent); }
-.paywall-submit { flex: 0 0 auto; }
-.paywall-submit:disabled { opacity: .5; cursor: not-allowed; }
-.paywall-error {
-  margin: 14px 0 0;
-  font-size: 13px;
-  color: #d64545;
-}
-html.dark .paywall-error { color: #ff8b8b; }
-.paywall-hint {
-  margin: 14px 0 0;
-  font-size: 12px;
-  color: var(--ink-faint);
-  line-height: 1.6;
-}
 
 /* 列表里的付费徽章 */
-.post-paid {
-  display: inline-block;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  padding: 1px 6px;
-  margin-right: 8px;
-  border: 1px solid var(--accent);
-  border-radius: 2px;
-  color: var(--accent-ink);
-  vertical-align: middle;
-}
 
 /* ============================================================================
    响应式（≤1024 平板 / ≤768 手机）—— 重写为最小化、单一来源、不与桌面冲突
@@ -1544,15 +1371,6 @@ html.dark .paywall-error { color: #ff8b8b; }
 
 @media (max-width: 768px) {
   /* 付费墙移动端 */
-  .paywall-card { padding: 22px 18px; }
-  .paywall-price { font-size: 34px; }
-  .paywall-field { flex-wrap: wrap; }
-  .paywall-field-label { flex-basis: 100%; }
-  .paywall-addr { font-size: 11px; }
-  .paywall-tab { font-size: 10px; padding: 9px 6px; }
-  .paywall-form { flex-direction: column; }
-  .paywall-input { flex-basis: auto; width: 100%; }
-  .paywall-submit { width: 100%; justify-content: center; }
 
   /* —— 全局基础 —— */
   .page { padding: 18px 16px 56px; max-width: 100%; }

@@ -1,3 +1,4 @@
+import { isFullStatic } from '@/lib/utils/buildMode'
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
 import { fetchGlobalAllData, getPostBlocks } from '@/lib/db/SiteDataApi'
@@ -106,9 +107,20 @@ export async function getStaticProps(req) {
   props.posts = slimPostsForList(props.posts)
 
   // 首页一篇文章都没有，基本只有两种可能：Notion 这次没拉到，或者配置出了问题。
-  // 无论哪种都不该按正常间隔静态化——那会把一次抖动固化成长时间的空首页。
-  // 这里给一个很短的 revalidate 让它尽快自愈（正常间隔现在是 1 小时）。
   const isEmpty = !Array.isArray(props.posts) || props.posts.length === 0
+
+  if (isEmpty && isFullStatic()) {
+    // 全量静态下产物是永久的：一旦把空首页构建出来，它会一直空到下次构建。
+    // 所以这里直接让构建失败——Vercel 会保留上一个成功的部署，
+    // 站点继续正常服务旧内容，而不是上线一个空站点。
+    throw new Error(
+      '[index:getStaticProps] 首页文章列表为空，中止构建。' +
+        '通常是 Notion 未返回数据（检查日志里的 NOTION_ACCESS_DENIED / ' +
+        'ALLPAGES_EMPTY），或 NOTION_PAGE_ID 配置有误。' +
+        '构建失败不影响线上：Vercel 会保留上一个成功的部署。'
+    )
+  }
+
   if (isEmpty) {
     console.warn(
       '[index:getStaticProps] 首页文章列表为空，改用 30s 短间隔重试，不做长时间静态化'
@@ -117,7 +129,7 @@ export async function getStaticProps(req) {
 
   return {
     props,
-    revalidate: process.env.EXPORT
+    revalidate: isFullStatic()
       ? undefined
       : isEmpty
         ? 30

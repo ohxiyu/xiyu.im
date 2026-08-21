@@ -3,7 +3,7 @@ import { siteConfig } from '@/lib/config'
 import { fetchGlobalAllData, resolvePostProps } from '@/lib/db/SiteDataApi'
 import Slug from '..'
 import { checkSlugHasOneSlash } from '@/lib/utils/post'
-import { isExport } from '@/lib/utils/buildMode'
+import { isFullStatic } from '@/lib/utils/buildMode'
 import { getPriorityPages, prefetchAllBlockMaps } from '@/lib/build/prefetch'
 
 /**
@@ -21,7 +21,7 @@ export async function getStaticPaths() {
   const { allPages } = await fetchGlobalAllData({ from })
 
   // Export 模式：全量预生成
-  if (isExport()) {
+  if (isFullStatic()) {
     await prefetchAllBlockMaps(allPages)
     return {
       paths: allPages
@@ -63,7 +63,7 @@ export async function getStaticProps({ params: { prefix, slug }, locale }) {
 
   return {
     props,
-    revalidate: isExport()
+    revalidate: isFullStatic()
       ? undefined
       : siteConfig(
         'NEXT_REVALIDATE_SECOND',

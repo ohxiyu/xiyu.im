@@ -1,3 +1,4 @@
+import { isFullStatic } from '@/lib/utils/buildMode'
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
 import { fetchGlobalAllData } from '@/lib/db/SiteDataApi'
@@ -20,7 +21,7 @@ export async function getStaticProps({ locale }) {
   delete props.allPages
   return {
     props,
-    revalidate: process.env.EXPORT
+    revalidate: isFullStatic()
       ? undefined
       : siteConfig(
           'NEXT_REVALIDATE_SECOND',
