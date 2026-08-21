@@ -132,7 +132,12 @@ const nextConfig = {
     // 允许next/image加载的图片 域名
     domains: [
       'gravatar.com',
+      // Notion 已把主域从 notion.so 迁到 notion.com，两个都保留：
+      // 图片 URL 可能来自任一域名，漏掉哪个 next/image 都会直接报错拒绝加载
       'www.notion.so',
+      'www.notion.com',
+      'notion.so',
+      'notion.com',
       'avatars.githubusercontent.com',
       'images.unsplash.com',
       'source.unsplash.com',

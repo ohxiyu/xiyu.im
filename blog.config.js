@@ -1,7 +1,13 @@
 // 注: process.env.XX是Vercel的环境变量，配置方式见：https://docs.tangly1024.com/article/how-to-config-notion-next#c4768010ae7d44609b744e79e2f9959a
 
 const BLOG = {
-  API_BASE_URL: process.env.API_BASE_URL || 'https://www.notion.so/api/v3', // API默认请求地址,可以配置成自己的地址例如：https://[xxxxx].notion.site/api/v3
+  // Notion 非官方 API 地址。
+  // ⚠️ Notion 已把主域从 notion.so 迁到 notion.com。若构建时出现
+  // `loadPageChunk: 403 Forbidden`，优先把这里指向新域名试一次：
+  //     API_BASE_URL=https://www.notion.com/api/v3
+  // 也可指向自建反代。图片域名由 conf/image.config.js 的 NOTION_HOST 单独控制，
+  // 换域名时两个要一起改。
+  API_BASE_URL: process.env.API_BASE_URL || 'https://www.notion.so/api/v3',
   // Important page_id！！！Duplicate Template from  https://tanghh.notion.site/02ab3b8678004aa69e9e415905ef32a5
   NOTION_PAGE_ID:
     process.env.NOTION_PAGE_ID ||
@@ -14,6 +20,9 @@ const BLOG = {
   // NOTION_ACTIVE_USER：对应的 Notion 用户 ID（多账号时必填）
   NOTION_TOKEN_V2: process.env.NOTION_TOKEN_V2 || null,
   NOTION_ACTIVE_USER: process.env.NOTION_ACTIVE_USER || null,
+  // 发往 Notion 的 User-Agent。默认伪装成常规浏览器——Notion 的反爬会
+  // 403 掉不带 UA 的请求。需要换新版本浏览器标识时可用环境变量覆盖。
+  NOTION_USER_AGENT: process.env.NOTION_USER_AGENT || null,
   THEME: process.env.NEXT_PUBLIC_THEME || 'xiyu', // 当前主题（xiyu.im 专用，其他主题已清理）
   LANG: process.env.NEXT_PUBLIC_LANG || 'zh-CN', // e.g 'zh-CN','en-US'  see /lib/lang.js for more.
   SINCE: process.env.NEXT_PUBLIC_SINCE || 2021, // e.g if leave this empty, current year will be used.
