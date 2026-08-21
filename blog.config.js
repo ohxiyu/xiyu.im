@@ -20,6 +20,9 @@ const BLOG = {
   // NOTION_ACTIVE_USER：对应的 Notion 用户 ID（多账号时必填）
   NOTION_TOKEN_V2: process.env.NOTION_TOKEN_V2 || null,
   NOTION_ACTIVE_USER: process.env.NOTION_ACTIVE_USER || null,
+  // 发往 Notion 的 User-Agent。默认伪装成常规浏览器——Notion 的反爬会
+  // 403 掉不带 UA 的请求。需要换新版本浏览器标识时可用环境变量覆盖。
+  NOTION_USER_AGENT: process.env.NOTION_USER_AGENT || null,
   THEME: process.env.NEXT_PUBLIC_THEME || 'xiyu', // 当前主题（xiyu.im 专用，其他主题已清理）
   LANG: process.env.NEXT_PUBLIC_LANG || 'zh-CN', // e.g 'zh-CN','en-US'  see /lib/lang.js for more.
   SINCE: process.env.NEXT_PUBLIC_SINCE || 2021, // e.g if leave this empty, current year will be used.
