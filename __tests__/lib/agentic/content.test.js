@@ -6,6 +6,7 @@ import {
   renderPageMarkdown
 } from '@/lib/agentic/content'
 import { sendAgentText } from '@/lib/agentic/serve-text'
+import { getDirectXiyuLayoutName } from '@/lib/agentic/layout'
 
 describe('agent-readable site resources', () => {
   it.each(['home', 'about', 'contact', 'privacy'])(
@@ -63,5 +64,28 @@ describe('agent-readable site resources', () => {
     expect(headers['Content-Type']).toBe('text/markdown; charset=utf-8')
     expect(headers.Vary).toBe('Accept, Accept-Encoding')
     expect(res.end).toHaveBeenCalledWith(agentTextResources.home.body)
+  })
+
+  it('server-renders agent trust pages before dynamic theme hydration', () => {
+    expect(
+      getDirectXiyuLayoutName({
+        theme: 'xiyu',
+        layoutName: 'LayoutInfoPage'
+      })
+    ).toBe('LayoutInfoPage')
+    expect(
+      getDirectXiyuLayoutName({
+        theme: 'xiyu',
+        layoutName: 'LayoutSlug',
+        post: { slug: 'about' }
+      })
+    ).toBe('LayoutSlug')
+    expect(
+      getDirectXiyuLayoutName({
+        theme: 'xiyu',
+        layoutName: 'LayoutSlug',
+        post: { slug: 'article/example' }
+      })
+    ).toBeNull()
   })
 })

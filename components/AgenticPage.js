@@ -1,11 +1,15 @@
 import BLOG from '@/blog.config'
+import AgentReadableLayout from '@/components/AgentReadableLayout'
 import { siteConfig } from '@/lib/config'
-import { DynamicLayout } from '@/themes/theme'
 
 const AgenticPage = props => {
   const theme = siteConfig('THEME', BLOG.THEME, props.NOTION_CONFIG)
   return (
-    <DynamicLayout theme={theme} layoutName='LayoutInfoPage' {...props} />
+    <AgentReadableLayout
+      theme={theme}
+      layoutName='LayoutInfoPage'
+      {...props}
+    />
   )
 }
 
