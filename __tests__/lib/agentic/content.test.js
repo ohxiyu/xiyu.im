@@ -76,6 +76,12 @@ describe('agent-readable site resources', () => {
     expect(
       getDirectXiyuLayoutName({
         theme: 'xiyu',
+        layoutName: 'Layout404'
+      })
+    ).toBe('Layout404')
+    expect(
+      getDirectXiyuLayoutName({
+        theme: 'xiyu',
         layoutName: 'LayoutInfoPage'
       })
     ).toBe('LayoutInfoPage')
