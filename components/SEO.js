@@ -20,9 +20,14 @@ const SEO = props => {
   )
   const SUB_PATH = siteConfig('SUB_PATH', '')
   let url = PATH?.length ? createSiteUrl(LINK, SUB_PATH) || LINK : LINK
-  let image
   const router = useRouter()
   const meta = getSEOMeta(props, router, useGlobal()?.locale)
+  let image = getAbsoluteImageUrl(
+    getValidImageCandidate(siteInfo?.pageCover) ||
+      getValidImageCandidate(siteInfo?.icon) ||
+      '/images/logo/og-image.png',
+    LINK
+  )
   const webFontUrl = siteConfig('FONT_URL')
   const hasWebFontUrl = Array.isArray(webFontUrl)
     ? webFontUrl.filter(Boolean).length > 0
@@ -61,7 +66,10 @@ const SEO = props => {
   }
   if (meta) {
     url = createSiteUrl(url, meta.slug) || url
-    image = getAbsoluteImageUrl(meta.image || '/bg_image.jpg', LINK)
+    image = getAbsoluteImageUrl(
+      getValidImageCandidate(meta.image) || image || '/images/logo/og-image.png',
+      LINK
+    )
   }
   const TITLE = siteConfig('TITLE')
   const title = meta?.title || TITLE
@@ -121,6 +129,23 @@ const SEO = props => {
   const TWITTER_CREATOR = siteConfig('TWITTER_CREATOR', '', NOTION_CONFIG)
 
   const AUTHOR = siteConfig('AUTHOR')
+  const markdownAlternate = getMarkdownAlternate(router?.asPath)
+  const organization = getSchemaOrganization({
+    name: siteConfig('SCHEMA_ORG_NAME'),
+    email: siteConfig('SCHEMA_CONTACT_EMAIL'),
+    telephone: siteConfig('SCHEMA_CONTACT_PHONE'),
+    streetAddress: siteConfig('SCHEMA_ADDRESS_STREET'),
+    addressLocality: siteConfig('SCHEMA_ADDRESS_LOCALITY'),
+    addressRegion: siteConfig('SCHEMA_ADDRESS_REGION'),
+    postalCode: siteConfig('SCHEMA_ADDRESS_POSTAL_CODE'),
+    addressCountry: siteConfig('SCHEMA_ADDRESS_COUNTRY')
+  })
+  const sameAs = [
+    siteConfig('CONTACT_TWITTER'),
+    siteConfig('CONTACT_GITHUB'),
+    'https://x.com/ohixyu',
+    'https://github.com/ohxiyu'
+  ].filter((value, index, list) => value && list.indexOf(value) === index)
   return (
     <Head>
       <link rel='icon' href={favicon} />
@@ -164,6 +189,13 @@ const SEO = props => {
 
       {/* 基础SEO元数据 */}
       <link rel='canonical' href={url} />
+      {markdownAlternate && (
+        <link
+          rel='alternate'
+          type='text/markdown'
+          href={createSiteUrl(LINK, markdownAlternate) || markdownAlternate}
+        />
+      )}
       <meta name='keywords' content={keywords} />
       <meta name='description' content={description} />
       <meta name='author' content={AUTHOR} />
@@ -243,7 +275,11 @@ const SEO = props => {
         type='application/ld+json'
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
-            generateStructuredData(meta, siteInfo, url, image, AUTHOR, LINK)
+            generateStructuredData(meta, siteInfo, url, image, AUTHOR, LINK, {
+              language,
+              organization,
+              sameAs
+            })
           )
         }}
       />
@@ -280,27 +316,39 @@ export const generateStructuredData = (
   url,
   image,
   author,
-  siteUrl
+  siteUrl,
+  options = {}
 ) => {
-  const baseData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: siteInfo?.title,
-    description: siteInfo?.description,
-    url: siteUrl,
-    author: {
-      '@type': 'Person',
-      name: author
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: siteInfo?.title,
-      logo: {
-        '@type': 'ImageObject',
-        url: getAbsoluteImageUrl(siteInfo?.icon, siteUrl)
-      }
-    }
+  const personId = `${siteUrl}/#person`
+  const websiteId = `${siteUrl}/#website`
+  const blogId = `${siteUrl}/#blog`
+  const logoUrl = getAbsoluteImageUrl(
+    getValidImageCandidate(siteInfo?.icon) || '/images/logo/og-image.png',
+    siteUrl
+  )
+  const person = {
+    '@type': 'Person',
+    '@id': personId,
+    name: author,
+    alternateName: ['西羽', 'xiyu'],
+    url: createSiteUrl(siteUrl, 'about'),
+    image: logoUrl,
+    sameAs: options.sameAs?.length ? options.sameAs : undefined
   }
+  const publisher = options.organization
+    ? { '@id': `${siteUrl}/#organization` }
+    : { '@id': personId }
+  const articlePublisher = options.organization
+    ? {
+        '@type': 'Organization',
+        ...options.organization,
+        url: siteUrl,
+        logo: {
+          '@type': 'ImageObject',
+          url: logoUrl
+        }
+      }
+    : person
 
   // 如果是文章页面，添加文章结构化数据
   if (meta?.type === 'Post') {
@@ -313,18 +361,8 @@ export const generateStructuredData = (
       url: url,
       datePublished: meta.publishTime,
       dateModified: meta.modifiedTime || meta.publishTime,
-      author: {
-        '@type': 'Person',
-        name: author
-      },
-      publisher: {
-        '@type': 'Organization',
-        name: siteInfo?.title,
-        logo: {
-          '@type': 'ImageObject',
-          url: getAbsoluteImageUrl(siteInfo?.icon, siteUrl)
-        }
-      },
+      author: person,
+      publisher: articlePublisher,
       mainEntityOfPage: {
         '@type': 'WebPage',
         '@id': url
@@ -334,7 +372,120 @@ export const generateStructuredData = (
     }
   }
 
-  return baseData
+  const graph = [
+    {
+      '@type': 'WebSite',
+      '@id': websiteId,
+      name: siteInfo?.title,
+      alternateName: ['xiyu.im', 'xiyu blog', '西羽博客'],
+      description: siteInfo?.description,
+      url: siteUrl,
+      inLanguage: options.language,
+      author: { '@id': personId },
+      publisher,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${siteUrl}/search?s={search_term_string}`,
+        'query-input': 'required name=search_term_string'
+      }
+    },
+    {
+      '@type': 'Blog',
+      '@id': blogId,
+      name: siteInfo?.title,
+      description: siteInfo?.description,
+      url: siteUrl,
+      inLanguage: options.language,
+      author: { '@id': personId },
+      publisher,
+      image
+    },
+    person
+  ]
+
+  if (options.organization) {
+    graph.push({
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      ...options.organization,
+      url: siteUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: logoUrl
+      }
+    })
+  }
+
+  if (url && url !== siteUrl) {
+    graph.push({
+      '@type': 'WebPage',
+      '@id': url,
+      url,
+      name: meta?.title,
+      description: meta?.description,
+      isPartOf: { '@id': websiteId },
+      about: { '@id': personId }
+    })
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': graph
+  }
+}
+
+export const getSchemaOrganization = values => {
+  const required = [
+    'name',
+    'email',
+    'telephone',
+    'streetAddress',
+    'addressLocality',
+    'addressRegion',
+    'postalCode',
+    'addressCountry'
+  ]
+  if (required.some(key => !String(values?.[key] || '').trim())) return null
+
+  return {
+    name: values.name,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'editorial inquiries',
+      email: values.email,
+      telephone: values.telephone,
+      availableLanguage: ['zh-CN', 'en']
+    },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: values.streetAddress,
+      addressLocality: values.addressLocality,
+      addressRegion: values.addressRegion,
+      postalCode: values.postalCode,
+      addressCountry: values.addressCountry
+    }
+  }
+}
+
+export const getMarkdownAlternate = asPath => {
+  const pathname = String(asPath || '').split(/[?#]/)[0].replace(/\/$/, '') || '/'
+  const alternates = {
+    '/': '/index.md',
+    '/about': '/about.md',
+    '/contact': '/contact.md',
+    '/privacy': '/privacy.md',
+    '/developer': '/developer.md'
+  }
+  return alternates[pathname] || null
+}
+
+const getValidImageCandidate = value => {
+  if (typeof value !== 'string') return ''
+  const normalized = value.trim()
+  if (!normalized || ['undefined', 'null'].includes(normalized.toLowerCase())) {
+    return ''
+  }
+  return normalized
 }
 
 const getAbsoluteImageUrl = (image, siteUrl) => {
@@ -364,8 +515,15 @@ const getIsoTime = value => {
  * @param {*} router
  */
 const getSEOMeta = (props, router, locale) => {
-  const { post, siteInfo, tag, category, page } = props
+  const { post, siteInfo, tag, category, page, seo } = props
   const keyword = router?.query?.s
+
+  if (seo) {
+    return {
+      ...seo,
+      image: getValidImageCandidate(seo.image) || siteInfo?.pageCover
+    }
+  }
 
   const TITLE = siteConfig('TITLE')
   switch (router.route) {

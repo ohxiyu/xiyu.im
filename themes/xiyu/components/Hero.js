@@ -66,20 +66,20 @@ const Hero = props => {
                 href={picked.href || `/${picked.slug}`}
                 className='hero-title-link'
                 title={`阅读：${picked.title}`}>
-                <h1 className='hero-title'>
+                <h2 className='hero-title'>
                   {titleSpans.map((s, i) =>
                     s.em
                       ? <em key={i}>{s.text}</em>
                       : <span key={i}>{s.text}</span>
                   )}
-                </h1>
+                </h2>
               </SmartLink>
             )
           : (
-              <h1 className='hero-title'>
+              <h2 className='hero-title'>
                 在喧嚣与噪声里，<br />
                 写点<em>经得住时间</em>的东西。
-              </h1>
+              </h2>
             )
         }
         {(latest || topics.length > 0) && (

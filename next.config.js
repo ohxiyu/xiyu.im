@@ -455,6 +455,20 @@ const nextConfig = {
     const pages = { ...defaultPathMap }
     delete pages['/sitemap.xml']
     delete pages['/auth']
+    // These negotiated resources use response headers and therefore only run
+    // on server-capable deployments. Keep legacy `next export` builds valid.
+    for (const resourcePath of [
+      '/index.md',
+      '/about.md',
+      '/contact.md',
+      '/privacy.md',
+      '/developer.md',
+      '/llms.txt',
+      '/llms-full.txt',
+      '/agent-instructions.txt'
+    ]) {
+      delete pages[resourcePath]
+    }
     return pages
   },
   publicRuntimeConfig: {

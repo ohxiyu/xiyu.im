@@ -1,4 +1,5 @@
 import { siteConfig } from '@/lib/config'
+import SmartLink from '@/components/SmartLink'
 import CONFIG from '../config'
 
 // xiyu 主题页脚
@@ -14,8 +15,16 @@ export const Footer = props => {
   const stack = siteConfig('XIYU_FOOT_STACK', 'Notion × NotionNext × Vercel', CONFIG)
   return (
     <footer className='site-foot'>
-      <span>© {author} {dateRange}</span>
-      <span>{host} · {tagline}{stack ? ` · ${stack}` : ''}</span>
+      <div className='site-foot-copy'>
+        <span>© {author} {dateRange}</span>
+        <span>{host} · {tagline}{stack ? ` · ${stack}` : ''}</span>
+      </div>
+      <nav className='site-foot-links' aria-label='站点说明与机器资源'>
+        <SmartLink href='/contact'>联系</SmartLink>
+        <SmartLink href='/privacy'>隐私</SmartLink>
+        <SmartLink href='/developer'>开发者资源</SmartLink>
+        <SmartLink href='/llms.txt'>llms.txt</SmartLink>
+      </nav>
     </footer>
   )
 }

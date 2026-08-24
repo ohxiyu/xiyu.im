@@ -1,4 +1,8 @@
-import { generateStructuredData } from '@/components/SEO'
+import {
+  generateStructuredData,
+  getMarkdownAlternate,
+  getSchemaOrganization
+} from '@/components/SEO'
 
 describe('SEO structured data', () => {
   const siteInfo = {
@@ -39,7 +43,11 @@ describe('SEO structured data', () => {
         '@id': 'https://example.com/article/structured-data'
       }
     })
-    expect(data.publisher.logo.url).toBe('https://example.com/logo.png')
+    expect(data.author).toMatchObject({
+      '@type': 'Person',
+      name: 'Example Author',
+      image: 'https://example.com/logo.png'
+    })
   })
 
   it('generates WebSite data for non-article pages', () => {
@@ -52,11 +60,60 @@ describe('SEO structured data', () => {
       'https://example.com'
     )
 
-    expect(data).toMatchObject({
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      name: 'Example Blog',
-      url: 'https://example.com'
+    expect(data['@context']).toBe('https://schema.org')
+    expect(data['@graph']).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          '@type': 'WebSite',
+          name: 'Example Blog',
+          url: 'https://example.com',
+          alternateName: expect.arrayContaining(['xiyu.im', '西羽博客'])
+        }),
+        expect.objectContaining({
+          '@type': 'Blog',
+          name: 'Example Blog'
+        }),
+        expect.objectContaining({
+          '@type': 'Person',
+          name: 'Example Author'
+        })
+      ])
+    )
+  })
+
+  it('only emits Organization schema when public contact and address data is complete', () => {
+    expect(getSchemaOrganization({ name: 'Example' })).toBeNull()
+
+    expect(
+      getSchemaOrganization({
+        name: 'Example Studio',
+        email: 'hello@example.com',
+        telephone: '+1-202-555-0100',
+        streetAddress: '1 Example Street',
+        addressLocality: 'Washington',
+        addressRegion: 'DC',
+        postalCode: '20001',
+        addressCountry: 'US'
+      })
+    ).toMatchObject({
+      name: 'Example Studio',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        email: 'hello@example.com',
+        telephone: '+1-202-555-0100'
+      },
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: '1 Example Street',
+        addressCountry: 'US'
+      }
     })
+  })
+
+  it('advertises explicit Markdown alternates for negotiated pages', () => {
+    expect(getMarkdownAlternate('/')).toBe('/index.md')
+    expect(getMarkdownAlternate('/about?from=test')).toBe('/about.md')
+    expect(getMarkdownAlternate('/privacy/')).toBe('/privacy.md')
+    expect(getMarkdownAlternate('/archive')).toBeNull()
   })
 })
