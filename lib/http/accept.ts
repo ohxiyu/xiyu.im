@@ -28,6 +28,7 @@ const parseAccept = (acceptHeader: string): MediaRange[] =>
     .split(',')
     .map((entry, position) => {
       const [mediaType, ...parameters] = entry.split(';')
+      if (!mediaType) return null
       const [type, subtype] = mediaType.trim().toLowerCase().split('/')
       if (!type || !subtype) return null
 
