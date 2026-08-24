@@ -21,6 +21,18 @@ const BLOG = {
   LINK: process.env.NEXT_PUBLIC_LINK || 'https://tangly1024.com', // 网站地址
   KEYWORDS: process.env.NEXT_PUBLIC_KEYWORD || 'Notion, 博客', // 网站关键词 英文逗号隔开
   BLOG_FAVICON: process.env.NEXT_PUBLIC_FAVICON || '/favicon.svg', // blog favicon 配置, 默认使用 /public/favicon.ico，支持在线图片，如 https://img.imesong.com/favicon.png
+  // 可选：只有完整配置公共组织资料时才输出 Organization JSON-LD；个人博客默认以 Person 作为发布者。
+  SCHEMA_ORG_NAME: process.env.NEXT_PUBLIC_SCHEMA_ORG_NAME || '',
+  SCHEMA_CONTACT_EMAIL: process.env.NEXT_PUBLIC_SCHEMA_CONTACT_EMAIL || '',
+  SCHEMA_CONTACT_PHONE: process.env.NEXT_PUBLIC_SCHEMA_CONTACT_PHONE || '',
+  SCHEMA_ADDRESS_STREET: process.env.NEXT_PUBLIC_SCHEMA_ADDRESS_STREET || '',
+  SCHEMA_ADDRESS_LOCALITY:
+    process.env.NEXT_PUBLIC_SCHEMA_ADDRESS_LOCALITY || '',
+  SCHEMA_ADDRESS_REGION: process.env.NEXT_PUBLIC_SCHEMA_ADDRESS_REGION || '',
+  SCHEMA_ADDRESS_POSTAL_CODE:
+    process.env.NEXT_PUBLIC_SCHEMA_ADDRESS_POSTAL_CODE || '',
+  SCHEMA_ADDRESS_COUNTRY:
+    process.env.NEXT_PUBLIC_SCHEMA_ADDRESS_COUNTRY || '',
   PWA_ENABLE: process.env.NEXT_PUBLIC_PWA_ENABLE || false, // 是否启用 PWA 安装入口；也可在 Notion_Config 中配置 PWA_ENABLE=true
   PWA_NAME: process.env.NEXT_PUBLIC_PWA_NAME || '', // PWA 安装名称；默认读取站点标题，通常无需单独配置
   PWA_SHORT_NAME: process.env.NEXT_PUBLIC_PWA_SHORT_NAME || '', // PWA 短名称；默认读取站点标题，通常无需单独配置

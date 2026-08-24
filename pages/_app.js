@@ -8,7 +8,6 @@ import '@/styles/notion.css' //  重写部分notion样式
 
 import useAdjustStyle from '@/hooks/useAdjustStyle'
 import { GlobalContextProvider } from '@/lib/global'
-import { getBaseLayoutByTheme } from '@/themes/theme'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo } from 'react'
 import { getQueryParam } from '../lib/utils'
@@ -16,6 +15,7 @@ import ErrorHandler from '@/lib/utils/errorHandler'
 
 // 各种扩展插件 这个要阻塞引入
 import BLOG from '@/blog.config'
+import AgentReadableBaseLayout from '@/components/AgentReadableBaseLayout'
 import ExternalPlugins from '@/components/ExternalPlugins'
 import PWAInstaller from '@/components/PWAInstaller'
 import SEO from '@/components/SEO'
@@ -76,8 +76,7 @@ const MyApp = ({ Component, pageProps }) => {
   // 整体布局
   const GLayout = useCallback(
     props => {
-      const Layout = getBaseLayoutByTheme(theme)
-      return <Layout {...props} />
+      return <AgentReadableBaseLayout theme={theme} {...props} />
     },
     [theme]
   )

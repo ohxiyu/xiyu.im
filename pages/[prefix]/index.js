@@ -1,4 +1,5 @@
 import BLOG from '@/blog.config'
+import AgentReadableLayout from '@/components/AgentReadableLayout'
 import useNotification from '@/components/Notification'
 import TechGrow from '@/components/TechGrow'
 import { siteConfig } from '@/lib/config'
@@ -11,7 +12,6 @@ import {
   sha256Digest
 } from '@/lib/utils/password'
 import { checkSlugHasNoSlash } from '@/lib/utils/post'
-import { DynamicLayout } from '@/themes/theme'
 import md5 from 'js-md5'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
@@ -100,7 +100,7 @@ const Slug = props => {
   return (
     <>
       {/* 文章布局 */}
-      <DynamicLayout theme={theme} layoutName='LayoutSlug' {...props} />
+      <AgentReadableLayout theme={theme} layoutName='LayoutSlug' {...props} />
       {/* 解锁密码提示框 */}
       {post?.password && post?.password !== '' && !lock && <Notification />}
       {/* 导流工具 */}

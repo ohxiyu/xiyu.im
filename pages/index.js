@@ -14,6 +14,7 @@ import { generateRedirectJson } from '@/lib/utils/redirect'
 import { checkDataFromAlgolia } from '@/lib/plugins/algolia'
 import pLimit from 'p-limit'
 import { adapterNotionBlockMap } from '@/lib/utils/notion.util'
+import { agenticPages } from '@/lib/agentic/content'
 
 /**
  * 首页布局
@@ -22,7 +23,24 @@ import { adapterNotionBlockMap } from '@/lib/utils/notion.util'
  */
 const Index = props => {
   const theme = siteConfig('THEME', BLOG.THEME, props.NOTION_CONFIG)
-  return <DynamicLayout theme={theme} layoutName='LayoutIndex' {...props} />
+  const agentSummary = agenticPages.home
+  return (
+    <>
+      <section
+        className='agent-readable-summary'
+        data-agent-readable='homepage-summary'
+        aria-label='站点摘要'>
+        <h1>{agentSummary.title}</h1>
+        <p>{agentSummary.description}</p>
+        {agentSummary.sections.flatMap(section =>
+          section.paragraphs.map((paragraph, index) => (
+            <p key={`${section.heading}-${index}`}>{paragraph}</p>
+          ))
+        )}
+      </section>
+      <DynamicLayout theme={theme} layoutName='LayoutIndex' {...props} />
+    </>
+  )
 }
 
 /**

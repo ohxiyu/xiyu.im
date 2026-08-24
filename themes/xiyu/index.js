@@ -8,6 +8,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import dynamic from 'next/dynamic'
 import CONFIG from './config'
 import { Style } from './style'
+import { agenticPages } from '@/lib/agentic/content'
 
 // —— xiyu 主题组件 ——
 import Nav from './components/Nav'
@@ -488,6 +489,73 @@ const extractAboutParagraphs = post => {
   }
 }
 
+const EditorialSections = ({ page, startIndex = 1 }) => (
+  <div className='editorial-sections'>
+    {page.sections.map((section, sectionIndex) => (
+      <section
+        className='editorial-section'
+        aria-labelledby={`editorial-${startIndex + sectionIndex}`}
+        key={section.heading}>
+        <div className='about-section-label'>
+          <span className='about-section-index'>
+            {String(startIndex + sectionIndex).padStart(2, '0')}
+          </span>
+          <h2 id={`editorial-${startIndex + sectionIndex}`}>
+            {section.heading}
+          </h2>
+        </div>
+        <div className='about-body'>
+          {section.paragraphs.map((paragraph, paragraphIndex) => (
+            <p key={paragraphIndex}>{paragraph}</p>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+)
+
+const ResourceLinks = ({ links }) => {
+  if (!links?.length) return null
+
+  return (
+    <section className='info-resources' aria-labelledby='resource-links-title'>
+      <div className='info-resource-heading'>
+        <span className='eyebrow'>Direct links</span>
+        <h2 id='resource-links-title'>可直接使用的入口</h2>
+      </div>
+      <div className='info-resource-list'>
+        {links.map(link => {
+          const content = (
+            <>
+              <span>{link.label}</span>
+              <small>{link.note}</small>
+            </>
+          )
+          return link.href.startsWith('http')
+            ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='info-resource-link'>
+                  {content}
+                </a>
+              )
+            : (
+                <SmartLink
+                  key={link.href}
+                  href={link.href}
+                  className='info-resource-link'>
+                  {content}
+                </SmartLink>
+              )
+        })}
+      </div>
+    </section>
+  )
+}
+
 const renderAboutPage = props => {
   const { post, postCount, tagOptions } = props
   const since = parseInt(siteConfig('SINCE')) || 2013
@@ -514,9 +582,27 @@ const renderAboutPage = props => {
           {paras.map((p, i) => <p key={i}>{p}</p>)}
         </div>
       </section>
+      <EditorialSections page={agenticPages.about} startIndex={2} />
       <AboutFacts postCount={postCount} tagCount={tagOptions?.length} />
       <Elsewhere />
     </div>
+  )
+}
+
+const LayoutInfoPage = props => {
+  const page = agenticPages[props.agenticPageKey]
+  if (!page) return null
+
+  return (
+    <main className='info-page'>
+      <header className='info-hero'>
+        <div className='eyebrow'>{page.eyebrow}</div>
+        <h1>{page.title}</h1>
+        <p>{page.description}</p>
+      </header>
+      <EditorialSections page={page} />
+      <ResourceLinks links={page.links} />
+    </main>
   )
 }
 
@@ -549,7 +635,12 @@ const Layout404 = () => (
     <p className='archive-sub' style={{ margin: '0 auto 32px', maxWidth: '40ch' }}>
       这里没有你要找的内容。也许它已经被我删了，也许从来就没存在过。
     </p>
-    <SmartLink href='/' className='btn-ghost'>← 回首页</SmartLink>
+    <nav className='not-found-links' aria-label='页面未找到后的可用入口'>
+      <SmartLink href='/' className='btn-ghost'>← 回首页</SmartLink>
+      <SmartLink href='/sitemap.xml' className='btn-ghost'>站点地图</SmartLink>
+      <SmartLink href='/llms.txt' className='btn-ghost'>Agent 导航</SmartLink>
+      <SmartLink href='/developer' className='btn-ghost'>开发者资源</SmartLink>
+    </nav>
   </section>
 )
 
@@ -564,5 +655,6 @@ export {
   LayoutCategoryIndex,
   LayoutTagIndex,
   LayoutPage,
+  LayoutInfoPage,
   Layout404
 }

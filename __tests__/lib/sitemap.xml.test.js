@@ -44,6 +44,10 @@ describe('generateSitemapXml', () => {
     const xml = writeSpy.mock.calls[0][1]
     expect(xml).toContain('<loc>https://example.com/hello-world</loc>')
     expect(xml).toContain('<loc>https://example.com/internal/page</loc>')
+    expect(xml).toContain('<loc>https://example.com/contact</loc>')
+    expect(xml).toContain('<loc>https://example.com/privacy</loc>')
+    expect(xml).toContain('<loc>https://example.com/developer</loc>')
+    expect(xml).toContain('<loc>https://example.com/llms.txt</loc>')
     expect(xml).not.toContain('<loc>https://external.com/landing</loc>')
     expect(xml).not.toContain('https://example.com/https://external.com/landing')
     expect(xml).not.toContain('Invalid Date')

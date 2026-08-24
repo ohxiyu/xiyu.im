@@ -9,6 +9,7 @@ import {
   toSitemapDateString
 } from '@/lib/sitemap-utils'
 import { extractLangId, extractLangPrefix } from '@/lib/utils/pageId'
+import { agenticDiscoveryRoutes } from '@/lib/agentic/content'
 import { getServerSideSitemap } from 'next-sitemap'
 
 export const getServerSideProps = async ctx => {
@@ -104,7 +105,17 @@ function generateLocalesSitemap(link, allPages, locale) {
       lastmod: dateNow,
       changefreq: 'daily',
       priority: '0.7'
-    }
+    },
+    ...agenticDiscoveryRoutes.map(slug => ({
+      loc: buildSitemapLoc({
+        baseUrl: normalizedLink,
+        locale: normalizedLocale,
+        slug
+      }),
+      lastmod: dateNow,
+      changefreq: 'monthly',
+      priority: '0.5'
+    }))
   ].filter(field => Boolean(field?.loc))
 
   const postFields =
