@@ -1,5 +1,6 @@
 import {
   generateStructuredData,
+  getDynamicPostOgUrl,
   getMarkdownAlternate,
   getSchemaOrganization
 } from '@/components/SEO'
@@ -115,5 +116,21 @@ describe('SEO structured data', () => {
     expect(getMarkdownAlternate('/about?from=test')).toBe('/about.md')
     expect(getMarkdownAlternate('/privacy/')).toBe('/privacy.md')
     expect(getMarkdownAlternate('/archive')).toBeNull()
+  })
+
+  it('builds a dynamic social image URL for text-only posts', () => {
+    const image = new URL(
+      getDynamicPostOgUrl({
+        siteUrl: 'https://example.com',
+        title: '没有封面的文章',
+        category: ['Writing', 'AI'],
+        publishDay: '2026-08-21'
+      })
+    )
+
+    expect(image.origin + image.pathname).toBe('https://example.com/api/og')
+    expect(image.searchParams.get('title')).toBe('没有封面的文章')
+    expect(image.searchParams.get('category')).toBe('Writing')
+    expect(image.searchParams.get('date')).toBe('2026-08-21')
   })
 })
