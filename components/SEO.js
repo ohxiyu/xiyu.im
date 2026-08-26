@@ -66,8 +66,16 @@ const SEO = props => {
   }
   if (meta) {
     url = createSiteUrl(url, meta.slug) || url
+    const generatedPostImage = meta.type === 'Post'
+      ? getDynamicPostOgUrl({
+          siteUrl: LINK,
+          title: post?.title || meta.title,
+          category: meta.category,
+          publishDay: meta.publishDay
+        })
+      : ''
     image = getAbsoluteImageUrl(
-      getValidImageCandidate(meta.image) || image || '/images/logo/og-image.png',
+      getValidImageCandidate(meta.image) || generatedPostImage || image || '/images/logo/og-image.png',
       LINK
     )
   }
@@ -479,6 +487,22 @@ export const getMarkdownAlternate = asPath => {
   return alternates[pathname] || null
 }
 
+export const getDynamicPostOgUrl = ({ siteUrl, title, category, publishDay }) => {
+  const endpoint = createSiteUrl(siteUrl, 'api/og')
+  if (!endpoint) return ''
+
+  try {
+    const url = new URL(endpoint)
+    const categoryName = Array.isArray(category) ? category[0] : category
+    if (title) url.searchParams.set('title', title)
+    if (categoryName) url.searchParams.set('category', categoryName)
+    if (publishDay) url.searchParams.set('date', publishDay)
+    return url.toString()
+  } catch {
+    return ''
+  }
+}
+
 const getValidImageCandidate = value => {
   if (typeof value !== 'string') return ''
   const normalized = value.trim()
@@ -521,7 +545,8 @@ const getSEOMeta = (props, router, locale) => {
   if (seo) {
     return {
       ...seo,
-      image: getValidImageCandidate(seo.image) || siteInfo?.pageCover
+      image: getValidImageCandidate(seo.image) ||
+        (seo.type === 'Post' ? '' : siteInfo?.pageCover)
     }
   }
 
@@ -625,7 +650,9 @@ const getSEOMeta = (props, router, locale) => {
         description: post?.summary,
         type: post?.type,
         slug: post?.slug,
-        image: post?.pageCoverThumbnail || `${siteInfo?.pageCover}`,
+        image:
+          getValidImageCandidate(post?.pageCoverThumbnail) ||
+          getValidImageCandidate(post?.pageCover),
         category,
         tags: post?.tags,
         publishDay: post?.publishDay,

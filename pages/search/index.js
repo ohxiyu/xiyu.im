@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
  */
 const Search = props => {
   const { posts } = props
+  const allPosts = posts
 
   const router = useRouter()
   const keyword = router?.query?.s
@@ -29,7 +30,7 @@ const Search = props => {
     filteredPosts = []
   }
 
-  props = { ...props, posts: filteredPosts }
+  props = { ...props, allPosts, posts: filteredPosts }
 
   const theme = siteConfig('THEME', BLOG.THEME, props.NOTION_CONFIG)
   return <DynamicLayout theme={theme} layoutName='LayoutSearch' {...props} />
