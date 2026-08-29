@@ -331,7 +331,7 @@ const LayoutSlug = props => {
   return (
     <div className='article-layout'>
       <TOC toc={post.toc} />
-      <article>
+      <article className='article-main'>
         <header className={`article-hero ${cover ? 'has-cover' : 'is-text-only'}`}>
           <SmartLink href='/' className='article-back'>
             <span aria-hidden='true'>←</span> 返回写作
@@ -351,8 +351,12 @@ const LayoutSlug = props => {
           </div>
           <h1 className='article-h1'>{post.title}</h1>
           {post.summary && <p className='article-lead'>{post.summary}</p>}
-          {cover && <PostCover post={post} variant='article' eager linked={false} />}
         </header>
+        {cover && (
+          <div className='article-cover-panel'>
+            <PostCover post={post} variant='article' eager linked={false} />
+          </div>
+        )}
         <div id='article-wrapper' className='article-body'>
           <NotionPage post={post} />
         </div>
