@@ -51,50 +51,6 @@ const NavIcon = ({ name }) => {
   )
 }
 
-const NavIcon = ({ name }) => {
-  const common = {
-    width: 15,
-    height: 15,
-    viewBox: '0 0 24 24',
-    fill: 'none',
-    stroke: 'currentColor',
-    strokeWidth: 1.8,
-    strokeLinecap: 'round',
-    strokeLinejoin: 'round',
-    'aria-hidden': true
-  }
-
-  if (name === 'writing') {
-    return (
-      <svg {...common}>
-        <path d='M4 20l4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20Z' />
-        <path d='m14.5 7.5 3 3' />
-      </svg>
-    )
-  }
-  if (name === 'archive') {
-    return (
-      <svg {...common}>
-        <path d='M4 7h16v13H4z' />
-        <path d='M3 4h18v3H3zM9 11h6' />
-      </svg>
-    )
-  }
-  if (name === 'about') {
-    return (
-      <svg {...common}>
-        <circle cx='12' cy='8' r='3' />
-        <path d='M5.5 20a6.5 6.5 0 0 1 13 0' />
-      </svg>
-    )
-  }
-  return (
-    <svg {...common}>
-      <path d='M7 17 17 7M8 7h9v9' />
-    </svg>
-  )
-}
-
 // xiyu 主题顶部导航（对应 .design/source/shared.jsx 的 SiteNav）
 const Nav = props => {
   const router = useRouter()
@@ -171,7 +127,7 @@ const Nav = props => {
             <LangToggle />
           </div>
         </div>
-        <SmartLink href='/archive#browse' className='theme-toggle nav-search' aria-label='搜索文章'>
+        <SmartLink href='/search' className='theme-toggle nav-search' aria-label='搜索文章'>
           <svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
             <circle cx='11' cy='11' r='7' />
             <line x1='21' y1='21' x2='16.65' y2='16.65' />

@@ -11,30 +11,20 @@ export const Footer = props => {
   const link = siteConfig('LINK') || ''
   const host = link.replace(/^https?:\/\//, '').replace(/\/$/, '') || 'xiyu.im'
   const tagline = siteConfig('XIYU_FOOT_QUOTE', null, CONFIG) || siteConfig('BIO') || '长期主义 · 记录思考'
+  // 技术栈一行字（原关于页 Colophon 区块压缩至此）
+  const stack = siteConfig('XIYU_FOOT_STACK', 'Notion × NotionNext × Vercel', CONFIG)
   return (
     <footer className='site-foot'>
-      <div className='site-foot-top'>
-        <div className='site-foot-brand'>
-          <span className='site-foot-kicker'>XIYU · NOTES FOR THE LONG RUN</span>
-          <strong>{tagline}</strong>
-          <span>{host}</span>
-        </div>
-        <SmartLink href='/archive' className='site-foot-cta'>
-          <span>继续阅读</span>
-          <svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' aria-hidden='true'>
-            <path d='M5 12h14M13 6l6 6-6 6' />
-          </svg>
-        </SmartLink>
-      </div>
-      <div className='site-foot-bottom'>
+      <div className='site-foot-copy'>
         <span>© {author} {dateRange}</span>
-        <nav className='site-foot-links' aria-label='站点说明与机器资源'>
-          <SmartLink href='/contact'>联系</SmartLink>
-          <SmartLink href='/privacy'>隐私</SmartLink>
-          <SmartLink href='/developer'>开发者资源</SmartLink>
-          <SmartLink href='/llms.txt'>llms.txt</SmartLink>
-        </nav>
+        <span>{host} · {tagline}{stack ? ` · ${stack}` : ''}</span>
       </div>
+      <nav className='site-foot-links' aria-label='站点说明与机器资源'>
+        <SmartLink href='/contact'>联系</SmartLink>
+        <SmartLink href='/privacy'>隐私</SmartLink>
+        <SmartLink href='/developer'>开发者资源</SmartLink>
+        <SmartLink href='/llms.txt'>llms.txt</SmartLink>
+      </nav>
     </footer>
   )
 }
