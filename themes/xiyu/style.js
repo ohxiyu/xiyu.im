@@ -18,8 +18,8 @@ export const Style = () => (
     <link key='xiyu-favicon-32' rel='icon' type='image/png' sizes='32x32' href='/favicon-32.png' />
     <link key='xiyu-favicon-16' rel='icon' type='image/png' sizes='16x16' href='/favicon-16.png' />
     <link key='xiyu-apple-touch-icon' rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
-    <link key='xiyu-mask-icon' rel='mask-icon' href='/favicon.svg' color='#ffc828' />
-    <meta key='xiyu-theme-color' name='theme-color' content='#ffc828' />
+    <link key='xiyu-mask-icon' rel='mask-icon' href='/favicon.svg' color='#557a46' />
+    <meta key='xiyu-theme-color' name='theme-color' content='#f7f8f5' />
     <meta key='xiyu-app-title' name='apple-mobile-web-app-title' content='xiyu' />
     <link key='xiyu-manifest' rel='manifest' href='/manifest.json' />
     <link key='xiyu-fonts-preconnect' rel='preconnect' href='https://fonts.googleapis.com' />
