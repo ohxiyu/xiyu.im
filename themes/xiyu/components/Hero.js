@@ -7,6 +7,8 @@ import NowCard from './NowCard'
 // 例："AI 交易的护城河不是 Alpha，是纪律" → ["AI 交易的护城河不是 Alpha，", "是纪律"(em)]
 // 没分隔符返回整段不 em
 const SPLITTERS = ['——', '：', '—', '：', ':', '，', ',', '、']
+const MAX_HIGHLIGHT_CHARS = 12
+
 function splitTitleForEm(title) {
   if (!title || typeof title !== 'string') return [{ text: title || '', em: false }]
   let lastIdx = -1
@@ -19,9 +21,36 @@ function splitTitleForEm(title) {
   if (lastIdx < 4 || lastIdx > title.length - 3) {
     return [{ text: title, em: false }]
   }
+
+  const separatorEnd = lastIdx + lastSep.length
+  const tail = title.slice(separatorEnd)
+  const tailChars = Array.from(tail)
+
+  // Luni-style highlight works best as one compact phrase. For a long clause,
+  // prefer the final two space-delimited phrases (useful for mixed CN/EN titles),
+  // otherwise keep only the final Chinese phrase-length segment highlighted.
+  if (tailChars.length > MAX_HIGHLIGHT_CHARS) {
+    const words = tail.trim().split(/\s+/).filter(Boolean)
+    if (words.length >= 3) {
+      const highlight = words.slice(-2).join(' ')
+      const highlightAt = title.lastIndexOf(highlight)
+      return [
+        { text: title.slice(0, highlightAt), em: false },
+        { text: title.slice(highlightAt), em: true }
+      ]
+    }
+
+    const normalTail = tailChars.slice(0, -MAX_HIGHLIGHT_CHARS).join('')
+    const highlight = tailChars.slice(-MAX_HIGHLIGHT_CHARS).join('')
+    return [
+      { text: title.slice(0, separatorEnd) + normalTail, em: false },
+      { text: highlight, em: true }
+    ]
+  }
+
   return [
-    { text: title.slice(0, lastIdx + lastSep.length), em: false },
-    { text: title.slice(lastIdx + lastSep.length), em: true }
+    { text: title.slice(0, separatorEnd), em: false },
+    { text: tail, em: true }
   ]
 }
 
@@ -59,7 +88,7 @@ const Hero = props => {
   return (
     <section className='hero'>
       <div>
-        <div className='eyebrow hero-eyebrow'>{author}'s notebook · est. {since}</div>
+        <div className='eyebrow hero-eyebrow'>{author}&apos;s notebook · est. {since}</div>
         {titleSpans
           ? (
               <SmartLink
