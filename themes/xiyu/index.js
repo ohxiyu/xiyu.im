@@ -23,17 +23,10 @@ import ArchiveYear from './components/ArchiveYear'
 import AboutHero from './components/AboutHero'
 import AboutFacts from './components/AboutFacts'
 import Elsewhere from './components/Elsewhere'
-import PostCover from './components/PostCover'
-import ShareActions from './components/ShareActions'
-import {
-  getPostCategories,
-  getPostCover,
-  getPostReadingTime,
-  matchesPost
-} from './lib/post'
 
 const Comment = dynamic(() => import('@/components/Comment'), { ssr: false })
 const ArticleLock = dynamic(() => import('./components/ArticleLock'), { ssr: false })
+const ShareBar = dynamic(() => import('@/components/ShareBar'), { ssr: false })
 const AlgoliaSearchModal = dynamic(() => import('@/components/AlgoliaSearchModal'), { ssr: false })
 
 // 主题全局状态
@@ -82,78 +75,6 @@ const groupByYear = posts => {
   }
   return groups
 }
-
-const DiscoverySidebar = ({
-  categories = [],
-  activeCategory = '',
-  onCategoryChange,
-  years = [],
-  activeYear = '',
-  onYearChange
-}) => (
-  <aside className='discovery-sidebar' aria-label='内容筛选'>
-    <div className='discovery-filter-group'>
-      <div className='discovery-filter-label'>Topics · 分类</div>
-      <button
-        type='button'
-        className={`discovery-filter${activeCategory ? '' : ' active'}`}
-        aria-pressed={!activeCategory}
-        onClick={() => onCategoryChange?.('')}>
-        <span>全部文章</span>
-      </button>
-      {categories.map(item => (
-        <button
-          type='button'
-          key={item.name}
-          className={`discovery-filter${activeCategory === item.name ? ' active' : ''}`}
-          aria-pressed={activeCategory === item.name}
-          onClick={() => onCategoryChange?.(item.name)}>
-          <span>{item.name}</span>
-          {Number.isFinite(Number(item.count)) && <small>{item.count}</small>}
-        </button>
-      ))}
-    </div>
-    {years.length > 0 && (
-      <div className='discovery-filter-group discovery-years'>
-        <div className='discovery-filter-label'>Years · 年份</div>
-        <button
-          type='button'
-          className={`discovery-filter${activeYear ? '' : ' active'}`}
-          aria-pressed={!activeYear}
-          onClick={() => onYearChange?.('')}>
-          <span>全部年份</span>
-        </button>
-        {years.map(year => (
-          <button
-            type='button'
-            key={year}
-            className={`discovery-filter${activeYear === year ? ' active' : ''}`}
-            aria-pressed={activeYear === year}
-            onClick={() => onYearChange?.(year)}>
-            <span>{year}</span>
-          </button>
-        ))}
-      </div>
-    )}
-  </aside>
-)
-
-const DiscoverySearch = ({ value, onChange, onSubmit, placeholder, label = '搜索文章' }) => (
-  <form className='discovery-search' onSubmit={onSubmit} role='search'>
-    <label htmlFor='xiyu-discovery-search' className='sr-only'>{label}</label>
-    <svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' aria-hidden='true'>
-      <circle cx='11' cy='11' r='7' />
-      <line x1='21' y1='21' x2='16.65' y2='16.65' />
-    </svg>
-    <input
-      id='xiyu-discovery-search'
-      type='search'
-      value={value}
-      onChange={event => onChange?.(event.target.value)}
-      placeholder={placeholder}
-    />
-  </form>
-)
 
 /**
  * 全局外壳：.page 容器 + Nav + children + Footer
@@ -296,6 +217,7 @@ const LayoutPagination = ({ page = 1, postCount }) => {
  */
 const LayoutSlug = props => {
   const { post, lock, validPassword, prev, next } = props
+  const { fullWidth } = useGlobal() || {}
   const router = useRouter()
   const waiting404 = parseInt(siteConfig('POST_WAITING_TIME_FOR_404') || 0) * 1000
 
@@ -322,25 +244,15 @@ const LayoutSlug = props => {
   const num = formatNum(post)
   const tags = Array.isArray(post.tags) ? post.tags : []
   const dateFmt = formatDateEN(post.publishDay || post.date?.start_date || '')
-  const modifiedDate = String(post.lastEditedDay || post.lastEditedTime || post.lastEditedDate || '').slice(0, 10)
-  const modifiedFmt = formatDateEN(modifiedDate)
-  const readTime = getPostReadingTime(post)
-  const cover = getPostCover(post)
-  const wasUpdated = Boolean(modifiedFmt && modifiedFmt !== dateFmt)
 
   return (
     <div className='article-layout'>
       <TOC toc={post.toc} />
       <article>
-        <header className={`article-hero ${cover ? 'has-cover' : 'is-text-only'}`}>
-          <SmartLink href='/' className='article-back'>
-            <span aria-hidden='true'>←</span> 返回写作
-          </SmartLink>
+        <header className='article-hero'>
           <div className='article-head-meta'>
             {num && <span className='post-num'>#{num}</span>}
             {dateFmt && <span className='post-date'>{dateFmt}</span>}
-            {readTime && <span className='post-read-time'>{readTime} min read</span>}
-            {wasUpdated && <span className='post-updated'>更新于 {modifiedFmt}</span>}
             {tags.length > 0 && <span className='tag-dot'>·</span>}
             {tags.map((t, i) => (
               <span key={t}>
@@ -351,7 +263,6 @@ const LayoutSlug = props => {
           </div>
           <h1 className='article-h1'>{post.title}</h1>
           {post.summary && <p className='article-lead'>{post.summary}</p>}
-          {cover && <PostCover post={post} variant='article' eager linked={false} />}
         </header>
         <div id='article-wrapper' className='article-body'>
           <NotionPage post={post} />
@@ -362,10 +273,7 @@ const LayoutSlug = props => {
               {tags.map(t => <span key={t} className='tag'>{t}</span>)}
             </div>
           )}
-          <div className='article-mobile-share'>
-            <span className='side-stat-label'>Share</span>
-            <ShareActions post={post} />
-          </div>
+          <ShareBar post={post} />
           <PrevNext prev={prev} next={next} />
         </footer>
         <Comment frontMatter={post} />
@@ -380,44 +288,18 @@ const LayoutSlug = props => {
  */
 const LayoutArchive = props => {
   const { archivePosts, postCount } = props
-  const rawGrouped = useMemo(
-    () => archivePosts && typeof archivePosts === 'object' ? archivePosts : {},
-    [archivePosts]
-  )
-  const [input, setInput] = useState('')
-  const [activeCategory, setActiveCategory] = useState('')
-  const [activeYear, setActiveYear] = useState('')
-  const allPosts = useMemo(() => {
-    const seen = new Set()
-    return Object.values(rawGrouped)
-      .flatMap(list => Array.isArray(list) ? list : [])
-      .filter(post => {
-        const key = post?.id || post?.slug
-        if (!key || seen.has(key)) return false
-        seen.add(key)
-        return true
-      })
-      .sort((a, b) => (b?.publishDay || '').localeCompare(a?.publishDay || ''))
-  }, [rawGrouped])
-  const categories = useMemo(() => {
-    const counts = new Map()
-    allPosts.forEach(post => {
-      getPostCategories(post).forEach(name => counts.set(name, (counts.get(name) || 0) + 1))
-    })
-    return [...counts.entries()]
-      .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
-  }, [allPosts])
-  const years = useMemo(() => [...new Set(allPosts
-    .map(post => (post?.publishDay || post?.date?.start_date || '').slice(0, 4))
-    .filter(Boolean))].sort((a, b) => b.localeCompare(a)), [allPosts])
-  const tokens = useMemo(() => input.trim().toLowerCase().split(/\s+/).filter(Boolean), [input])
-  const filtered = useMemo(() => allPosts.filter(post => matchesPost(post, {
-    tokens,
-    category: activeCategory,
-    year: activeYear
-  })), [allPosts, tokens, activeCategory, activeYear])
-  const filteredByYear = useMemo(() => groupByYear(filtered), [filtered])
+  const rawGrouped = archivePosts && typeof archivePosts === 'object' ? archivePosts : {}
+  // NotionNext 把 archivePosts 按 yyyy-MM 分组；我们需要的是按 yyyy 年二次聚合
+  const byYear = {}
+  for (const [ym, list] of Object.entries(rawGrouped)) {
+    const year = String(ym).slice(0, 4)
+    if (!byYear[year]) byYear[year] = []
+    byYear[year] = byYear[year].concat(list || [])
+  }
+  for (const year of Object.keys(byYear)) {
+    byYear[year].sort((a, b) => (b?.publishDay || '').localeCompare(a?.publishDay || ''))
+  }
+  const years = Object.keys(byYear).sort((a, b) => b.localeCompare(a))
   const author = siteConfig('AUTHOR') || 'xiyu'
   const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
   const years_writing = Math.max(1, new Date().getFullYear() - since + 1)
@@ -430,43 +312,9 @@ const LayoutArchive = props => {
           从 {since} 到现在，一共 {postCount || 0} 篇文章。早期的幼稚和近年的克制，都在这里——{author} 不删旧文，因为那也是我。
         </p>
       </header>
-      <div className='discovery-layout'>
-        <DiscoverySidebar
-          categories={categories}
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
-          years={years}
-          activeYear={activeYear}
-          onYearChange={setActiveYear}
-        />
-        <div className='discovery-main'>
-          <DiscoverySearch
-            value={input}
-            onChange={setInput}
-            onSubmit={event => event.preventDefault()}
-            placeholder='搜索标题、摘要、标签或分类…'
-          />
-          <div className='discovery-result-meta' aria-live='polite'>
-            <span>{filtered.length} 篇文章</span>
-            {(input || activeCategory || activeYear) && (
-              <button
-                type='button'
-                onClick={() => {
-                  setInput('')
-                  setActiveCategory('')
-                  setActiveYear('')
-                }}>
-                清除筛选
-              </button>
-            )}
-          </div>
-          {filtered.length === 0
-            ? <p className='discovery-empty'>没有匹配结果，换一个关键词或分类试试。</p>
-            : filteredByYear.map(group => (
-                <ArchiveYear key={group.year || 'no-year'} year={group.year} posts={group.posts} />
-              ))}
-        </div>
-      </div>
+      {years.map(y => (
+        <ArchiveYear key={y} year={y} posts={byYear[y]} />
+      ))}
     </>
   )
 }
@@ -481,7 +329,6 @@ const LayoutSearch = props => {
   const router = useRouter()
   const initialKeyword = (router?.query?.s || '').toString()
   const [input, setInput] = useState(initialKeyword)
-  const [activeCategory, setActiveCategory] = useState('')
 
   // 路由变了同步 input
   useEffect(() => { setInput(initialKeyword) }, [initialKeyword])
@@ -503,31 +350,24 @@ const LayoutSearch = props => {
     return []
   }, [props.allPosts, props.allPages, props.latestPosts, props.posts])
 
-  const tokens = useMemo(() => (input || '').trim().toLowerCase().split(/\s+/).filter(Boolean), [input])
-
-  const categories = useMemo(() => {
-    if (Array.isArray(props.categoryOptions) && props.categoryOptions.length > 0) {
-      return props.categoryOptions
-    }
-    const counts = new Map()
-    allList.forEach(post => getPostCategories(post).forEach(name => {
-      counts.set(name, (counts.get(name) || 0) + 1)
-    }))
-    return [...counts.entries()]
-      .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
-  }, [allList, props.categoryOptions])
+  const tokens = useMemo(
+    () => (input || '').trim().toLowerCase().split(/\s+/).filter(Boolean),
+    [input]
+  )
 
   const filtered = useMemo(() => {
-    if (!tokens.length && !activeCategory) return []
+    if (!tokens.length) return []
     return allList.filter(p => {
       if (!p) return false
       // 只搜已发布的 Post（避免菜单 / 草稿 / Notice 进结果）
       if (p.type && p.type !== 'Post') return false
       if (p.status && p.status !== 'Published') return false
-      return matchesPost(p, { tokens, category: activeCategory })
+      const tags = Array.isArray(p.tags) ? p.tags.join(' ') : (p.tags || '')
+      const category = Array.isArray(p.category) ? p.category.join(' ') : (p.category || '')
+      const haystack = `${p.title || ''} ${p.summary || ''} ${tags} ${category}`.toLowerCase()
+      return tokens.every(t => haystack.includes(t))
     })
-  }, [allList, tokens, activeCategory])
+  }, [allList, tokens])
 
   // 同步 URL（不重新拉数据，只 shallow push 让浏览器记住搜索词，便于分享/回退）
   const onSubmit = e => {
@@ -539,51 +379,45 @@ const LayoutSearch = props => {
 
   return (
     <section>
-      <header className='archive-head search-head'>
+      <header className='archive-head' style={{ marginBottom: 32 }}>
         <div className='eyebrow'>Search · 搜索</div>
-        <h1 className='archive-title'>在旧文章里，重新找到一条线索。</h1>
-        <p className='archive-sub'>按关键词和分类交叉筛选。标题、摘要、标签和分类都会参与匹配。</p>
-      </header>
-      <div className='discovery-layout search-discovery'>
-        <DiscoverySidebar
-          categories={categories}
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
-        />
-        <div className='discovery-main'>
-          <DiscoverySearch
+        <form onSubmit={onSubmit} role='search' style={{ marginTop: 18 }}>
+          <input
+            type='search'
             value={input}
-            onChange={setInput}
-            onSubmit={onSubmit}
-            placeholder='输入关键词，立即筛选…'
+            onChange={e => setInput(e.target.value)}
+            placeholder='输入关键词，输入即过滤…'
+            autoFocus
+            style={{
+              width: '100%',
+              padding: '14px 18px',
+              fontSize: 17,
+              fontFamily: 'inherit',
+              color: 'var(--ink)',
+              background: 'var(--bg-elev)',
+              border: '1px solid var(--rule)',
+              borderRadius: 2,
+              outline: 'none'
+            }}
           />
-          <div className='discovery-result-meta' aria-live='polite'>
-            <span>{tokens.length || activeCategory ? `${filtered.length} 篇结果` : '等待输入'}</span>
-            {(input || activeCategory) && (
-              <button
-                type='button'
-                onClick={() => {
-                  setInput('')
-                  setActiveCategory('')
-                  router.push('/search', undefined, { shallow: true })
-                }}>
-                清除筛选
-              </button>
+        </form>
+        {input.trim() && (
+          <p className='archive-sub' style={{ marginTop: 14, fontSize: 14 }}>
+            &quot;<strong style={{ color: 'var(--ink)' }}>{input.trim()}</strong>&quot; · 找到 {filtered.length} 篇
+          </p>
+        )}
+      </header>
+      {!input.trim()
+        ? <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>输入关键词开始搜索（标题、摘要、标签、分类都会匹配）。</p>
+        : filtered.length === 0
+          ? <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>没有匹配结果。试试别的词？</p>
+          : (
+              <div>
+                {filtered.map((p, idx) => (
+                  <BlogPost key={p.id || p.slug} post={p} totalCount={filtered.length} index={idx} />
+                ))}
+              </div>
             )}
-          </div>
-          {!tokens.length && !activeCategory
-            ? <p className='discovery-empty'>输入关键词，或直接选择一个分类开始浏览。</p>
-            : filtered.length === 0
-              ? <p className='discovery-empty'>没有匹配结果，试试更短的关键词。</p>
-              : (
-                  <div>
-                    {filtered.map((p, idx) => (
-                      <BlogPost key={p.id || p.slug} post={p} totalCount={filtered.length} index={idx} />
-                    ))}
-                  </div>
-                )}
-        </div>
-      </div>
     </section>
   )
 }
