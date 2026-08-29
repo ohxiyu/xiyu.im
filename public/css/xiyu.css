@@ -2113,3 +2113,180 @@ html.dark #theme-xiyu {
   .portrait-caption span:last-child { margin-top: 3px; text-align: left; }
   .topics-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   Blog-first polish — inspired by bmt.news details, not its layout.
+   The original xiyu composition, spacing and serif reading rhythm stay intact.
+   ============================================================ */
+
+:root {
+  --bg: #faf8f4;
+  --bg-elev: #fffdfa;
+  --ink: #1b1713;
+  --ink-soft: #332d27;
+  --ink-mute: #71685e;
+  --ink-faint: #aaa094;
+  --rule: #e2dbd0;
+  --rule-soft: #eee8df;
+  --accent: #df7b21;
+  --accent-ink: #b75b10;
+  --tag-bg: #f1ece3;
+  --tag-ink: #5e544a;
+  --selection: #f7d8b2;
+}
+
+html.dark {
+  --bg: #15120e;
+  --bg-elev: #1d1914;
+  --ink: #f3eee5;
+  --ink-soft: #d9d1c5;
+  --ink-mute: #958b7e;
+  --ink-faint: #655d53;
+  --rule: #302a23;
+  --rule-soft: #241f19;
+  --accent: #f09a43;
+  --accent-ink: #f5b568;
+  --tag-bg: #241f18;
+  --tag-ink: #b1a696;
+  --selection: #4a391f;
+}
+
+#theme-xiyu {
+  --bg: #faf8f4;
+  --bg-elev: #fffdfa;
+  --ink: #1b1713;
+  --ink-soft: #332d27;
+  --ink-mute: #71685e;
+  --ink-faint: #aaa094;
+  --rule: #e2dbd0;
+  --rule-soft: #eee8df;
+  --accent: #df7b21;
+  --accent-ink: #b75b10;
+  --tag-bg: #f1ece3;
+  --tag-ink: #5e544a;
+  --selection: #f7d8b2;
+}
+
+html.dark #theme-xiyu {
+  --bg: #15120e;
+  --bg-elev: #1d1914;
+  --ink: #f3eee5;
+  --ink-soft: #d9d1c5;
+  --ink-mute: #958b7e;
+  --ink-faint: #655d53;
+  --rule: #302a23;
+  --rule-soft: #241f19;
+  --accent: #f09a43;
+  --accent-ink: #f5b568;
+  --tag-bg: #241f18;
+  --tag-ink: #b1a696;
+  --selection: #4a391f;
+}
+
+.paper-grain { opacity: .024; }
+html.dark .paper-grain { opacity: .045; }
+
+.site-nav { border-bottom-color: var(--rule); }
+.brand-mark { letter-spacing: -.018em; }
+
+.brand-tag,
+.section-count,
+.post-date,
+.post-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.nav-link::after { height: 2px; }
+.hero { border-bottom: 1px solid var(--rule-soft); }
+.hero-title { letter-spacing: -.024em; }
+
+.hero-card {
+  border-color: var(--rule);
+  box-shadow: 0 18px 42px rgba(57, 38, 20, .055);
+}
+
+html.dark .hero-card {
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .16);
+}
+
+.section-head { border-bottom: 2px solid var(--ink); }
+
+.section-title {
+  font-weight: 600;
+  letter-spacing: -.012em;
+}
+
+.feature-card,
+.article-row {
+  transition: background-color .2s ease;
+}
+
+.feature-card:hover,
+.article-row:hover {
+  background-color: color-mix(in srgb, var(--accent) 3%, transparent);
+}
+
+.feature-title,
+.row-title,
+.article-h1 {
+  letter-spacing: -.012em;
+}
+
+.feature-link {
+  background-image: linear-gradient(var(--accent), var(--accent));
+}
+
+.tag {
+  border: 1px solid color-mix(in srgb, var(--rule) 72%, transparent);
+}
+
+.article-lead { border-left-color: var(--accent); }
+
+.article-body blockquote,
+.article-body .notion-quote {
+  border-left-color: color-mix(in srgb, var(--accent) 58%, var(--rule));
+}
+
+.article-body pre,
+.article-body .notion-code,
+.callout,
+.article-body .notion-callout {
+  border-color: var(--rule);
+  box-shadow: 0 10px 30px rgba(57, 38, 20, .035);
+}
+
+html.dark .article-body pre,
+html.dark .article-body .notion-code,
+html.dark .callout,
+html.dark .article-body .notion-callout {
+  box-shadow: none;
+}
+
+.portrait {
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--rule));
+  box-shadow: 12px 12px 0 var(--selection), 0 22px 52px rgba(48, 32, 18, .12);
+}
+
+.fact,
+.elsewhere {
+  border-color: var(--rule);
+}
+
+.fact {
+  box-shadow: 0 10px 28px rgba(57, 38, 20, .035);
+}
+
+html.dark .fact { box-shadow: none; }
+.link-row:hover { color: var(--accent-ink); }
+.site-foot { border-top-color: var(--rule); }
+
+@media (max-width: 768px) {
+  .feature-card:hover,
+  .article-row:hover {
+    background-color: transparent;
+  }
+
+  .hero {
+    border-bottom-color: var(--rule);
+  }
+}
