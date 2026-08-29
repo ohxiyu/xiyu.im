@@ -11,15 +11,13 @@ export const Footer = props => {
   const link = siteConfig('LINK') || ''
   const host = link.replace(/^https?:\/\//, '').replace(/\/$/, '') || 'xiyu.im'
   const tagline = siteConfig('XIYU_FOOT_QUOTE', null, CONFIG) || siteConfig('BIO') || '长期主义 · 记录思考'
-  // 技术栈一行字（原关于页 Colophon 区块压缩至此）
-  const stack = siteConfig('XIYU_FOOT_STACK', 'Notion × NotionNext × Vercel', CONFIG)
   return (
     <footer className='site-foot'>
       <div className='site-foot-top'>
         <div className='site-foot-brand'>
           <span className='site-foot-kicker'>XIYU · NOTES FOR THE LONG RUN</span>
           <strong>{tagline}</strong>
-          <span>{host} · {stack}</span>
+          <span>{host}</span>
         </div>
         <SmartLink href='/archive' className='site-foot-cta'>
           <span>继续阅读</span>

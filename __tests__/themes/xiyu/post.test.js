@@ -1,8 +1,10 @@
 import {
   getPostCategories,
   getPostCover,
+  getPostPublishTime,
   getPostReadingTime,
-  matchesPost
+  matchesPost,
+  sortPostsByPublishDate
 } from '@/themes/xiyu/lib/post'
 
 describe('xiyu post presentation helpers', () => {
@@ -39,5 +41,22 @@ describe('xiyu post presentation helpers', () => {
       })
     ).toBe(true)
     expect(matchesPost(post, { category: '生活' })).toBe(false)
+  })
+
+  it('sorts padded and unpadded publish dates chronologically', () => {
+    const posts = [
+      { id: 'aug-3', publishDay: '2026-8-3' },
+      { id: 'jul-16', publishDay: '2026-7-16' },
+      { id: 'aug-22', publishDay: '2026-08-22' },
+      { id: 'aug-20', date: { start_date: '2026-8-20' } }
+    ]
+
+    expect(getPostPublishTime(posts[0])).toBe(Date.UTC(2026, 7, 3))
+    expect(sortPostsByPublishDate(posts).map(post => post.id)).toEqual([
+      'aug-22',
+      'aug-20',
+      'aug-3',
+      'jul-16'
+    ])
   })
 })
