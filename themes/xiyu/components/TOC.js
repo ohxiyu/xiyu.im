@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 // 左侧目录：消费 NotionNext 的 post.toc 数组（或 blockMap headings）
 // toc 项典型形状：{ id, text, indentLevel }
-const TOC = ({ toc }) => {
+const TOC = ({ toc, mobile = false }) => {
   const [activeId, setActiveId] = useState('')
   const items = Array.isArray(toc) ? toc : []
   // items 每次 render 是新数组、activeId 高频变化，都不能进 effect deps，
@@ -36,20 +36,37 @@ const TOC = ({ toc }) => {
 
   if (!items.length) return null
 
+  const list = (
+    <ul className='toc-list'>
+      {items.map(it => (
+        <li key={it.id} style={it.indentLevel > 0 ? { paddingLeft: `${it.indentLevel * 12}px` } : undefined}>
+          <a
+            href={`#${it.id}`}
+            className={'toc-link' + (activeId === it.id ? ' active' : '')}>
+            {it.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+
+  if (mobile) {
+    const activeItem = items.find(item => item.id === activeId)
+    return (
+      <details className='toc-mobile'>
+        <summary>
+          <span>文章目录</span>
+          <small>{activeItem?.text || `${items.length} 个章节`}</small>
+        </summary>
+        {list}
+      </details>
+    )
+  }
+
   return (
     <aside className='toc'>
       <div className='toc-label'>Contents</div>
-      <ul className='toc-list'>
-        {items.map(it => (
-          <li key={it.id} style={it.indentLevel > 0 ? { paddingLeft: `${it.indentLevel * 12}px` } : undefined}>
-            <a
-              href={`#${it.id}`}
-              className={'toc-link' + (activeId === it.id ? ' active' : '')}>
-              {it.text}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {list}
     </aside>
   )
 }

@@ -48,6 +48,34 @@ export function getPostYear(post) {
   return String(post?.publishDay || post?.date?.start_date || '').slice(0, 4)
 }
 
+export function getPostPublishTime(post) {
+  const value = String(
+    post?.publishDay || post?.date?.start_date || ''
+  ).trim()
+  const dateParts = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/)
+
+  if (dateParts) {
+    const [, year, month, day] = dateParts
+    return Date.UTC(Number(year), Number(month) - 1, Number(day))
+  }
+
+  const parsed = Date.parse(value)
+  return Number.isFinite(parsed) ? parsed : 0
+}
+
+export function sortPostsByPublishDate(posts) {
+  if (!Array.isArray(posts)) return []
+
+  return [...posts].sort((a, b) => {
+    const dateDifference = getPostPublishTime(b) - getPostPublishTime(a)
+    if (dateDifference) return dateDifference
+
+    const aKey = String(a?.id || a?.slug || a?.title || '')
+    const bKey = String(b?.id || b?.slug || b?.title || '')
+    return aKey.localeCompare(bKey)
+  })
+}
+
 export function matchesPost(
   post,
   { tokens = [], category = '', year = '' } = {}
