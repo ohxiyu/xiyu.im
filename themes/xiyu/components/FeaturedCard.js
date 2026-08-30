@@ -1,33 +1,20 @@
 import SmartLink from '@/components/SmartLink'
 import { formatNum, formatDateEN } from '../lib/format'
-import { getPostCover, getPostReadingTime } from '../lib/post'
-import PostCover from './PostCover'
 
 // 首篇文章大卡（feature-card）
 const FeaturedCard = ({ post, totalCount, index = 0 }) => {
   if (!post) return null
   const num = formatNum(post, totalCount, index)
   const tags = Array.isArray(post.tags) ? post.tags : []
-  const cover = getPostCover(post)
-  const readTime = getPostReadingTime(post)
   return (
-    <article className={`feature-card ${cover ? 'has-cover' : 'is-text-only'}`}>
+    <article className='feature-card'>
       <div className='feature-meta'>
         {num && <span className='post-num'>#{num}</span>}
-        <span className='post-date'>
-          {formatDateEN(post.publishDay || post.date?.start_date)}
-        </span>
-        {readTime && (
-          <span className='post-read-time'>{readTime} min read</span>
-        )}
+        <span className='post-date'>{formatDateEN(post.publishDay || post.date?.start_date)}</span>
       </div>
-      {cover && <PostCover post={post} variant='feature' eager />}
       <div className='feature-body'>
         <h2 className='post-title feature-title'>
-          <SmartLink
-            href={post.href || `/${post.slug}`}
-            className='feature-link'
-          >
+          <SmartLink href={post.href || `/${post.slug}`} className='feature-link'>
             {post.title}
           </SmartLink>
         </h2>

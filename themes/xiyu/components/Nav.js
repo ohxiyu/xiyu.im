@@ -127,7 +127,7 @@ const Nav = props => {
             <LangToggle />
           </div>
         </div>
-        <SmartLink href='/archive#browse' className='theme-toggle nav-search' aria-label='搜索文章'>
+        <SmartLink href='/search' className='theme-toggle nav-search' aria-label='搜索文章'>
           <svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
             <circle cx='11' cy='11' r='7' />
             <line x1='21' y1='21' x2='16.65' y2='16.65' />

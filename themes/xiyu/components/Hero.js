@@ -1,15 +1,12 @@
 import { siteConfig } from '@/lib/config'
 import SmartLink from '@/components/SmartLink'
+import CONFIG from '../config'
 import NowCard from './NowCard'
-import { formatDateCN } from '../lib/format'
-import { getPostCategories, getPostReadingTime } from '../lib/post'
 
 // 标题里如果有 ：/，/——/—/- 分隔符，自动把最后一段当 em
 // 例："AI 交易的护城河不是 Alpha，是纪律" → ["AI 交易的护城河不是 Alpha，", "是纪律"(em)]
 // 没分隔符返回整段不 em
 const SPLITTERS = ['——', '：', '—', '：', ':', '，', ',', '、']
-const MAX_HIGHLIGHT_CHARS = 12
-
 function splitTitleForEm(title) {
   if (!title || typeof title !== 'string') return [{ text: title || '', em: false }]
   let lastIdx = -1
@@ -22,43 +19,16 @@ function splitTitleForEm(title) {
   if (lastIdx < 4 || lastIdx > title.length - 3) {
     return [{ text: title, em: false }]
   }
-
-  const separatorEnd = lastIdx + lastSep.length
-  const tail = title.slice(separatorEnd)
-  const tailChars = Array.from(tail)
-
-  // Luni-style highlight works best as one compact phrase. For a long clause,
-  // prefer the final two space-delimited phrases (useful for mixed CN/EN titles),
-  // otherwise keep only the final Chinese phrase-length segment highlighted.
-  if (tailChars.length > MAX_HIGHLIGHT_CHARS) {
-    const words = tail.trim().split(/\s+/).filter(Boolean)
-    if (words.length >= 3) {
-      const highlight = words.slice(-2).join(' ')
-      const highlightAt = title.lastIndexOf(highlight)
-      return [
-        { text: title.slice(0, highlightAt), em: false },
-        { text: title.slice(highlightAt), em: true }
-      ]
-    }
-
-    const normalTail = tailChars.slice(0, -MAX_HIGHLIGHT_CHARS).join('')
-    const highlight = tailChars.slice(-MAX_HIGHLIGHT_CHARS).join('')
-    return [
-      { text: title.slice(0, separatorEnd) + normalTail, em: false },
-      { text: highlight, em: true }
-    ]
-  }
-
   return [
-    { text: title.slice(0, separatorEnd), em: false },
-    { text: tail, em: true }
+    { text: title.slice(0, lastIdx + lastSep.length), em: false },
+    { text: title.slice(lastIdx + lastSep.length), em: true }
   ]
 }
 
 // 首页 Hero 区：大标题（自动从最近文章抽）+ 副文案（最近写了 + 在想）+ 三个数字 + Now 卡
 // 全部从 props.posts 推导，零外部依赖、零维护
 const Hero = props => {
-  const { posts, postCount, allNavPages } = props
+  const { posts, postCount, allNavPages, heroPickedIdx, heroPoolSize } = props
   const author = siteConfig('AUTHOR') || 'xiyu'
   const total = typeof postCount === 'number' ? postCount : (posts?.length ?? 0)
   const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
@@ -68,14 +38,23 @@ const Hero = props => {
   const list = Array.isArray(posts) ? posts : []
   const latest = list[0]
 
-  // 阅读优先：首页永远展示最新文章，避免刷新后主角变化，也避免和列表顺序冲突。
-  const picked = latest
+  // 大字标题：服务端已经算好 heroPickedIdx，这里直接选
+  const pool = list.slice(0, heroPoolSize || 20)
+  const picked = pool.length > 0 ? pool[(heroPickedIdx || 0) % pool.length] : null
   const titleSpans = picked ? splitTitleForEm(picked.title) : null
-  const pickedDate = picked
-    ? formatDateCN(picked.publishDay || picked.date?.start_date)
-    : ''
-  const pickedReadTime = getPostReadingTime(picked)
-  const pickedCategories = getPostCategories(picked).slice(0, 3)
+
+  // 在想：最近 N 篇 tags 按出现顺序去重
+  const topicsFrom = parseInt(siteConfig('XIYU_HERO_TOPICS_FROM', 8, CONFIG)) || 8
+  const topicsLimit = parseInt(siteConfig('XIYU_HERO_TOPICS_LIMIT', 5, CONFIG)) || 5
+  const topics = []
+  const seen = new Set()
+  for (const p of list.slice(0, topicsFrom)) {
+    for (const t of (Array.isArray(p?.tags) ? p.tags : [])) {
+      if (t && !seen.has(t)) { seen.add(t); topics.push(t) }
+      if (topics.length >= topicsLimit) break
+    }
+    if (topics.length >= topicsLimit) break
+  }
 
   return (
     <section className='hero'>
@@ -103,11 +82,32 @@ const Hero = props => {
               </h2>
             )
         }
-        {picked && (
-          <div className='hero-feature-meta' aria-label='主打文章信息'>
-            {pickedDate && <span>{pickedDate}</span>}
-            {pickedReadTime && <span>{pickedReadTime} min read</span>}
-            {pickedCategories.map(category => <span key={category}>{category}</span>)}
+        {(latest || topics.length > 0) && (
+          <div className='hero-status'>
+            {latest && (
+              <p className='hero-status-line'>
+                <span className='hero-status-label'>最近写了</span>
+                <SmartLink
+                  href={latest.href || `/${latest.slug}`}
+                  className='hero-status-latest'>
+                  {latest.title}
+                  <span aria-hidden='true' style={{ marginLeft: 4 }}>→</span>
+                </SmartLink>
+              </p>
+            )}
+            {topics.length > 0 && (
+              <p className='hero-status-line'>
+                <span className='hero-status-label'>在想</span>
+                <span className='hero-status-topics'>
+                  {topics.map((t, i) => (
+                    <span key={t}>
+                      {i > 0 && <span className='hero-status-dot'> · </span>}
+                      {t}
+                    </span>
+                  ))}
+                </span>
+              </p>
+            )}
           </div>
         )}
         <div className='hero-meta'>
@@ -125,7 +125,7 @@ const Hero = props => {
           </div>
         </div>
       </div>
-      <NowCard featured={picked} allNavPages={allNavPages} />
+      <NowCard posts={posts} allNavPages={allNavPages} />
     </section>
   )
 }
