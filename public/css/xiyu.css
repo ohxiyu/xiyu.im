@@ -458,35 +458,42 @@ html { scroll-behavior: smooth; }
 }
 
 .hero-card {
-  border: 1px solid var(--rule);
-  background: var(--bg-elev);
-  padding: 24px 28px;
+  border: 1px solid var(--rule-soft);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--bg-elev) 94%, transparent);
+  box-shadow: 0 10px 30px rgba(26, 22, 18, .045);
+  backdrop-filter: blur(10px);
+  padding: 26px 28px 24px;
   position: relative;
+  overflow: hidden;
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
-.hero-card::before {
-  content: "";
-  position: absolute;
-  top: -1px; left: -1px;
-  width: 12px; height: 12px;
-  border-top: 1px solid var(--accent);
-  border-left: 1px solid var(--accent);
+.hero-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--rule));
+  box-shadow: 0 14px 36px rgba(26, 22, 18, .07);
+  transform: translateY(-1px);
 }
-.hero-card::after {
-  content: "";
-  position: absolute;
-  bottom: -1px; right: -1px;
-  width: 12px; height: 12px;
-  border-bottom: 1px solid var(--accent);
-  border-right: 1px solid var(--accent);
+html.dark .hero-card {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .22);
+}
+.hero-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 .hero-card-label {
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-mute);
-  margin-bottom: 14px;
-  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 9%, var(--tag-bg));
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 .hero-card-label::before {
   content: "";
@@ -495,6 +502,13 @@ html { scroll-behavior: smooth; }
   border-radius: 50%;
   background: var(--accent);
   animation: pulse 2s ease-in-out infinite;
+}
+.hero-card-month {
+  flex: 0 0 auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-mute);
 }
 @keyframes pulse {
   0%, 100% { opacity: 1; }
@@ -505,14 +519,40 @@ html { scroll-behavior: smooth; }
   font-size: 16px;
   line-height: 1.75;
   color: var(--ink-soft);
-  margin: 0;
-  font-style: italic;
+  margin: 22px 0 0;
+  font-style: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+  text-wrap: pretty;
+}
+.hero-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 22px;
 }
 .hero-card-attr {
-  margin-top: 14px;
-  font-size: 12px;
+  min-width: 0;
+  font-size: 11px;
   color: var(--ink-mute);
   font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.02em;
+}
+.hero-card-link {
+  flex: 0 0 auto;
+  color: var(--accent-ink);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color .15s ease, transform .15s ease;
+}
+.hero-card-link:hover {
+  color: var(--accent);
+  transform: translateX(2px);
 }
 
 /* ——— Section header ——— */
@@ -1594,8 +1634,10 @@ html.dark #theme-xiyu {
   .hero-subtitle { font-size: 15px; max-width: 100%; margin-bottom: 24px; }
   .hero-meta { gap: 24px; flex-wrap: wrap; }
   .hero-meta-num { font-size: 28px; }
-  .hero-card { padding: 22px 24px; }
+  .hero-card { padding: 22px 24px 20px; border-radius: 16px; }
+  .hero-card-label { padding: 6px 9px; }
   .hero-card-quote { font-size: 15px; line-height: 1.7; }
+  .hero-card-footer { margin-top: 20px; }
 
   /* —— 列表 —— */
   .section-head { padding: 14px 0 16px; margin-bottom: 4px; }
