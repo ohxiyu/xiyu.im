@@ -908,12 +908,18 @@ html.dark .hero-card {
   margin: 0 auto;
 }
 .toc {
+  grid-column: 1;
   position: sticky;
   top: 40px;
   padding-top: 24px;
   font-size: 13px;
   align-self: start;
 }
+/* 正文固定在中间列。
+   post.toc 为空时 <TOC> 不渲染任何 DOM 节点，若不显式声明该列位置，
+   grid 的隐式自动布局会按“现存子元素数量”重新分配轨道——
+   <article> 被挤进本该给 TOC 的窄列，<ArticleSide> 顶替进本该给正文的宽列。 */
+.article-layout > article { grid-column: 2; }
 .toc-label {
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
@@ -941,6 +947,7 @@ html.dark .hero-card {
 }
 
 .article-side {
+  grid-column: 3;
   padding-top: 24px;
   font-size: 13px;
 }
