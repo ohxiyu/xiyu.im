@@ -1,3 +1,12 @@
+// notion-utils 只发 ESM，而本仓 jest 的 transformIgnorePatterns 是 '/node_modules/' 一刀切，
+// 直接 import 会让整个 suite 在加载阶段就 SyntaxError。这里只用到 getTextContent
+// ——把 Notion 的富文本 Decoration[] 拍平成纯字符串——用等价实现替掉即可。
+// 本文件要验的是目录遍历逻辑，不是富文本解析。
+jest.mock('notion-utils', () => ({
+  getTextContent: title =>
+    Array.isArray(title) ? title.map(([text]) => text ?? '').join('') : ''
+}))
+
 import { getPageTableOfContents } from '@/lib/db/notion/getPageTableOfContents'
 
 /**
