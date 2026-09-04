@@ -17,6 +17,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # docs/ 是独立部署到 Cloudflare Pages 的 VitePress 站，
+          # 博客构建一行都不引用它，却占了工作树 200MB 里的 173MB。
+          # 这三个 job 不检出它，省掉每次 checkout 的绝大部分下载量。
+          sparse-checkout: |
+            /*
+            !/docs
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
@@ -30,6 +38,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # docs/ 是独立部署到 Cloudflare Pages 的 VitePress 站，
+          # 博客构建一行都不引用它，却占了工作树 200MB 里的 173MB。
+          # 这三个 job 不检出它，省掉每次 checkout 的绝大部分下载量。
+          sparse-checkout: |
+            /*
+            !/docs
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
@@ -42,6 +58,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # docs/ 是独立部署到 Cloudflare Pages 的 VitePress 站，
+          # 博客构建一行都不引用它，却占了工作树 200MB 里的 173MB。
+          # 这三个 job 不检出它，省掉每次 checkout 的绝大部分下载量。
+          sparse-checkout: |
+            /*
+            !/docs
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc

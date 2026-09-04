@@ -1,1 +1,14 @@
 .next*
+node_modules
+.git
+
+# docs/ 是独立部署到 Cloudflare Pages 的 VitePress 站，
+# 镜像里的 Next 应用不引用它，但它占了工作树 200MB 里的 173MB。
+docs
+.vitepress
+functions
+
+# 只在开发/CI 用得到的东西
+__tests__
+coverage
+test-results

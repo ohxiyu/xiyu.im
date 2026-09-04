@@ -5,13 +5,16 @@ name: Docker ghcr.io
 # separate terms of service, privacy policy, and support
 # documentation.
 
+# 去掉 pull_request 触发：PR 上这个 job 只是 build 一遍就丢掉（push: false），
+# 却是整条流水线最慢的一环（约 5 分钟，其余 job 都在 2 分钟内）。
+# main 推送和 tag 发布照旧构建并推送，自托管用户拉取的镜像不受影响；
+# 需要在合并前验证 Dockerfile 时，用 workflow_dispatch 手动跑一次。
 on:
   push:
     branches: [main]
     # Publish semver tags as releases.
     tags: ["v*.*.*"]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 env:
   # Use docker.io for Docker Hub if empty
