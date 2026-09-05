@@ -9,7 +9,7 @@ const makeMessage = (role, text) => ({
 
 export default function DocsChat() {
   const aiChatApi = siteConfig('AI_CHAT_API')
-  const api = aiChatApi || siteConfig('DOCS_CHAT_API')
+  const api = aiChatApi
   const title = aiChatApi
     ? siteConfig('AI_CHAT_TITLE', 'AI 助手')
     : siteConfig('DOCS_CHAT_TITLE', 'AI 助手')
