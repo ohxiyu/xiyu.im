@@ -21,22 +21,6 @@ import PWAInstaller from '@/components/PWAInstaller'
 import SEO from '@/components/SEO'
 import dynamic from 'next/dynamic'
 
-// Clerk 只在配置了 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY 时才启用。
-// provider 本来就是动态加载的，但中文语言包原先是静态 import，
-// 于是没启用 Clerk 的站点也照样把 @clerk/localizations 打进主 bundle。
-// 把两者放进同一个动态 chunk，未启用时一个字节都不加载。
-const ClerkAuthProvider = dynamic(() =>
-  Promise.all([
-    import('@clerk/nextjs'),
-    import('@clerk/localizations')
-  ]).then(([{ ClerkProvider }, { zhCN }]) => {
-    const Provider = ({ children }) => (
-      <ClerkProvider localization={zhCN}>{children}</ClerkProvider>
-    )
-    Provider.displayName = 'ClerkAuthProvider'
-    return Provider
-  })
-)
 const AppErrorBoundary = ErrorHandler.createErrorBoundary(
   <div style={{ padding: '2rem', textAlign: 'center', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
     <h1 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Something went wrong</h1>
@@ -93,7 +77,6 @@ const MyApp = ({ Component, pageProps }) => {
     [theme]
   )
 
-  const enableClerk = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
   const content = (
     <AppErrorBoundary>
       <GlobalContextProvider {...pageProps}>
@@ -106,15 +89,7 @@ const MyApp = ({ Component, pageProps }) => {
       </GlobalContextProvider>
     </AppErrorBoundary>
   )
-  return (
-    <>
-      {enableClerk ? (
-        <ClerkAuthProvider>{content}</ClerkAuthProvider>
-      ) : (
-        content
-      )}
-    </>
-  )
+  return content
 }
 
 export default MyApp

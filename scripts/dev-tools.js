@@ -209,116 +209,6 @@ function checkUpdates() {
 }
 
 /**
- * 生成文档
- */
-function generateDocs() {
-  log('📚 生成项目文档...', 'magenta')
-  
-  // 生成API文档
-  const apiDocs = generateApiDocs()
-  fs.writeFileSync(path.join(process.cwd(), 'docs', 'API.md'), apiDocs)
-  
-  // 生成组件文档
-  const componentDocs = generateComponentDocs()
-  fs.writeFileSync(path.join(process.cwd(), 'docs', 'COMPONENTS.md'), componentDocs)
-  
-  log('✅ 文档生成完成', 'green')
-}
-
-/**
- * 生成API文档
- */
-function generateApiDocs() {
-  return `# API 文档
-
-## 概述
-本文档描述了项目中的API接口。
-
-## 接口列表
-
-### GET /api/posts
-获取文章列表
-
-**参数:**
-- page: 页码 (可选)
-- limit: 每页数量 (可选)
-
-**响应:**
-\`\`\`json
-{
-  "success": true,
-  "data": [...],
-  "pagination": {...}
-}
-\`\`\`
-
-### GET /api/posts/[slug]
-获取单篇文章
-
-**参数:**
-- slug: 文章标识符
-
-**响应:**
-\`\`\`json
-{
-  "success": true,
-  "data": {...}
-}
-\`\`\`
-`
-}
-
-/**
- * 生成组件文档
- */
-function generateComponentDocs() {
-  return `# 组件文档
-
-## 概述
-本文档描述了项目中的React组件。
-
-## 组件列表
-
-### LazyImage
-懒加载图片组件
-
-**Props:**
-- src: 图片地址 (必需)
-- alt: 图片描述 (必需)
-- width: 图片宽度 (可选)
-- height: 图片高度 (可选)
-- priority: 是否优先加载 (可选)
-
-**用法:**
-\`\`\`jsx
-<LazyImage 
-  src="/image.jpg" 
-  alt="描述" 
-  width={300} 
-  height={200} 
-/>
-\`\`\`
-
-### SEO
-SEO优化组件
-
-**Props:**
-- title: 页面标题 (可选)
-- description: 页面描述 (可选)
-- keywords: 关键词 (可选)
-
-**用法:**
-\`\`\`jsx
-<SEO 
-  title="页面标题" 
-  description="页面描述" 
-  keywords="关键词1,关键词2" 
-/>
-\`\`\`
-`
-}
-
-/**
  * 主函数
  */
 function main() {
@@ -341,9 +231,6 @@ function main() {
     case 'check-updates':
       checkUpdates()
       break
-    case 'docs':
-      generateDocs()
-      break
     default:
       log('🛠️  NotionNext 开发工具', 'magenta')
       log('\n可用命令:', 'cyan')
@@ -352,7 +239,6 @@ function main() {
       log('  generate:component <name> - 生成组件模板', 'cyan')
       log('  analyze           - 分析包大小', 'cyan')
       log('  check-updates     - 检查依赖更新', 'cyan')
-      log('  docs              - 生成项目文档', 'cyan')
       log('\n用法: npm run dev-tools <command> [args]', 'yellow')
   }
 }
@@ -368,5 +254,4 @@ module.exports = {
   generateComponent,
   analyzeBundle,
   checkUpdates,
-  generateDocs
 }
