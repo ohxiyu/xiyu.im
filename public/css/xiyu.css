@@ -1903,41 +1903,173 @@ html.dark #theme-xiyu {
     flex-wrap: nowrap;
     gap: 4px;
   }
-  .nav-primary {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    z-index: 30;
-    display: none;
-    width: min(280px, calc(100vw - 24px));
-    padding: 10px;
-    flex-direction: column;
-    align-items: stretch;
-    border: 1px solid var(--rule);
-    border-radius: 16px;
-    background: color-mix(in srgb, var(--bg-elev) 96%, transparent);
-    box-shadow: 0 18px 48px rgba(26, 22, 18, .14);
-    backdrop-filter: blur(16px);
-  }
-  .nav-primary.is-open { display: flex; }
-  .nav-primary .nav-link,
-  .nav-primary .nav-link-external {
-    display: flex;
-    width: 100%;
-    min-height: 42px;
-    justify-content: flex-start;
-    padding: 9px 11px;
-  }
-  .nav-primary .nav-link-external .nav-link-label { display: inline; }
+  /* 移动端主导航改由 components/ui/MobileNav.js（Radix Dialog 抽屉）承担，
+     这里的行内下拉面板连同 .is-open 状态一并退役。 */
+  .nav-primary { display: none; }
   .nav-desktop-tools { display: none; }
   .nav-menu-toggle { display: flex; }
-  .nav-mobile-tools {
-    display: flex;
-    width: 100%;
-    margin-top: 4px;
-    padding-top: 9px;
-    justify-content: flex-end;
-    border-top: 1px solid var(--rule-soft);
-  }
   .theme-toggle { width: 40px; height: 40px; }
+}
+
+/* ============================================================
+   Tailwind 令牌桥
+   上面那批 hex 变量的 RGB 三元组版本。Tailwind 用
+   rgb(var(--x-rgb) / <alpha-value>) 取色，因此工具类才写得出
+   bg-ink/40、border-rule/60 这类带透明度的写法。
+
+   为什么四个作用域都要写：Radix 的 Dialog / DropdownMenu 会把
+   内容渲染到 document.body 下的 portal 里，那是 #theme-xiyu 之外，
+   只能拿到 :root 上的变量。
+
+   ⚠️ 改颜色时上面的 hex 和这里的 rgb 必须一起改。
+   ============================================================ */
+:root {
+  --bg-rgb: 250 247 242;
+  --bg-elev-rgb: 255 253 249;
+  --ink-rgb: 26 22 18;
+  --ink-soft-rgb: 45 39 32;
+  --ink-mute-rgb: 107 99 88;
+  --ink-faint-rgb: 166 158 146;
+  --rule-rgb: 232 225 211;
+  --rule-soft-rgb: 240 234 222;
+  --accent-rgb: 230 126 34;
+  --accent-ink-rgb: 184 94 16;
+  --tag-bg-rgb: 242 237 226;
+  --tag-ink-rgb: 90 80 70;
+  --selection-rgb: 249 220 182;
+}
+html.dark {
+  --bg-rgb: 20 17 13;
+  --bg-elev-rgb: 28 24 19;
+  --ink-rgb: 242 237 226;
+  --ink-soft-rgb: 217 210 195;
+  --ink-mute-rgb: 143 135 122;
+  --ink-faint-rgb: 94 87 76;
+  --rule-rgb: 42 37 30;
+  --rule-soft-rgb: 32 27 21;
+  --accent-rgb: 243 156 62;
+  --accent-ink-rgb: 245 181 101;
+  --tag-bg-rgb: 34 29 22;
+  --tag-ink-rgb: 166 157 140;
+  --selection-rgb: 74 58 30;
+}
+#theme-xiyu {
+  --bg-rgb: 250 247 242;
+  --bg-elev-rgb: 255 253 249;
+  --ink-rgb: 26 22 18;
+  --ink-soft-rgb: 45 39 32;
+  --ink-mute-rgb: 107 99 88;
+  --ink-faint-rgb: 166 158 146;
+  --rule-rgb: 232 225 211;
+  --rule-soft-rgb: 240 234 222;
+  --accent-rgb: 230 126 34;
+  --accent-ink-rgb: 184 94 16;
+  --tag-bg-rgb: 242 237 226;
+  --tag-ink-rgb: 90 80 70;
+  --selection-rgb: 249 220 182;
+}
+html.dark #theme-xiyu {
+  --bg-rgb: 20 17 13;
+  --bg-elev-rgb: 28 24 19;
+  --ink-rgb: 242 237 226;
+  --ink-soft-rgb: 217 210 195;
+  --ink-mute-rgb: 143 135 122;
+  --ink-faint-rgb: 94 87 76;
+  --rule-rgb: 42 37 30;
+  --rule-soft-rgb: 32 27 21;
+  --accent-rgb: 243 156 62;
+  --accent-ink-rgb: 245 181 101;
+  --tag-bg-rgb: 34 29 22;
+  --tag-ink-rgb: 166 157 140;
+  --selection-rgb: 74 58 30;
+}
+
+/* ============================================================
+   shadcn 组件的站点皮肤
+   —— 结构与可访问性由 Radix / cmdk 负责，长相在这里定。
+   刻意沿用站点既有手法：锐角、等宽标注、悬停只动颜色。
+   ============================================================ */
+
+/* ⌘K 触发按钮：桌面端是一个带快捷键提示的搜索框，移动端收成图标 */
+.xiyu-cmd-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--ink-mute);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.xiyu-cmd-trigger:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.xiyu-cmd-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.xiyu-cmd-trigger-label { line-height: 1; }
+
+.xiyu-kbd {
+  font-family: "JetBrains Mono", Menlo, Consolas, ui-monospace, monospace;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--ink-faint);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 3px 5px;
+  background: var(--bg-elev);
+  white-space: nowrap;
+}
+
+/* cmdk 内部结构 */
+.xiyu-cmd [cmdk-group-heading] {
+  font-family: "JetBrains Mono", Menlo, Consolas, ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: 10px 10px 6px;
+}
+.xiyu-cmd-item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background .12s;
+}
+.xiyu-cmd-item[data-selected="true"] { background: var(--tag-bg); }
+.xiyu-cmd-item[data-selected="true"] .xiyu-cmd-title { color: var(--accent-ink); }
+.xiyu-cmd-title {
+  flex: 1;
+  min-width: 0;
+  font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, serif;
+  font-size: 14.5px;
+  color: var(--ink);
+  transition: color .12s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.xiyu-cmd-date {
+  flex: none;
+  font-family: "JetBrains Mono", Menlo, Consolas, ui-monospace, monospace;
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 窄屏：搜索框收成纯图标 */
+@media (max-width: 720px) {
+  .xiyu-cmd-trigger { width: 40px; height: 40px; justify-content: center; padding: 0; }
+  .xiyu-cmd-trigger-label,
+  .xiyu-cmd-trigger .xiyu-kbd { display: none; }
 }
