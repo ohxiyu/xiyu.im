@@ -6,12 +6,12 @@ import { forwardRef } from 'react'
  * Button —— shadcn 的结构，xiyu 的皮。
  *
  * 和 shadcn 默认样式的三处刻意偏离：
- * 1. 圆角用 rounded-ctl(3px) 而非 rounded-md(6px)。本站是锐角设计。
+ * 1. 圆角走站点统一的 --r-* 尺度（rounded-sm = 8px），不用 Tailwind 默认值。
  * 2. 主色是站点的橙 (--accent)，不是 shadcn 的中性主色。
  * 3. 悬停只改颜色，不加阴影、不位移——与 .nav-link、.tag 的手感一致。
  */
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 rounded-ctl border font-medium leading-tight transition-colors duration-150 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper',
+  'inline-flex items-center justify-center gap-2 rounded-sm border font-medium leading-tight transition-colors duration-150 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper',
   {
     variants: {
       variant: {

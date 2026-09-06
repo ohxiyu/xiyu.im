@@ -90,12 +90,13 @@ module.exports = {
         'gray-7': '#CED4DA'
       },
       borderRadius: {
-        // 站点是锐角设计：标签 2px、按钮/输入 3px、面板 4px。
-        // 刻意不使用 Tailwind 默认的 rounded-md(6px)/lg(8px)。
-        tag: '2px',
-        ctl: '3px',
-        panel: '4px',
-        card: '16px'
+        // 与 public/css/xiyu.css 里的 --r-* 尺度同源（参照苹果官网的克制用法）。
+        // 直接引用 CSS 变量，改一处两边同时生效。
+        xs: 'var(--r-xs)',    // 标签、行内代码
+        sm: 'var(--r-sm)',    // 按钮、输入、导航项、开关
+        md: 'var(--r-md)',    // 卡片、面板、下拉
+        lg: 'var(--r-lg)',    // 最大的表面
+        full: 'var(--r-full)'
       },
       fontFamily: {
         // 独立命名，不去覆盖全站已有的 font-sans / font-serif。

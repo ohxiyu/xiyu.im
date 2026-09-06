@@ -17,6 +17,15 @@
   --tag-bg: #f2ede2;
   --tag-ink: #5a5046;
   --selection: #f9dcb6;
+
+  /* ——— 圆角尺度 ———
+     参照苹果官网的克制用法：小控件轻微收角，只有最大的表面才明显圆。
+     全站只用这五个值，不要再写裸数字。 */
+  --r-xs: 4px;    /* 标签、行内代码、小图标 */
+  --r-sm: 8px;    /* 按钮、输入框、导航项、开关 */
+  --r-md: 12px;   /* 卡片、面板、导航条、下拉 */
+  --r-lg: 16px;   /* 最大的表面：肖像、Hero 卡 */
+  --r-full: 999px;/* 胶囊：标签徽章 */
 }
 
 html.dark {
@@ -153,13 +162,6 @@ html, body {
 .theme-toggle:hover { color: var(--ink); border-color: var(--ink-mute); }
 
 /* 中/英切换按钮：复用 theme-toggle 圆形外观，内容是等宽小字 */
-.lang-toggle-text {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1;
-}
 
 /* ——— Labels ——— */
 .eyebrow {
@@ -213,7 +215,7 @@ html, body {
   color: var(--tag-ink);
   background: var(--tag-bg);
   padding: 2px 8px;
-  border-radius: 2px;
+  border-radius: var(--r-xs);
   font-family: "JetBrains Mono", monospace;
   letter-spacing: 0.02em;
 }
@@ -248,7 +250,7 @@ html, body {
   gap: 8px;
   padding: 10px 18px;
   border: 1px solid var(--rule);
-  border-radius: 2px;
+  border-radius: var(--r-sm);
   color: var(--ink);
   background: transparent;
   font-size: 13px;
@@ -459,7 +461,7 @@ html { scroll-behavior: smooth; }
 
 .hero-card {
   border: 1px solid var(--rule-soft);
-  border-radius: 18px;
+  border-radius: var(--r-md);
   background: color-mix(in srgb, var(--bg-elev) 94%, transparent);
   box-shadow: 0 10px 30px rgba(26, 22, 18, .045);
   backdrop-filter: blur(10px);
@@ -489,7 +491,7 @@ html.dark .hero-card {
   text-transform: uppercase;
   color: var(--ink-mute);
   padding: 6px 10px;
-  border-radius: 999px;
+  border-radius: var(--r-full);
   background: color-mix(in srgb, var(--accent) 9%, var(--tag-bg));
   display: inline-flex;
   align-items: center;
@@ -560,9 +562,10 @@ html.dark .hero-card {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 20px 0 24px;
-  border-bottom: 1px solid var(--rule);
-  margin-bottom: 8px;
+  padding: 20px 0 16px;
+  /* 不画分隔线：紧接其后的年份标题（2026 ———）自带一条，
+     两条挨在一起显得杂乱。分组的语义由年份那条承担。 */
+  margin-bottom: 0;
 }
 .section-title {
   font-family: "Noto Serif SC", serif;
@@ -795,7 +798,7 @@ html.dark .hero-card {
   background: var(--tag-bg);
   color: var(--ink);
   padding: 2px 6px;
-  border-radius: 3px;
+  border-radius: var(--r-xs);
 }
 .article-body pre {
   background: var(--bg-elev);
@@ -1091,7 +1094,7 @@ html.dark .hero-card {
 }
 .about-signals span {
   border: 1px solid var(--rule);
-  border-radius: 999px;
+  border-radius: var(--r-full);
   background: var(--bg-elev);
   padding: 7px 11px;
   font-family: "JetBrains Mono", monospace;
@@ -1115,7 +1118,7 @@ html.dark .hero-card {
   position: relative;
   overflow: hidden;
   border: 1px solid var(--rule);
-  border-radius: 28px;
+  border-radius: var(--r-lg);
   box-shadow: 14px 14px 0 var(--selection), 0 24px 56px rgba(48, 32, 18, .14);
 }
 .portrait-image {
@@ -1135,7 +1138,7 @@ html.dark .hero-card {
   left: 16px;
   bottom: 16px;
   border: 1px solid rgba(255, 255, 255, .25);
-  border-radius: 999px;
+  border-radius: var(--r-full);
   background: rgba(20, 17, 13, .84);
   backdrop-filter: blur(8px);
   padding: 8px 12px;
@@ -1238,7 +1241,7 @@ html.dark .hero-card {
   margin-top: 56px;
   padding: 32px;
   border: 1px solid var(--rule);
-  border-radius: 20px;
+  border-radius: var(--r-md);
   background: var(--bg-elev);
 }
 .info-resource-heading h2 {
@@ -1295,7 +1298,7 @@ html.dark .hero-card {
 .fact {
   padding: 26px 24px;
   border: 1px solid var(--rule);
-  border-radius: 18px;
+  border-radius: var(--r-md);
   background: linear-gradient(145deg, var(--bg-elev), var(--bg));
 }
 .fact:first-child { border-top-color: var(--accent); }
@@ -1326,7 +1329,7 @@ html.dark .hero-card {
   margin: 48px 0 0;
   padding: 28px 32px;
   border: 1px solid var(--rule);
-  border-radius: 20px;
+  border-radius: var(--r-md);
   background: var(--bg-elev);
 }
 .elsewhere-title {
@@ -1462,7 +1465,7 @@ html.dark .hero-card {
 .article-body .notion-code-inline {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.88em; background: var(--tag-bg);
-  color: var(--ink); padding: 2px 6px; border-radius: 3px;
+  color: var(--ink); padding: 2px 6px; border-radius: var(--r-xs);
 }
 .article-body .notion-code {
   background: var(--bg-elev); border: 1px solid var(--rule);
@@ -1539,7 +1542,7 @@ html.dark #theme-xiyu {
   display: inline-block;
   vertical-align: middle;
   margin-right: 2px;
-  border-radius: 4px;
+  border-radius: var(--r-xs);
   flex-shrink: 0;
 }
 
@@ -1641,7 +1644,7 @@ html.dark #theme-xiyu {
   .hero-subtitle { font-size: 15px; max-width: 100%; margin-bottom: 24px; }
   .hero-meta { gap: 24px; flex-wrap: wrap; }
   .hero-meta-num { font-size: 28px; }
-  .hero-card { padding: 22px 24px 20px; border-radius: 16px; }
+  .hero-card { padding: 22px 24px 20px; border-radius: var(--r-md); }
   .hero-card-label { padding: 6px 9px; }
   .hero-card-quote { font-size: 15px; line-height: 1.7; }
   .hero-card-footer { margin-top: 20px; }
@@ -1755,7 +1758,7 @@ html.dark #theme-xiyu {
   .about-lead { font-size: 17px; max-width: 100%; }
   .about-signals { margin-top: 22px; }
   .portrait-col { width: min(100%, 360px); }
-  .portrait { width: 100%; height: auto; border-radius: 22px; box-shadow: 10px 10px 0 var(--selection); }
+  .portrait { width: 100%; height: auto; border-radius: var(--r-lg); box-shadow: 10px 10px 0 var(--selection); }
   .portrait-caption { text-align: left; }
   .about-story { grid-template-columns: 1fr; gap: 18px; margin-top: 24px; padding: 32px 0; }
   .editorial-section { grid-template-columns: 1fr; gap: 18px; padding: 32px 0; }
@@ -1817,7 +1820,7 @@ html.dark #theme-xiyu {
   min-height: 58px;
   padding: 8px 10px 8px 14px;
   border: 1px solid var(--rule-soft);
-  border-radius: 18px;
+  border-radius: var(--r-md);
   background: color-mix(in srgb, var(--bg-elev) 90%, transparent);
   box-shadow: 0 8px 24px rgba(26, 22, 18, .055);
   backdrop-filter: blur(14px);
@@ -1847,7 +1850,7 @@ html.dark #theme-xiyu {
 .nav-link {
   min-height: 38px;
   padding: 8px 10px;
-  border-radius: 11px;
+  border-radius: var(--r-sm);
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1871,7 +1874,7 @@ html.dark #theme-xiyu {
 .theme-toggle {
   width: 38px;
   height: 38px;
-  border-radius: 12px;
+  border-radius: var(--r-sm);
   background: var(--bg-elev);
 }
 .theme-toggle:hover {
@@ -1998,7 +2001,7 @@ html.dark #theme-xiyu {
   height: 34px;
   padding: 0 10px;
   border: 1px solid var(--rule);
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   background: transparent;
   color: var(--ink-mute);
   font-family: inherit;
@@ -2022,7 +2025,7 @@ html.dark #theme-xiyu {
   line-height: 1;
   color: var(--ink-faint);
   border: 1px solid var(--rule);
-  border-radius: 3px;
+  border-radius: var(--r-xs);
   padding: 3px 5px;
   background: var(--bg-elev);
   white-space: nowrap;
@@ -2042,7 +2045,7 @@ html.dark #theme-xiyu {
   align-items: baseline;
   gap: 12px;
   padding: 9px 10px;
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   cursor: pointer;
   transition: background .12s;
 }

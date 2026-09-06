@@ -3,7 +3,7 @@ import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import { useRouter } from 'next/router'
 import ThemeToggle from './ThemeToggle'
-import LangToggle from './LangToggle'
+import XLink from './XLink'
 import CONFIG from '../config'
 import CommandPalette from '@/components/ui/CommandPalette'
 import MobileNav from '@/components/ui/MobileNav'
@@ -66,9 +66,6 @@ const Nav = props => {
         ? 'writing'
         : ''
 
-  const twitterLink =
-    siteConfig('CONTACT_TWITTER') ||
-    siteConfig('XIYU_NAV_TWITTER', '', CONFIG)
 
   const lightLogo = siteConfig('BLOG_LOGO') || '/images/logo/logo-mark.svg'
   const darkLogo = siteConfig('BLOG_LOGO_DARK') || '/images/logo/logo-mark-dark.svg'
@@ -109,33 +106,19 @@ const Nav = props => {
             <NavIcon name='about' />
             <span className='nav-link-label'>关于</span>
           </SmartLink>
-          {twitterLink && (
-            <a
-              href={twitterLink}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='nav-link nav-link-external'
-              aria-label='在 Twitter 上关注 xiyu'>
-              <NavIcon name='external' />
-              <span className='nav-link-label'>Twitter</span>
-            </a>
-          )}
         </div>
         <CommandPalette posts={allNavPages} />
         <div className='nav-desktop-tools'>
           <ThemeToggle />
-          <LangToggle />
+          <XLink />
         </div>
         <MobileNav
           links={[
             { key: 'writing', href: '/', label: '写作' },
             { key: 'archive', href: '/archive', label: '归档' },
-            { key: 'about', href: '/about', label: '关于' },
-            ...(twitterLink
-              ? [{ key: 'twitter', href: twitterLink, label: 'Twitter', external: true }]
-              : [])
+            { key: 'about', href: '/about', label: '关于' }
           ]}
-          tools={<><ThemeToggle /><LangToggle /></>}
+          tools={<><ThemeToggle /><XLink /></>}
         />
       </div>
     </nav>

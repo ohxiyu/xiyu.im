@@ -47,7 +47,7 @@ export default function MobileNavDrawer({ links = [], tools = null, open, onOpen
               <button
                 type='button'
                 aria-label='关闭菜单'
-                className='rounded-ctl p-1 text-ink-mute transition-colors hover:text-accent-ink'>
+                className='rounded-sm p-1 text-ink-mute transition-colors hover:text-accent-ink'>
                 <svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' aria-hidden='true'>
                   <path d='m6 6 12 12M18 6 6 18' />
                 </svg>
@@ -67,7 +67,7 @@ export default function MobileNavDrawer({ links = [], tools = null, open, onOpen
                 </>
               )
               const className = cn(
-                'flex items-center gap-[11px] rounded-ctl border-b border-rule-soft',
+                'flex items-center gap-[11px] rounded-sm border-b border-rule-soft',
                 'px-2 py-[11px] text-[14.5px] text-ink-soft no-underline',
                 'transition-all duration-150 hover:pl-[13px] hover:text-accent-ink'
               )
