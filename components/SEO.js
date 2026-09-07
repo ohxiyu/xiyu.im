@@ -151,7 +151,7 @@ const SEO = props => {
   const sameAs = [
     siteConfig('CONTACT_TWITTER'),
     siteConfig('CONTACT_GITHUB'),
-    'https://x.com/ohixyu',
+    'https://x.com/ohxiyu',
     'https://github.com/ohxiyu'
   ].filter((value, index, list) => value && list.indexOf(value) === index)
   return (
