@@ -1,6 +1,5 @@
 const CONFIG = {
   // —— 首页 Hero 区配置 ——
-  XIYU_BITCOIN_YEARS: 7, // Hero 第三个数字 "Long BTC" 显示的年数
   // Hero 副文案下方：从最近文章 tags 里聚合 N 个关键词显示"在想：xxx · xxx"
   XIYU_HERO_TOPICS_FROM: 8, // 取最近 N 篇文章聚合
   XIYU_HERO_TOPICS_LIMIT: 5, // 最多显示几个关键词
@@ -15,8 +14,9 @@ const CONFIG = {
   XIYU_FOOT_STACK: 'Notion × NotionNext × Vercel', // 页脚技术栈一行字（原关于页 Colophon 压缩版），空字符串则隐藏
 
   // —— 导航栏 / 联系方式 ——
-  // Twitter 链接：Nav 的 'Twitter ↗' 和关于页 Elsewhere 共用；也可用环境变量 NEXT_PUBLIC_CONTACT_TWITTER 覆盖
-  XIYU_NAV_TWITTER: 'https://x.com/ohixyu',
+  // X 链接：Nav 的 X 图标和关于页 Elsewhere 共用；也可用环境变量 NEXT_PUBLIC_CONTACT_TWITTER 覆盖
+  // ⚠️ 原值是 ohixyu，与 GitHub 用户名和文章里的署名（ohxiyu）不一致，判定为笔误已更正
+  XIYU_NAV_TWITTER: 'https://x.com/ohxiyu',
   XIYU_NAV_TAGLINE: 'long · bitcoin', // brand 旁的等宽副标
 
   // —— Now 卡 ——

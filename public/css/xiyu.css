@@ -17,6 +17,15 @@
   --tag-bg: #f2ede2;
   --tag-ink: #5a5046;
   --selection: #f9dcb6;
+
+  /* ——— 圆角尺度 ———
+     参照苹果官网的克制用法：小控件轻微收角，只有最大的表面才明显圆。
+     全站只用这五个值，不要再写裸数字。 */
+  --r-xs: 4px;    /* 标签、行内代码、小图标 */
+  --r-sm: 8px;    /* 按钮、输入框、导航项、开关 */
+  --r-md: 12px;   /* 卡片、面板、导航条、下拉 */
+  --r-lg: 16px;   /* 最大的表面：肖像、Hero 卡 */
+  --r-full: 999px;/* 胶囊：标签徽章 */
 }
 
 html.dark {
@@ -153,13 +162,6 @@ html, body {
 .theme-toggle:hover { color: var(--ink); border-color: var(--ink-mute); }
 
 /* 中/英切换按钮：复用 theme-toggle 圆形外观，内容是等宽小字 */
-.lang-toggle-text {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1;
-}
 
 /* ——— Labels ——— */
 .eyebrow {
@@ -213,7 +215,7 @@ html, body {
   color: var(--tag-ink);
   background: var(--tag-bg);
   padding: 2px 8px;
-  border-radius: 2px;
+  border-radius: var(--r-xs);
   font-family: "JetBrains Mono", monospace;
   letter-spacing: 0.02em;
 }
@@ -248,7 +250,7 @@ html, body {
   gap: 8px;
   padding: 10px 18px;
   border: 1px solid var(--rule);
-  border-radius: 2px;
+  border-radius: var(--r-sm);
   color: var(--ink);
   background: transparent;
   font-size: 13px;
@@ -459,7 +461,7 @@ html { scroll-behavior: smooth; }
 
 .hero-card {
   border: 1px solid var(--rule-soft);
-  border-radius: 18px;
+  border-radius: var(--r-md);
   background: color-mix(in srgb, var(--bg-elev) 94%, transparent);
   box-shadow: 0 10px 30px rgba(26, 22, 18, .045);
   backdrop-filter: blur(10px);
@@ -489,7 +491,7 @@ html.dark .hero-card {
   text-transform: uppercase;
   color: var(--ink-mute);
   padding: 6px 10px;
-  border-radius: 999px;
+  border-radius: var(--r-full);
   background: color-mix(in srgb, var(--accent) 9%, var(--tag-bg));
   display: inline-flex;
   align-items: center;
@@ -560,9 +562,10 @@ html.dark .hero-card {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 20px 0 24px;
-  border-bottom: 1px solid var(--rule);
-  margin-bottom: 8px;
+  padding: 20px 0 16px;
+  /* 不画分隔线：紧接其后的年份标题（2026 ———）自带一条，
+     两条挨在一起显得杂乱。分组的语义由年份那条承担。 */
+  margin-bottom: 0;
 }
 .section-title {
   font-family: "Noto Serif SC", serif;
@@ -795,7 +798,7 @@ html.dark .hero-card {
   background: var(--tag-bg);
   color: var(--ink);
   padding: 2px 6px;
-  border-radius: 3px;
+  border-radius: var(--r-xs);
 }
 .article-body pre {
   background: var(--bg-elev);
@@ -1091,7 +1094,7 @@ html.dark .hero-card {
 }
 .about-signals span {
   border: 1px solid var(--rule);
-  border-radius: 999px;
+  border-radius: var(--r-full);
   background: var(--bg-elev);
   padding: 7px 11px;
   font-family: "JetBrains Mono", monospace;
@@ -1115,7 +1118,7 @@ html.dark .hero-card {
   position: relative;
   overflow: hidden;
   border: 1px solid var(--rule);
-  border-radius: 28px;
+  border-radius: var(--r-lg);
   box-shadow: 14px 14px 0 var(--selection), 0 24px 56px rgba(48, 32, 18, .14);
 }
 .portrait-image {
@@ -1135,7 +1138,7 @@ html.dark .hero-card {
   left: 16px;
   bottom: 16px;
   border: 1px solid rgba(255, 255, 255, .25);
-  border-radius: 999px;
+  border-radius: var(--r-full);
   background: rgba(20, 17, 13, .84);
   backdrop-filter: blur(8px);
   padding: 8px 12px;
@@ -1238,7 +1241,7 @@ html.dark .hero-card {
   margin-top: 56px;
   padding: 32px;
   border: 1px solid var(--rule);
-  border-radius: 20px;
+  border-radius: var(--r-md);
   background: var(--bg-elev);
 }
 .info-resource-heading h2 {
@@ -1295,7 +1298,7 @@ html.dark .hero-card {
 .fact {
   padding: 26px 24px;
   border: 1px solid var(--rule);
-  border-radius: 18px;
+  border-radius: var(--r-md);
   background: linear-gradient(145deg, var(--bg-elev), var(--bg));
 }
 .fact:first-child { border-top-color: var(--accent); }
@@ -1326,7 +1329,7 @@ html.dark .hero-card {
   margin: 48px 0 0;
   padding: 28px 32px;
   border: 1px solid var(--rule);
-  border-radius: 20px;
+  border-radius: var(--r-md);
   background: var(--bg-elev);
 }
 .elsewhere-title {
@@ -1462,7 +1465,7 @@ html.dark .hero-card {
 .article-body .notion-code-inline {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.88em; background: var(--tag-bg);
-  color: var(--ink); padding: 2px 6px; border-radius: 3px;
+  color: var(--ink); padding: 2px 6px; border-radius: var(--r-xs);
 }
 .article-body .notion-code {
   background: var(--bg-elev); border: 1px solid var(--rule);
@@ -1539,7 +1542,7 @@ html.dark #theme-xiyu {
   display: inline-block;
   vertical-align: middle;
   margin-right: 2px;
-  border-radius: 4px;
+  border-radius: var(--r-xs);
   flex-shrink: 0;
 }
 
@@ -1641,7 +1644,7 @@ html.dark #theme-xiyu {
   .hero-subtitle { font-size: 15px; max-width: 100%; margin-bottom: 24px; }
   .hero-meta { gap: 24px; flex-wrap: wrap; }
   .hero-meta-num { font-size: 28px; }
-  .hero-card { padding: 22px 24px 20px; border-radius: 16px; }
+  .hero-card { padding: 22px 24px 20px; border-radius: var(--r-md); }
   .hero-card-label { padding: 6px 9px; }
   .hero-card-quote { font-size: 15px; line-height: 1.7; }
   .hero-card-footer { margin-top: 20px; }
@@ -1755,7 +1758,7 @@ html.dark #theme-xiyu {
   .about-lead { font-size: 17px; max-width: 100%; }
   .about-signals { margin-top: 22px; }
   .portrait-col { width: min(100%, 360px); }
-  .portrait { width: 100%; height: auto; border-radius: 22px; box-shadow: 10px 10px 0 var(--selection); }
+  .portrait { width: 100%; height: auto; border-radius: var(--r-lg); box-shadow: 10px 10px 0 var(--selection); }
   .portrait-caption { text-align: left; }
   .about-story { grid-template-columns: 1fr; gap: 18px; margin-top: 24px; padding: 32px 0; }
   .editorial-section { grid-template-columns: 1fr; gap: 18px; padding: 32px 0; }
@@ -1817,7 +1820,7 @@ html.dark #theme-xiyu {
   min-height: 58px;
   padding: 8px 10px 8px 14px;
   border: 1px solid var(--rule-soft);
-  border-radius: 18px;
+  border-radius: var(--r-md);
   background: color-mix(in srgb, var(--bg-elev) 90%, transparent);
   box-shadow: 0 8px 24px rgba(26, 22, 18, .055);
   backdrop-filter: blur(14px);
@@ -1847,7 +1850,7 @@ html.dark #theme-xiyu {
 .nav-link {
   min-height: 38px;
   padding: 8px 10px;
-  border-radius: 11px;
+  border-radius: var(--r-sm);
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1871,7 +1874,7 @@ html.dark #theme-xiyu {
 .theme-toggle {
   width: 38px;
   height: 38px;
-  border-radius: 12px;
+  border-radius: var(--r-sm);
   background: var(--bg-elev);
 }
 .theme-toggle:hover {
@@ -1903,41 +1906,173 @@ html.dark #theme-xiyu {
     flex-wrap: nowrap;
     gap: 4px;
   }
-  .nav-primary {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    z-index: 30;
-    display: none;
-    width: min(280px, calc(100vw - 24px));
-    padding: 10px;
-    flex-direction: column;
-    align-items: stretch;
-    border: 1px solid var(--rule);
-    border-radius: 16px;
-    background: color-mix(in srgb, var(--bg-elev) 96%, transparent);
-    box-shadow: 0 18px 48px rgba(26, 22, 18, .14);
-    backdrop-filter: blur(16px);
-  }
-  .nav-primary.is-open { display: flex; }
-  .nav-primary .nav-link,
-  .nav-primary .nav-link-external {
-    display: flex;
-    width: 100%;
-    min-height: 42px;
-    justify-content: flex-start;
-    padding: 9px 11px;
-  }
-  .nav-primary .nav-link-external .nav-link-label { display: inline; }
+  /* 移动端主导航改由 components/ui/MobileNav.js（Radix Dialog 抽屉）承担，
+     这里的行内下拉面板连同 .is-open 状态一并退役。 */
+  .nav-primary { display: none; }
   .nav-desktop-tools { display: none; }
   .nav-menu-toggle { display: flex; }
-  .nav-mobile-tools {
-    display: flex;
-    width: 100%;
-    margin-top: 4px;
-    padding-top: 9px;
-    justify-content: flex-end;
-    border-top: 1px solid var(--rule-soft);
-  }
   .theme-toggle { width: 40px; height: 40px; }
+}
+
+/* ============================================================
+   Tailwind 令牌桥
+   上面那批 hex 变量的 RGB 三元组版本。Tailwind 用
+   rgb(var(--x-rgb) / <alpha-value>) 取色，因此工具类才写得出
+   bg-ink/40、border-rule/60 这类带透明度的写法。
+
+   为什么四个作用域都要写：Radix 的 Dialog / DropdownMenu 会把
+   内容渲染到 document.body 下的 portal 里，那是 #theme-xiyu 之外，
+   只能拿到 :root 上的变量。
+
+   ⚠️ 改颜色时上面的 hex 和这里的 rgb 必须一起改。
+   ============================================================ */
+:root {
+  --bg-rgb: 250 247 242;
+  --bg-elev-rgb: 255 253 249;
+  --ink-rgb: 26 22 18;
+  --ink-soft-rgb: 45 39 32;
+  --ink-mute-rgb: 107 99 88;
+  --ink-faint-rgb: 166 158 146;
+  --rule-rgb: 232 225 211;
+  --rule-soft-rgb: 240 234 222;
+  --accent-rgb: 230 126 34;
+  --accent-ink-rgb: 184 94 16;
+  --tag-bg-rgb: 242 237 226;
+  --tag-ink-rgb: 90 80 70;
+  --selection-rgb: 249 220 182;
+}
+html.dark {
+  --bg-rgb: 20 17 13;
+  --bg-elev-rgb: 28 24 19;
+  --ink-rgb: 242 237 226;
+  --ink-soft-rgb: 217 210 195;
+  --ink-mute-rgb: 143 135 122;
+  --ink-faint-rgb: 94 87 76;
+  --rule-rgb: 42 37 30;
+  --rule-soft-rgb: 32 27 21;
+  --accent-rgb: 243 156 62;
+  --accent-ink-rgb: 245 181 101;
+  --tag-bg-rgb: 34 29 22;
+  --tag-ink-rgb: 166 157 140;
+  --selection-rgb: 74 58 30;
+}
+#theme-xiyu {
+  --bg-rgb: 250 247 242;
+  --bg-elev-rgb: 255 253 249;
+  --ink-rgb: 26 22 18;
+  --ink-soft-rgb: 45 39 32;
+  --ink-mute-rgb: 107 99 88;
+  --ink-faint-rgb: 166 158 146;
+  --rule-rgb: 232 225 211;
+  --rule-soft-rgb: 240 234 222;
+  --accent-rgb: 230 126 34;
+  --accent-ink-rgb: 184 94 16;
+  --tag-bg-rgb: 242 237 226;
+  --tag-ink-rgb: 90 80 70;
+  --selection-rgb: 249 220 182;
+}
+html.dark #theme-xiyu {
+  --bg-rgb: 20 17 13;
+  --bg-elev-rgb: 28 24 19;
+  --ink-rgb: 242 237 226;
+  --ink-soft-rgb: 217 210 195;
+  --ink-mute-rgb: 143 135 122;
+  --ink-faint-rgb: 94 87 76;
+  --rule-rgb: 42 37 30;
+  --rule-soft-rgb: 32 27 21;
+  --accent-rgb: 243 156 62;
+  --accent-ink-rgb: 245 181 101;
+  --tag-bg-rgb: 34 29 22;
+  --tag-ink-rgb: 166 157 140;
+  --selection-rgb: 74 58 30;
+}
+
+/* ============================================================
+   shadcn 组件的站点皮肤
+   —— 结构与可访问性由 Radix / cmdk 负责，长相在这里定。
+   刻意沿用站点既有手法：锐角、等宽标注、悬停只动颜色。
+   ============================================================ */
+
+/* ⌘K 触发按钮：桌面端是一个带快捷键提示的搜索框，移动端收成图标 */
+.xiyu-cmd-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--ink-mute);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.xiyu-cmd-trigger:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.xiyu-cmd-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.xiyu-cmd-trigger-label { line-height: 1; }
+
+.xiyu-kbd {
+  font-family: "JetBrains Mono", Menlo, Consolas, ui-monospace, monospace;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--ink-faint);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-xs);
+  padding: 3px 5px;
+  background: var(--bg-elev);
+  white-space: nowrap;
+}
+
+/* cmdk 内部结构 */
+.xiyu-cmd [cmdk-group-heading] {
+  font-family: "JetBrains Mono", Menlo, Consolas, ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: 10px 10px 6px;
+}
+.xiyu-cmd-item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 10px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background .12s;
+}
+.xiyu-cmd-item[data-selected="true"] { background: var(--tag-bg); }
+.xiyu-cmd-item[data-selected="true"] .xiyu-cmd-title { color: var(--accent-ink); }
+.xiyu-cmd-title {
+  flex: 1;
+  min-width: 0;
+  font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, serif;
+  font-size: 14.5px;
+  color: var(--ink);
+  transition: color .12s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.xiyu-cmd-date {
+  flex: none;
+  font-family: "JetBrains Mono", Menlo, Consolas, ui-monospace, monospace;
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 窄屏：搜索框收成纯图标 */
+@media (max-width: 720px) {
+  .xiyu-cmd-trigger { width: 40px; height: 40px; justify-content: center; padding: 0; }
+  .xiyu-cmd-trigger-label,
+  .xiyu-cmd-trigger .xiyu-kbd { display: none; }
 }

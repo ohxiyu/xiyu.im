@@ -130,6 +130,36 @@ tarball 内容一致、integrity 校验仍然成立。**不要**因此去改仓�
 `Cannot find module '../build/Release/canvas.node'` 失败。
 `rm -rf node_modules/canvas` 即可，jsdom 会优雅降级。
 
+### 8. shadcn 组件必须拆成「轻触发器 + 懒加载面板」
+
+`components/ui/` 下的交互组件（⌘K 面板、移动端抽屉）都是一对文件：
+
+| 轻 | 重 |
+|---|---|
+| `CommandPalette.js` | `CommandDialog.js` |
+| `MobileNav.js` | `MobileNavDrawer.js` |
+
+轻的那半只有按钮和键盘监听，进首屏；重的那半用 `next/dynamic` 在首次打开时才拉。
+**直接静态 import 会把 Radix + cmdk 塞进共享的 `_app` chunk，实测首屏 JS 从 219 kB 涨到 246 kB。**
+拆开之后是 220 kB。加新的 shadcn 组件时照这个模式来。
+
+不要整体 `dynamic()`：那样触发按钮在 chunk 到达前不渲染，导航栏会闪。
+
+### 9. Radix 的内容渲染在 portal 里，取不到 `#theme-xiyu` 的变量
+
+Dialog / DropdownMenu 的内容挂在 `document.body` 下，而站点的颜色令牌原本
+只定义在 `:root` 和 `#theme-xiyu` 上。`public/css/xiyu.css` 末尾的「Tailwind 令牌桥」
+把 RGB 三元组同时写进 `:root` / `html.dark` / `#theme-xiyu` / `html.dark #theme-xiyu`
+四个作用域，portal 里的组件才能正确取色。
+
+**改颜色时，上面的 hex 和末尾的 `-rgb` 必须一起改。**
+
+### 10. 不要用 `extend.fontFamily` 覆盖 `sans` / `serif`
+
+`tailwind.config.js` 顶层的 `theme.fontFamily` 来自 `lib/utils/font.js`，是全站字体。
+在 `extend` 里写同名 key 会把它覆盖掉，全站字体都变。
+shadcn 组件要用的字体已另起名为 `font-xiyu-serif` / `font-xiyu-mono`。
+
 ---
 
 ## 验证改动

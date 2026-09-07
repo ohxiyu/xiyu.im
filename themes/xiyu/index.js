@@ -563,13 +563,12 @@ const renderAboutPage = props => {
   const { post, postCount, tagOptions } = props
   const since = parseInt(siteConfig('SINCE')) || 2013
   const years = Math.max(1, new Date().getFullYear() - since + 1)
-  const bitcoinYears = parseInt(siteConfig('XIYU_BITCOIN_YEARS', 7, CONFIG)) || 7
 
   // 正文优先用 Notion about 页的段落；抽不到时回退默认文案
   const notionParas = extractAboutParagraphs(post)
   const fallbackParas = [
     `我从 ${since} 年开始写博客，到今天是第 ${years} 年。最早写的是技术笔记，后来慢慢变成投资思考、AI 实验、生活观察的混合体。这里不是一个内容产品，它是我的公开思考档案——我写给三年后的自己看，顺便让愿意陪我读的人进来坐坐。`,
-    `我在币圈待了快 ${bitcoinYears} 年。回头看，最大的教训不是买错了哪个币，而是——我根本就不该"炒"。现在我只做一件事：长期持有比特币，观察市场，不参与，不预测。`
+    `做了十年交易，追过热点，也在维权群里见过别人的兴衰。后来想明白一件事：我根本就不该做交易。现在只观察，不预测，不参与。这个转变没什么戏剧性，就是亏够了。`
   ]
   const paras = notionParas.length > 0 ? notionParas : fallbackParas
 
