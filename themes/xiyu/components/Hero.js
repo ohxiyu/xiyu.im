@@ -33,7 +33,6 @@ const Hero = props => {
   const total = typeof postCount === 'number' ? postCount : (posts?.length ?? 0)
   const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
   const years = Math.max(1, new Date().getFullYear() - since + 1)
-  const bitcoinYears = parseInt(siteConfig('XIYU_BITCOIN_YEARS')) || 7
 
   const list = Array.isArray(posts) ? posts : []
   const latest = list[0]
@@ -118,10 +117,6 @@ const Hero = props => {
           <div>
             <span className='hero-meta-num'>{years}</span>
             <span className='hero-meta-label'>Years writing</span>
-          </div>
-          <div>
-            <span className='hero-meta-num'>{bitcoinYears}</span>
-            <span className='hero-meta-label'>Long BTC</span>
           </div>
         </div>
       </div>

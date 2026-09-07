@@ -11,8 +11,6 @@ const AboutHero = () => {
     'Based in Shanghai · CN',
     CONFIG
   )
-  const bitcoinYears =
-    parseInt(siteConfig('XIYU_BITCOIN_YEARS', 7, CONFIG)) || 7
 
   return (
     <section className='about-hero'>
@@ -26,7 +24,6 @@ const AboutHero = () => {
         <div className='about-signals' aria-label='个人标签'>
           <span>Agent builder</span>
           <span>Long-term thinker</span>
-          <span>{bitcoinYears}y · Long bitcoin</span>
         </div>
       </div>
 
