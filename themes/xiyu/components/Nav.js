@@ -71,6 +71,11 @@ const Nav = props => {
   const darkLogo = siteConfig('BLOG_LOGO_DARK') || '/images/logo/logo-mark-dark.svg'
   const logo = isDarkMode ? darkLogo : lightLogo
   const author = siteConfig('AUTHOR') || 'xiyu'
+  // 留空就自动跟着 SINCE 走（2013 = 入行那年），不用两处维护同一个年份
+  const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
+  const tagline =
+    String(siteConfig('XIYU_NAV_TAGLINE', '', CONFIG) || '').trim() ||
+    `since · ${since}`
 
   return (
     <nav className='site-nav' aria-label='主导航'>
@@ -88,7 +93,7 @@ const Nav = props => {
           {author}
           <span className='brand-dot'></span>
         </span>
-        <span className='brand-tag'>{siteConfig('XIYU_NAV_TAGLINE', 'long · bitcoin', CONFIG)}</span>
+        <span className='brand-tag'>{tagline}</span>
       </SmartLink>
       <div className='nav-links'>
         <div

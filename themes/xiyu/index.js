@@ -26,6 +26,8 @@ import AboutFacts from './components/AboutFacts'
 import AboutMethods from './components/AboutMethods'
 import AboutTimeline from './components/AboutTimeline'
 import Elsewhere from './components/Elsewhere'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
 
 const Comment = dynamic(() => import('@/components/Comment'), { ssr: false })
 const ArticleLock = dynamic(() => import('./components/ArticleLock'), { ssr: false })
@@ -124,8 +126,7 @@ const LayoutIndex = props => {
         posts={list}
         postCount={total}
         allNavPages={allNavPages}
-        heroPickedIdx={props.heroPickedIdx}
-        heroPoolSize={props.heroPoolSize}
+        renderedOn={props.renderedOn}
       />
       <section>
         <div className='section-head'>
@@ -256,27 +257,43 @@ const LayoutSlug = props => {
           <div className='article-head-meta'>
             {num && <span className='post-num'>#{num}</span>}
             {dateFmt && <span className='post-date'>{dateFmt}</span>}
-            {tags.length > 0 && <span className='tag-dot'>·</span>}
-            {tags.map((t, i) => (
-              <span key={t}>
-                {i > 0 && <span className='tag-dot'>·</span>}
-                <span className='tag-plain'>{t}</span>
-              </span>
-            ))}
           </div>
           <h1 className='article-h1'>{post.title}</h1>
           {post.summary && <p className='article-lead'>{post.summary}</p>}
+          {tags.length > 0 && (
+            <div className='article-head-tags'>
+              {tags.map(t => (
+                <SmartLink key={t} href={`/tag/${encodeURIComponent(t)}`}>
+                  <Badge variant='outline'>{t}</Badge>
+                </SmartLink>
+              ))}
+            </div>
+          )}
         </header>
         <div id='article-wrapper' className='article-body'>
           <NotionPage post={post} />
         </div>
         <footer className='article-foot'>
-          {tags.length > 0 && (
-            <div className='article-foot-tags'>
-              {tags.map(t => <span key={t} className='tag'>{t}</span>)}
-            </div>
-          )}
-          <ShareBar post={post} />
+          <Card className='article-foot-card'>
+            <CardContent>
+              <div className='article-foot-label'>读完了</div>
+              <p className='article-foot-note'>
+                写于 {dateFmt || '——'}。结论会过期，日期就是它的免责声明。
+              </p>
+              {tags.length > 0 && (
+                <div className='article-foot-tags'>
+                  {tags.map(t => (
+                    <SmartLink key={t} href={`/tag/${encodeURIComponent(t)}`}>
+                      <Badge variant='secondary'>{t}</Badge>
+                    </SmartLink>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+            <CardFooter>
+              <ShareBar post={post} />
+            </CardFooter>
+          </Card>
           <PrevNext prev={prev} next={next} />
         </footer>
         <Comment frontMatter={post} />
@@ -306,19 +323,49 @@ const LayoutArchive = props => {
   const author = siteConfig('AUTHOR') || 'xiyu'
   const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
   const years_writing = Math.max(1, new Date().getFullYear() - since + 1)
+  const busiest = years.reduce(
+    (best, y) => (byYear[y].length > (byYear[best]?.length || 0) ? y : best),
+    years[0]
+  )
   return (
-    <>
+    <div className='archive-page'>
       <header className='archive-head'>
         <div className='eyebrow'>Archive · {years_writing} 年的文字</div>
         <h1 className='archive-title'>所有写过的字，按年陈列。</h1>
         <p className='archive-sub'>
           从 {since} 到现在，一共 {postCount || 0} 篇文章。早期的幼稚和近年的克制，都在这里——{author} 不删旧文，因为那也是我。
         </p>
+        <div className='archive-facts'>
+          <div className='archive-fact'>
+            <span className='archive-fact-num'>{postCount || 0}</span>
+            <span className='archive-fact-label'>Essays</span>
+          </div>
+          <div className='archive-fact'>
+            <span className='archive-fact-num'>{years.length}</span>
+            <span className='archive-fact-label'>Years</span>
+          </div>
+          {busiest && (
+            <div className='archive-fact'>
+              <span className='archive-fact-num'>{busiest}</span>
+              <span className='archive-fact-label'>写得最多</span>
+            </div>
+          )}
+        </div>
+        {years.length > 1 && (
+          <nav className='archive-jump' aria-label='按年份跳转'>
+            {years.map(y => (
+              <a key={y} href={`#year-${y}`} className='archive-jump-link'>
+                {y}
+                <span className='archive-jump-count'>{byYear[y].length}</span>
+              </a>
+            ))}
+          </nav>
+        )}
       </header>
       {years.map(y => (
         <ArchiveYear key={y} year={y} posts={byYear[y]} />
       ))}
-    </>
+    </div>
   )
 }
 
