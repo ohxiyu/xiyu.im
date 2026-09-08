@@ -967,13 +967,15 @@ html.dark .hero-card {
   min-height: 0;
 }
 .article-layout > article { grid-column: 2; }
-.toc-label {
+/* 左轨里每一段的起头：目录、阅读信息、分享共用同一个 */
+.toc-label,
+.side-label {
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-mute);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--rule);
 }
@@ -995,33 +997,55 @@ html.dark .hero-card {
 
 /* sticky 由外面的 .article-rail 统一负责，这里只管自身排版 */
 .article-side { font-size: 13px; }
-.side-card { padding: 16px 18px; }
-.side-stats {
+/* .side-label 的样式和 .toc-label 合并在上面一条规则里 */
+.side-section + .side-section { margin-top: 26px; }
+.side-stats { margin: 0; }
+.side-stat {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.side-stat + .side-stat { margin-top: 8px; }
+.side-stat dt {
+  font-size: 12.5px;
+  color: var(--ink-mute);
+}
+.side-stat dd {
+  margin: 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12.5px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 .side-actions {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid var(--rule-soft);
+  align-items: flex-start;
+  gap: 9px;
 }
-.side-actions > * { width: 100%; }
-.side-stat-label {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  margin-bottom: 6px;
-}
-.side-stat-value {
-  font-family: "Noto Serif SC", serif;
-  font-size: 18px;
+/* 和正文里的 .inline-link 一个手感：常态就有一条下划线，hover 变色 */
+.side-action {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12.5px;
   color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+  transition: color .15s;
+}
+.side-action:hover { color: var(--accent-ink); }
+.side-action:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--r-xs);
 }
 
 /* ——— Archive page ——— */
@@ -1496,21 +1520,15 @@ html.dark #theme-xiyu {
     width: 100%;
   }
   .toc { display: none; }
-  .side-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    flex-wrap: wrap;
+  /* 平板：轨落到正文下方，两段并排，不在宽屏上拉成两条竖列 */
+  .article-side {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
   }
-  .side-stats { flex-direction: row; gap: 32px; }
-  .side-actions {
-    flex-direction: row;
-    margin-top: 0;
-    padding-top: 0;
-    border-top: 0;
-  }
-  .side-actions > * { width: auto; }
+  .side-section + .side-section { margin-top: 0; }
+  .side-actions { flex-direction: row; gap: 20px; }
   /* 关于页等收紧 */
   .about-hero {
     grid-template-columns: minmax(0, 1fr) minmax(280px, .8fr);
