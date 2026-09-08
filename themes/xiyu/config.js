@@ -4,6 +4,11 @@ const CONFIG = {
   XIYU_HERO_TOPICS_FROM: 8, // 取最近 N 篇文章聚合
   XIYU_HERO_TOPICS_LIMIT: 5, // 最多显示几个关键词
 
+  // 大标题的「旧文重读」：跳过最近 N 篇（它们已经在下方列表里露脸了），
+  // 从接下来的 M 篇里按天轮换一篇。调小 SKIP 会让 hero 和列表重复。
+  XIYU_HERO_SKIP_RECENT: 3,
+  XIYU_HERO_POOL: 40,
+
   // —— 关于页 ——
   XIYU_ABOUT_LOCATION: 'Based in anywhere', // 头部第三个标签
 
@@ -49,9 +54,9 @@ const CONFIG = {
   // X 链接：Nav 的 X 图标和关于页 Elsewhere 共用；也可用环境变量 NEXT_PUBLIC_CONTACT_TWITTER 覆盖
   // ⚠️ 原值是 ohixyu，与 GitHub 用户名和文章里的署名（ohxiyu）不一致，判定为笔误已更正
   XIYU_NAV_TWITTER: 'https://x.com/ohxiyu',
-  XIYU_NAV_TAGLINE: 'long · bitcoin', // brand 旁的等宽副标
-
-  // —— Now 卡 ——
-  XIYU_NOW_SLUG: 'now' // 首页 Now 卡引用的 Notion page slug，读不到时 fallback 到最新文章 summary
+  // brand 旁的等宽副标。2013 = 进加密货币行业那年，写死不跟 SINCE 走——
+  // SINCE 在 blog.config.js 里是 2021，线上靠 NEXT_PUBLIC_SINCE 覆盖成 2013，
+  // 万一那个环境变量没了，副标不该跟着变成 2021。留空则回退到 `since · ${SINCE}`。
+  XIYU_NAV_TAGLINE: 'since · 2013'
 }
 export default CONFIG

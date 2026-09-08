@@ -180,6 +180,31 @@ webpack 就会把整个模块连同 `tailwind-merge` 一起打进 `_app` chunk�
 在 `extend` 里写同名 key 会把它覆盖掉，全站字体都变。
 shadcn 组件要用的字体已另起名为 `font-xiyu-serif` / `font-xiyu-mono`。
 
+### 12. 组件里不能直接读 `Date`，日期要从 `getStaticProps` 传进来
+
+首页大标题「旧文重读」每天换一篇。轮换的种子是 `pages/index.js` 里算好、
+当作 `props.renderedOn` 传下来的 UTC 日期字符串（`Hero` 再拿它做 FNV-1a 取模）。
+
+**不能在组件里 `new Date()`**：SSG 的 HTML 是构建那天生成的，客户端 hydration
+是访问那天算的，两边选中的文章不一样，React 会报 hydration 不匹配。
+同理不能用 `Math.random()`。`themes/xiyu/lib/format.js` 里所有日期函数都走 UTC，
+也是这个原因（`formatYear` / `parseUTC`）。
+
+### 13. 沙箱里跑不出真实页面，别拿本地渲染当验证
+
+构建时到 `app.notion.com` 的请求会 403（每次 9 条错误，`main` 上也一样，
+不是谁改坏的），于是**文章数据是空的**——首页 Hero、归档列表在本地都渲染不出内容。
+`yarn build` 能过只说明代码能编译。
+
+还有个坑：`.next/server/pages/zh-CN.html` 是上一次构建留下的，
+`yarn start` 会照旧供它，看起来像"改了没生效"。要验证输出先 `rm -rf .next` 再构建，
+然后直接 grep 那个 html，别去 curl `next start`。
+
+真正的视觉验证只有 Vercel 的 PR preview。需要在本地断言渲染结果时，
+写 `__tests__/themes/` 下那种带假数据的 RTL 测试。
+注意 `toHaveTextContent` 是**子串**匹配，断言「不是第 1 篇」时它会被「文章 12」骗过去，
+这种地方要用全等。
+
 ---
 
 ## 验证改动
@@ -192,7 +217,7 @@ shadcn 组件要用的字体已另起名为 `font-xiyu-serif` / `font-xiyu-mono`
 4. Vercel 的 PR preview —— 视觉/运行时问题只有这里能发现
 
 **改主题布局、CSS、目录提取逻辑时，测试全绿不代表没问题**——这三处的问题通常只在渲染后可见，
-一定要看 preview。
+一定要看 preview（原因见第 13 条）。
 
 ---
 

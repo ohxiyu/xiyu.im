@@ -32,6 +32,17 @@ export function formatDateEN(iso) {
   return `${MONTHS_EN[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`
 }
 
+// '2026'。接受 yyyy-MM-dd 字符串或时间戳（allNavPages 给的是 publishDate 时间戳）。
+// 一律按 UTC 取，跨年那两天服务端和客户端才不会算出不同的年份。
+export function formatYear(value) {
+  if (typeof value === 'number' && isFinite(value)) {
+    const d = new Date(value)
+    return isNaN(d.getTime()) ? '' : String(d.getUTCFullYear())
+  }
+  const d = parseUTC(value)
+  return d ? String(d.getUTCFullYear()) : ''
+}
+
 // '2026 · 04 · 23'
 export function formatDateCN(iso) {
   const d = parseUTC(iso)

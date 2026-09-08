@@ -147,6 +147,11 @@ export async function getStaticProps(req) {
     props.posts = cleanPostSummaries(props.posts)
   }
   props.latestPosts = cleanPostSummaries(props.latestPosts)
+
+  // 本次静态生成的 UTC 日期。主题拿它当「每天换一个」的种子——直接在组件里读
+  // Date 会让服务端 HTML 和客户端 hydration 算出不同结果，必须在这里定死。
+  props.renderedOn = new Date().toISOString().slice(0, 10)
+
   delete props.allPages
 
   return {

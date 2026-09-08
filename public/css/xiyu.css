@@ -349,6 +349,19 @@ html { scroll-behavior: smooth; }
   align-items: center;
 }
 .hero-eyebrow { margin-bottom: 18px; }
+/* 「旧文重读」标记：说明大标题不是最新那篇，否则读者会以为它就是头条 */
+.hero-revisit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.hero-revisit-when {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+}
 .hero-title {
   font-family: "Noto Serif SC", serif;
   font-size: 58px;
@@ -418,20 +431,6 @@ html { scroll-behavior: smooth; }
   width: 16px;
   height: 1px;
   background: var(--accent);
-}
-.hero-status-latest {
-  flex: 1 1 auto;
-  color: var(--ink);
-  text-decoration: none;
-  background-image: linear-gradient(var(--accent), var(--accent));
-  background-size: 0% 1px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size .25s ease, color .15s;
-}
-.hero-status-latest:hover {
-  color: var(--accent-ink);
-  background-size: 100% 1px;
 }
 .hero-status-topics { flex: 1 1 auto; }
 .hero-status-dot { color: var(--ink-faint); margin: 0 2px; }
@@ -516,18 +515,39 @@ html.dark .hero-card {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.35; }
 }
-.hero-card-quote {
+/* 最近三篇的小列表（取代原来引用最新文章 summary 的那段引文） */
+.hero-card-list {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+}
+.hero-card-list li + li { border-top: 1px dashed var(--rule-soft); }
+.hero-card-item {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 11px 0;
+  text-decoration: none;
+  color: var(--ink);
+  transition: color .15s ease;
+}
+.hero-card-item:hover { color: var(--accent-ink); }
+.hero-card-item-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+.hero-card-item-title {
   font-family: "Noto Serif SC", serif;
-  font-size: 16px;
-  line-height: 1.75;
-  color: var(--ink-soft);
-  margin: 22px 0 0;
-  font-style: normal;
+  font-size: 14.5px;
+  line-height: 1.55;
+  text-wrap: pretty;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  text-wrap: pretty;
 }
 .hero-card-footer {
   display: flex;
@@ -748,9 +768,17 @@ html.dark .hero-card {
   font-style: italic;
   padding-left: 20px;
   border-left: 2px solid var(--accent);
-  margin: 0 0 48px;
+  margin: 0 0 22px;
   text-wrap: pretty;
 }
+/* 标签从头部那行 mono 元信息里挪出来，做成可点的 badge 通向 /tag/xxx */
+.article-head-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 48px;
+}
+.article-head-tags a { text-decoration: none; }
 
 .article-body {
   max-width: 680px;
@@ -859,32 +887,53 @@ html.dark .hero-card {
 .article-foot {
   max-width: 680px;
   margin: 64px auto 0;
-  padding-top: 32px;
-  border-top: 1px solid var(--rule);
+  /* 收尾卡自己有边框，再画一条上分隔线就是两条平行线 */
+  padding-top: 0;
+}
+.article-foot-card { margin-bottom: 0; }
+.article-foot-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+}
+.article-foot-note {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--ink-mute);
+  max-width: 52ch;
 }
 .article-foot-tags {
   display: flex;
-  gap: 8px;
-  margin-bottom: 32px;
+  gap: 6px;
+  margin-top: 14px;
   flex-wrap: wrap;
 }
+.article-foot-tags a { text-decoration: none; }
+
 .prev-next {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 40px;
+  gap: 14px;
+  margin-top: 20px;
 }
-.pn-card {
-  padding: 20px 24px;
-  border: 1px solid var(--rule);
+.pn-link {
   text-decoration: none;
-  color: var(--ink);
-  transition: all .2s;
-  background: var(--bg);
+  color: inherit;
+  display: block;
 }
-.pn-card:hover {
-  border-color: var(--ink);
-  background: var(--bg-elev);
+.pn-placeholder { display: block; }
+.pn-card {
+  padding: 18px 22px;
+  height: 100%;
+  transition: border-color .2s ease, background .2s ease;
+}
+.pn-link:hover .pn-card {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--rule));
+  background: color-mix(in srgb, var(--accent) 4%, var(--bg-elev));
 }
 .pn-label {
   font-family: "JetBrains Mono", monospace;
@@ -896,9 +945,10 @@ html.dark .hero-card {
 }
 .pn-title {
   font-family: "Noto Serif SC", serif;
-  font-size: 16px;
-  line-height: 1.4;
+  font-size: 15.5px;
+  line-height: 1.45;
   color: var(--ink);
+  text-wrap: pretty;
 }
 .pn-right { text-align: right; }
 
@@ -953,10 +1003,26 @@ html.dark .hero-card {
   grid-column: 3;
   padding-top: 24px;
   font-size: 13px;
+  /* 和左侧 TOC 一样跟着滚动，长文读到一半还能分享 */
+  position: sticky;
+  top: 40px;
+  align-self: start;
 }
-.side-stat {
-  margin-bottom: 24px;
+.side-card { padding: 18px 20px; }
+.side-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
+.side-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule-soft);
+}
+.side-actions > * { width: 100%; }
 .side-stat-label {
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
@@ -989,57 +1055,126 @@ html.dark .hero-card {
   max-width: 55ch;
 }
 
-.archive-year {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 48px;
-  padding: 40px 0;
-  border-top: 1px solid var(--rule);
-  align-items: start;
+/* 概览数字条：和关于页的 .about-facts 同一种细条，不做成大方块 */
+.archive-facts {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-top: 26px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  background: var(--bg-elev);
+  overflow: hidden;
+  max-width: 460px;
 }
-.archive-year:last-child { border-bottom: 1px solid var(--rule); }
-.year-label {
+.archive-fact {
+  flex: 1;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.archive-fact + .archive-fact { border-left: 1px solid var(--rule-soft); }
+.archive-fact-num {
   font-family: "Noto Serif SC", serif;
-  font-size: 48px;
-  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.1;
   color: var(--ink);
-  line-height: 1;
   font-variant-numeric: tabular-nums;
-  position: sticky;
-  top: 40px;
 }
-.year-count {
-  display: block;
+.archive-fact-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* 年份跳转：14 年的归档，一屏滚不完，给个锚点条 */
+.archive-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 22px;
+}
+.archive-jump-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
   font-family: "JetBrains Mono", monospace;
   font-size: 11px;
   color: var(--ink-mute);
-  margin-top: 10px;
-  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: border-color .15s, color .15s, background .15s;
 }
-.year-list {
+.archive-jump-link:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  background: var(--tag-bg);
+}
+.archive-jump-count {
+  font-size: 9.5px;
+  color: var(--ink-faint);
+}
+
+.archive-year {
+  margin-bottom: 20px;
+  /* 锚点跳过来时不要贴着视口顶边 */
+  scroll-margin-top: 24px;
+}
+.archive-year-head {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--rule-soft);
+  background: color-mix(in srgb, var(--tag-bg) 40%, transparent);
 }
+.archive-year-label {
+  font-family: "Noto Serif SC", serif;
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.archive-year-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+}
+.archive-year-list li + li { border-top: 1px dashed var(--rule-soft); }
 .archive-item {
   display: grid;
   grid-template-columns: 64px 1fr auto;
-  gap: 24px;
-  padding: 14px 0;
-  border-bottom: 1px dashed var(--rule);
+  gap: 20px;
+  padding: 12px 22px;
   align-items: baseline;
   text-decoration: none;
   color: var(--ink);
-  transition: color .15s, padding .2s;
+  transition: color .15s, background .15s;
 }
-.archive-item:last-child { border-bottom: 0; }
 .archive-item:hover {
   color: var(--accent-ink);
-  padding-left: 12px;
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+.archive-item-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
 }
 .archive-item-title {
   font-family: "Noto Serif SC", serif;
-  font-size: 16px;
-  line-height: 1.4;
+  font-size: 15.5px;
+  line-height: 1.45;
+  text-wrap: pretty;
 }
 .archive-item-date {
   font-family: "JetBrains Mono", monospace;
@@ -1401,20 +1536,28 @@ html.dark #theme-xiyu {
     margin: 0 auto;
   }
   .toc { display: none; }
-  /* 平板：ArticleSide 横排放在文章正下方 */
+  /* 平板：ArticleSide 落到文章正下方，卡片内改成横排 */
   .article-side {
-    display: flex;
-    flex-direction: row;
-    gap: 32px;
-    flex-wrap: wrap;
-    border-top: 1px solid var(--rule);
-    padding-top: 24px;
-    margin-top: 48px;
+    position: static;
+    padding-top: 0;
+    margin: 48px auto 0;
     max-width: 680px;
-    margin-left: auto;
-    margin-right: auto;
   }
-  .article-side .side-stat { margin-bottom: 0; }
+  .side-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .side-stats { flex-direction: row; gap: 32px; }
+  .side-actions {
+    flex-direction: row;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+  .side-actions > * { width: auto; }
   /* 关于页等收紧 */
   .about-hero {
     grid-template-columns: minmax(0, 1fr) minmax(280px, .8fr);
@@ -1449,8 +1592,9 @@ html.dark #theme-xiyu {
   .hero-meta-num { font-size: 28px; }
   .hero-card { padding: 22px 24px 20px; border-radius: var(--r-md); }
   .hero-card-label { padding: 6px 9px; }
-  .hero-card-quote { font-size: 15px; line-height: 1.7; }
-  .hero-card-footer { margin-top: 20px; }
+  .hero-card-item-title { font-size: 14px; }
+  .hero-card-footer { margin-top: 16px; }
+  .hero-revisit { margin-bottom: 10px; }
 
   /* —— 列表 —— */
   .section-head { padding: 14px 0 16px; margin-bottom: 4px; }
@@ -1479,20 +1623,21 @@ html.dark #theme-xiyu {
   /* —— 归档 —— */
   .archive-head { margin-bottom: 28px; }
   .archive-title { font-size: 30px; }
-  .archive-year { display: block; padding: 24px 0; }
-  .year-label { position: static; font-size: 28px; display: inline-block; }
-  .year-count { display: inline-block; margin: 0 0 0 12px; }
-  .year-list { margin-top: 12px; }
+  .archive-facts { max-width: 100%; margin-top: 20px; }
+  .archive-fact { padding: 10px 12px; }
+  .archive-fact-num { font-size: 17px; }
+  .archive-jump { margin-top: 18px; }
+  .archive-year-head { padding: 13px 16px; }
+  .archive-year-label { font-size: 22px; }
   .archive-item {
     grid-template-columns: auto 1fr;
     grid-template-areas: "num title" "date date";
     gap: 4px 12px;
-    padding: 12px 0;
+    padding: 12px 16px;
   }
-  .archive-item .post-num { grid-area: num; }
+  .archive-item-num { grid-area: num; }
   .archive-item-title { grid-area: title; font-size: 15px; }
   .archive-item-date { grid-area: date; }
-  .archive-item:hover { padding-left: 0; }
 
   /* —— 文章详情：完全 block 流，没有 grid，永不可能溢出 —— */
   .article-layout { display: block; padding: 0; max-width: 100%; }
@@ -1500,10 +1645,9 @@ html.dark #theme-xiyu {
   .article-side { display: none !important; }
   .article-hero { padding: 4px 0 24px; max-width: 100%; }
   .article-head-meta { font-size: 11px; gap: 6px 10px; flex-wrap: wrap; margin-bottom: 16px; }
-  .article-head-meta .tag-plain:nth-of-type(n+5),
-  .article-head-meta .tag-dot:nth-of-type(n+5) { display: none; }
   .article-h1 { font-size: 26px; line-height: 1.25; margin-bottom: 14px; letter-spacing: -0.01em; }
-  .article-lead { font-size: 15px; line-height: 1.65; padding-left: 12px; margin-bottom: 24px; }
+  .article-lead { font-size: 15px; line-height: 1.65; padding-left: 12px; margin-bottom: 16px; }
+  .article-head-tags { margin-bottom: 24px; }
 
   .article-body {
     max-width: 100%;
@@ -1546,8 +1690,8 @@ html.dark #theme-xiyu {
   }
 
   /* 文章 footer */
-  .article-foot { padding-top: 24px; margin-top: 32px; max-width: 100%; }
-  .article-foot-tags { gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+  .article-foot { padding-top: 0; margin-top: 32px; max-width: 100%; }
+  .article-foot-tags { gap: 6px; margin-top: 12px; flex-wrap: wrap; }
   .prev-next { grid-template-columns: 1fr; gap: 10px; margin-top: 18px; }
   .pn-card { padding: 14px 16px; }
   .pn-title { font-size: 14px; }
