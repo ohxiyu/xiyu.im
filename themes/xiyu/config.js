@@ -54,9 +54,15 @@ const CONFIG = {
   // X 链接：Nav 的 X 图标和关于页 Elsewhere 共用；也可用环境变量 NEXT_PUBLIC_CONTACT_TWITTER 覆盖
   // ⚠️ 原值是 ohixyu，与 GitHub 用户名和文章里的署名（ohxiyu）不一致，判定为笔误已更正
   XIYU_NAV_TWITTER: 'https://x.com/ohxiyu',
+  // —— Now 卡 ——
+  // 首页「Now · 最近在想」引用的 Notion page slug。
+  // ⚠️ 读不到这个页面时会回落到最新文章的 summary，那段摘要于是在首页出现两次
+  //（这张卡 + 列表大卡）。在 Notion 里建一篇 slug=now 的页面就能消掉。
+  XIYU_NOW_SLUG: 'now',
+
   // brand 旁的等宽副标。2013 = 进加密货币行业那年，写死不跟 SINCE 走——
   // SINCE 在 blog.config.js 里是 2021，线上靠 NEXT_PUBLIC_SINCE 覆盖成 2013，
   // 万一那个环境变量没了，副标不该跟着变成 2021。留空则回退到 `since · ${SINCE}`。
-  XIYU_NAV_TAGLINE: 'since · 2013'
+  XIYU_NAV_TAGLINE: 'since 2013'
 }
 export default CONFIG

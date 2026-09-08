@@ -1,4 +1,6 @@
 import SmartLink from '@/components/SmartLink'
+import { siteConfig } from '@/lib/config'
+import CONFIG from '../config'
 import { formatNum } from '../lib/format'
 
 const CN_MONTHS = [
@@ -16,21 +18,27 @@ const CN_MONTHS = [
   '十二月'
 ]
 
-/**
- * 首页右上「Now · 最近在想」。
- *
- * 原来这里引用最新文章的 summary 当近况，于是同一段摘要在首页出现两次
- * （这张卡 + 列表大卡）。现在改成列最近三篇的**标题**：同样零维护，
- * 但形态是列表不是引文，和下面的大卡不会读成重复的一段话。
- */
-const NowCard = ({ posts, postCount, limit = 3 }) => {
-  const all = Array.isArray(posts) ? posts : []
-  const list = all.slice(0, limit)
-  if (!list.length) return null
-
-  const total = typeof postCount === 'number' ? postCount : all.length
-  const mm = list[0]?.publishDay ? parseInt(list[0].publishDay.slice(5, 7), 10) : 0
+// 首页 "Now · 最近在想" 卡，引用最新文章 summary 作 fallback
+const NowCard = ({ posts, postCount, allNavPages }) => {
+  const slug = siteConfig('XIYU_NOW_SLUG', 'now', CONFIG)
+  const now = allNavPages?.find(p => p.slug === slug || p.slug === `/${slug}`)
+  const quote =
+    now?.summary ||
+    posts?.[0]?.summary ||
+    siteConfig('DESCRIPTION') ||
+    '记录一些值得三年后再读的思考。'
+  const latest = posts?.[0]
+  const mm = latest?.publishDay
+    ? parseInt(latest.publishDay.slice(5, 7), 10)
+    : 0
   const monthLabel = mm >= 1 && mm <= 12 ? CN_MONTHS[mm - 1] : ''
+  const total = typeof postCount === 'number' ? postCount : posts?.length
+  const num = latest ? formatNum(latest, total, 0) : ''
+  const source = now || latest
+  const href =
+    source?.href ||
+    (source?.slug ? `/${String(source.slug).replace(/^\/+/, '')}` : '')
+  const attr = num ? `#${num} · 最近更新` : '最近更新'
 
   return (
     <aside className='hero-card' aria-label='最近在想'>
@@ -38,26 +46,18 @@ const NowCard = ({ posts, postCount, limit = 3 }) => {
         <div className='hero-card-label'>Now · 最近在想</div>
         <div className='hero-card-month'>{monthLabel || '最近'}</div>
       </div>
-      <ol className='hero-card-list'>
-        {list.map((p, idx) => {
-          const num = formatNum(p, total, idx)
-          return (
-            <li key={p.id || p.slug}>
-              <SmartLink
-                href={p.href || `/${String(p.slug || '').replace(/^\/+/, '')}`}
-                className='hero-card-item'>
-                <span className='hero-card-item-num'>{num ? `#${num}` : ''}</span>
-                <span className='hero-card-item-title'>{p.title}</span>
-              </SmartLink>
-            </li>
-          )
-        })}
-      </ol>
+      <p className='hero-card-quote'>{quote}</p>
       <div className='hero-card-footer'>
-        <div className='hero-card-attr'>最近 {list.length} 篇</div>
-        <SmartLink href='/archive' className='hero-card-link' aria-label='查看全部文章'>
-          看全部 <span aria-hidden='true'>→</span>
-        </SmartLink>
+        <div className='hero-card-attr'>{attr}</div>
+        {href && (
+          <SmartLink
+            href={href}
+            className='hero-card-link'
+            aria-label='查看最近在想'
+          >
+            查看近况 <span aria-hidden='true'>→</span>
+          </SmartLink>
+        )}
       </div>
     </aside>
   )

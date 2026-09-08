@@ -71,16 +71,24 @@ CI（`.github/workflows/ci.yml`）跑四件事：`Lint & type-check`、`Unit tes
 
 这些都是真出过问题、修完留下的记录。改到相关区域时先读这一节。
 
-### 1. 文章详情页是三栏 grid，每个子元素都要显式声明 `grid-column`
-
-`public/css/xiyu.css` 里 `.article-layout` 是 `grid-template-columns: 200px 1fr 200px`。
+### 1. 文章详情页的 grid 不能依赖「DOM 里有几个子元素」
 
 `<TOC>` 在文章没有标题块时 `return null`——**React 不产生任何 DOM 节点**（这跟 `display:none`
-完全不同）。于是 grid 的隐式自动布局会按"现存子元素数量"重新分配轨道，正文被挤进本该给目录的
-200px 窄列，右侧留一大片空白。
+完全不同）。当年 `.article-layout` 是三栏、三个子元素平铺，grid 的隐式自动布局就按
+"现存子元素数量"重新分配轨道：正文被挤进本该给目录的窄列，右侧留一大片空白。
+触发条件是**文章没有二级标题**，不是"文章年代久远"。
 
-所以 `.toc` / `article` / `.article-side` 三者都显式写死了 `grid-column`。
-**不要删这三行**，`__tests__/styles/article-layout-grid.test.js` 会盯着它们。
+现在是两栏 `210px minmax(0, 1fr)`，防线有两层：
+
+1. **结构**：`<TOC>` 和 `<ArticleSide>` 一起包在 `.article-rail` 里，
+   grid 的直接子元素恒为 `.article-rail` + `<article>` 两个，TOC 返回 null 也改不了这个数。
+2. **样式**：这两个子元素仍各自显式写 `grid-column`。
+
+**别把 TOC 从 rail 里挪出去，也别删那两行 `grid-column`**，
+`__tests__/styles/article-layout-grid.test.js` 两层都盯着。
+
+顺带：rail 在 DOM 里排在 `<article>` 前面，所以 ≤1024px 收成单栏时用的是
+`flex-direction: column` + `order`，不是 `display: block`——block 流没法把它挪到正文下方。
 
 ### 2. Notion 的折叠标题既是标题、又有子内容
 

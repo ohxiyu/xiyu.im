@@ -75,7 +75,7 @@ const Nav = props => {
   const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
   const tagline =
     String(siteConfig('XIYU_NAV_TAGLINE', '', CONFIG) || '').trim() ||
-    `since · ${since}`
+    `since ${since}`
 
   return (
     <nav className='site-nav' aria-label='主导航'>
