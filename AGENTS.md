@@ -154,7 +154,27 @@ Dialog / DropdownMenu 的内容挂在 `document.body` 下，而站点的颜色�
 
 **改颜色时，上面的 hex 和末尾的 `-rgb` 必须一起改。**
 
-### 10. 不要用 `extend.fontFamily` 覆盖 `sans` / `serif`
+### 10. 首屏组件用 `cx`，懒加载组件才用 `cn`
+
+两个几乎同名的工具，区别只有一个依赖：
+
+| | 依赖 | 给谁用 |
+|---|---|---|
+| `lib/cx.js` 的 `cx` | 只有 `clsx` | 会进首屏的（Card / Badge / Button） |
+| `lib/cn.js` 的 `cn` | `clsx` + `tailwind-merge` | 只在懒加载的（CommandDialog / MobileNavDrawer） |
+
+**它们必须待在两个文件里。** 放同一个模块时，只要首屏组件 import 了其中任何一个导出，
+webpack 就会把整个模块连同 `tailwind-merge` 一起打进 `_app` chunk——tree shaking 摘不掉。
+实测：合在一起 231 kB，拆开 222 kB。想确认有没有漏进去，
+`grep -c conflictingClassGroups .next/static/chunks/pages/_app-*.js`，那是 tailwind-merge
+压缩后仍然认得出的数据表，应该是 0。
+
+代价：用 `cx` 的组件，调用方**不能**靠传 `className` 去覆盖同属性的基础工具类
+（给 `py-[18px]` 的组件传 `py-1.5` 不保证赢，胜负取决于产物顺序）。
+需要不同尺寸时加语义类——用两个类名（`.about-methods .about-method-name`，0-2-0）
+稳压 Tailwind 的单类（0-1-0）——或者给组件开一个 variant。
+
+### 11. 不要用 `extend.fontFamily` 覆盖 `sans` / `serif`
 
 `tailwind.config.js` 顶层的 `theme.fontFamily` 来自 `lib/utils/font.js`，是全站字体。
 在 `extend` 里写同名 key 会把它覆盖掉，全站字体都变。

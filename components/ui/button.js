@@ -1,4 +1,4 @@
-import { cn } from '@/lib/cn'
+import { cx } from '@/lib/cx'
 import { cva } from 'class-variance-authority'
 import { forwardRef } from 'react'
 
@@ -38,7 +38,7 @@ const Button = forwardRef(function Button(
     <button
       ref={ref}
       type={type}
-      className={cn(buttonVariants({ variant, size }), className)}
+      className={cx(buttonVariants({ variant, size }), className)}
       {...props}
     />
   )
