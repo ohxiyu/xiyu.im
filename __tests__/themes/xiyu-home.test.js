@@ -70,18 +70,21 @@ describe('xiyu 首页 Hero', () => {
 })
 
 describe('xiyu 首页 NowCard', () => {
-  it('列最近三篇标题，不再引用文章摘要', () => {
-    const { container } = render(<NowCard posts={posts} postCount={12} />)
+  // 有 slug=now 的页面时用它的 summary；这是让这张卡不和列表大卡重复的唯一办法
+  it('优先引用 now 页的 summary', () => {
+    const nowPage = { slug: 'now', href: '/now', summary: '在把 Agent 的状态搬进仓库。' }
+    const { container } = render(
+      <NowCard posts={posts} postCount={12} allNavPages={[...posts, nowPage]} />
+    )
     const card = container.querySelector('.hero-card')
-    expect(within(card).getByText('文章 1')).toBeInTheDocument()
-    expect(within(card).getByText('文章 3')).toBeInTheDocument()
-    expect(within(card).queryByText('文章 4')).not.toBeInTheDocument()
-    // 摘要是重复的来源，卡里不该再出现
+    expect(within(card).getByText('在把 Agent 的状态搬进仓库。')).toBeInTheDocument()
     expect(card.textContent).not.toContain('摘要 1')
   })
 
-  it('没有文章时不渲染', () => {
-    const { container } = render(<NowCard posts={[]} postCount={0} />)
-    expect(container.querySelector('.hero-card')).toBeNull()
+  it('没有 now 页时回落到最新文章的摘要', () => {
+    const { container } = render(
+      <NowCard posts={posts} postCount={12} allNavPages={posts} />
+    )
+    expect(within(container.querySelector('.hero-card')).getByText('摘要 1')).toBeInTheDocument()
   })
 })

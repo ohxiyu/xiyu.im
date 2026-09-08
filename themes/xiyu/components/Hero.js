@@ -145,7 +145,7 @@ const Hero = props => {
           </div>
         </div>
       </div>
-      <NowCard posts={posts} postCount={postCount} />
+      <NowCard posts={posts} postCount={postCount} allNavPages={allNavPages} />
     </section>
   )
 }

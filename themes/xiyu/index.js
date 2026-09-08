@@ -217,7 +217,7 @@ const LayoutPagination = ({ page = 1, postCount }) => {
 }
 
 /**
- * 文章详情：左 TOC · 中正文 · 右 ArticleSide
+ * 文章详情：两栏——左边一根轨（目录 + 阅读信息/分享），右边正文
  */
 const LayoutSlug = props => {
   const { post, lock, validPassword, prev, next } = props
@@ -251,7 +251,13 @@ const LayoutSlug = props => {
 
   return (
     <div className='article-layout'>
-      <TOC toc={post.toc} />
+      {/* 左栏一根轨：目录在上、阅读信息与分享在下。
+          包成一个元素，grid 就永远只有两个直接子元素——TOC 没内容时返回 null
+          也不会让隐式布局把 <article> 挤进窄列（AGENTS.md 第 1 条）。 */}
+      <div className='article-rail'>
+        <TOC toc={post.toc} />
+        <ArticleSide post={post} />
+      </div>
       <article>
         <header className='article-hero'>
           <div className='article-head-meta'>
@@ -298,7 +304,6 @@ const LayoutSlug = props => {
         </footer>
         <Comment frontMatter={post} />
       </article>
-      <ArticleSide post={post} />
     </div>
   )
 }
@@ -335,19 +340,20 @@ const LayoutArchive = props => {
         <p className='archive-sub'>
           从 {since} 到现在，一共 {postCount || 0} 篇文章。早期的幼稚和近年的克制，都在这里——{author} 不删旧文，因为那也是我。
         </p>
-        <div className='archive-facts'>
-          <div className='archive-fact'>
-            <span className='archive-fact-num'>{postCount || 0}</span>
-            <span className='archive-fact-label'>Essays</span>
+        {/* 复用首页 Hero 的数字排版，归档不另起一套视觉 */}
+        <div className='hero-meta archive-meta'>
+          <div>
+            <span className='hero-meta-num'>{postCount || 0}</span>
+            <span className='hero-meta-label'>Essays</span>
           </div>
-          <div className='archive-fact'>
-            <span className='archive-fact-num'>{years.length}</span>
-            <span className='archive-fact-label'>Years</span>
+          <div>
+            <span className='hero-meta-num'>{years.length}</span>
+            <span className='hero-meta-label'>Years</span>
           </div>
           {busiest && (
-            <div className='archive-fact'>
-              <span className='archive-fact-num'>{busiest}</span>
-              <span className='archive-fact-label'>写得最多</span>
+            <div>
+              <span className='hero-meta-num'>{busiest}</span>
+              <span className='hero-meta-label'>写得最多</span>
             </div>
           )}
         </div>
@@ -356,7 +362,6 @@ const LayoutArchive = props => {
             {years.map(y => (
               <a key={y} href={`#year-${y}`} className='archive-jump-link'>
                 {y}
-                <span className='archive-jump-count'>{byYear[y].length}</span>
               </a>
             ))}
           </nav>

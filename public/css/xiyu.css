@@ -113,12 +113,15 @@ html, body {
   display: inline-block;
   transform: translateY(-4px);
 }
+/* 副标是配角：字号压到 10px、颜色退到 faint、字距收紧，
+   和 logo 之间也不要 .brand 那 12px 的间距——那会让它像并列的第二个标题 */
 .brand-tag {
   font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  color: var(--ink-mute);
-  letter-spacing: 0.06em;
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
   text-transform: uppercase;
+  margin-left: -4px;
 }
 
 .nav-links {
@@ -515,39 +518,18 @@ html.dark .hero-card {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.35; }
 }
-/* 最近三篇的小列表（取代原来引用最新文章 summary 的那段引文） */
-.hero-card-list {
-  list-style: none;
-  margin: 20px 0 0;
-  padding: 0;
-}
-.hero-card-list li + li { border-top: 1px dashed var(--rule-soft); }
-.hero-card-item {
-  display: grid;
-  grid-template-columns: 44px 1fr;
-  gap: 12px;
-  align-items: baseline;
-  padding: 11px 0;
-  text-decoration: none;
-  color: var(--ink);
-  transition: color .15s ease;
-}
-.hero-card-item:hover { color: var(--accent-ink); }
-.hero-card-item-num {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10.5px;
-  color: var(--ink-faint);
-  letter-spacing: 0.04em;
-}
-.hero-card-item-title {
+.hero-card-quote {
   font-family: "Noto Serif SC", serif;
-  font-size: 14.5px;
-  line-height: 1.55;
-  text-wrap: pretty;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin: 22px 0 0;
+  font-style: normal;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 5;
   overflow: hidden;
+  text-wrap: pretty;
 }
 .hero-card-footer {
   display: flex;
@@ -953,25 +935,37 @@ html.dark .hero-card {
 .pn-right { text-align: right; }
 
 /* TOC sidebar */
+/* 两栏：左边一根轨（目录 + 阅读信息/分享），右边正文。
+   grid 的直接子元素永远只有 .article-rail 和 <article> 两个——
+   TOC 在没有目录时返回 null，但它在 rail 内部，不影响外层轨道分配
+   （这正是 AGENTS.md 第 1 条那次事故的成因）。 */
 .article-layout {
   display: grid;
-  grid-template-columns: 200px 1fr 200px;
-  gap: 48px;
-  max-width: 1180px;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 56px;
+  max-width: 1060px;
   margin: 0 auto;
 }
-.toc {
+.article-rail {
   grid-column: 1;
   position: sticky;
   top: 40px;
-  padding-top: 24px;
-  font-size: 13px;
   align-self: start;
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  /* 目录很长时轨自己滚，不要把正文顶下去 */
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
-/* 正文固定在中间列。
-   post.toc 为空时 <TOC> 不渲染任何 DOM 节点，若不显式声明该列位置，
-   grid 的隐式自动布局会按“现存子元素数量”重新分配轨道——
-   <article> 被挤进本该给 TOC 的窄列，<ArticleSide> 顶替进本该给正文的宽列。 */
+.article-rail::-webkit-scrollbar { width: 3px; }
+.article-rail::-webkit-scrollbar-thumb { background: var(--rule); border-radius: var(--r-full); }
+.toc {
+  font-size: 13px;
+  min-height: 0;
+}
 .article-layout > article { grid-column: 2; }
 .toc-label {
   font-family: "JetBrains Mono", monospace;
@@ -999,16 +993,9 @@ html.dark .hero-card {
   border-left-color: var(--accent);
 }
 
-.article-side {
-  grid-column: 3;
-  padding-top: 24px;
-  font-size: 13px;
-  /* 和左侧 TOC 一样跟着滚动，长文读到一半还能分享 */
-  position: sticky;
-  top: 40px;
-  align-self: start;
-}
-.side-card { padding: 18px 20px; }
+/* sticky 由外面的 .article-rail 统一负责，这里只管自身排版 */
+.article-side { font-size: 13px; }
+.side-card { padding: 16px 18px; }
 .side-stats {
   display: flex;
   flex-direction: column;
@@ -1055,133 +1042,92 @@ html.dark .hero-card {
   max-width: 55ch;
 }
 
-/* 概览数字条：和关于页的 .about-facts 同一种细条，不做成大方块 */
-.archive-facts {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  margin-top: 26px;
-  border: 1px solid var(--rule);
-  border-radius: var(--r-md);
-  background: var(--bg-elev);
-  overflow: hidden;
-  max-width: 460px;
-}
-.archive-fact {
-  flex: 1;
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.archive-fact + .archive-fact { border-left: 1px solid var(--rule-soft); }
-.archive-fact-num {
-  font-family: "Noto Serif SC", serif;
-  font-size: 20px;
-  line-height: 1.1;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-}
-.archive-fact-label {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
+/* 数字排版直接复用 .hero-meta，这里只调间距 */
+.archive-meta { margin-top: 28px; }
 
-/* 年份跳转：14 年的归档，一屏滚不完，给个锚点条 */
+/* 年份跳转：14 年的归档一屏滚不完。做成一排安静的等宽链接，
+   不用带框的胶囊——归档页面的重点是下面的索引，不是这排导航。 */
 .archive-jump {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 22px;
+  gap: 16px;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule-soft);
 }
 .archive-jump-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 9px;
-  border: 1px solid var(--rule);
-  border-radius: var(--r-sm);
   font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  color: var(--ink-mute);
-  text-decoration: none;
-  transition: border-color .15s, color .15s, background .15s;
-}
-.archive-jump-link:hover {
-  border-color: var(--accent);
-  color: var(--accent-ink);
-  background: var(--tag-bg);
-}
-.archive-jump-count {
-  font-size: 9.5px;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
   color: var(--ink-faint);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+  transition: color .15s;
 }
+.archive-jump-link:hover { color: var(--accent-ink); }
 
+/* 年份分组：和首页「最新写作」里的 `2026 ————` 是同一条横线 */
 .archive-year {
-  margin-bottom: 20px;
   /* 锚点跳过来时不要贴着视口顶边 */
   scroll-margin-top: 24px;
 }
 .archive-year-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 22px;
-  border-bottom: 1px solid var(--rule-soft);
-  background: color-mix(in srgb, var(--tag-bg) 40%, transparent);
+  gap: 14px;
+  margin: 44px 0 4px;
+  font-weight: 400;
 }
-.archive-year-label {
-  font-family: "Noto Serif SC", serif;
-  font-size: 26px;
-  font-weight: 500;
-  color: var(--ink);
-  line-height: 1;
-  margin: 0;
+.archive-year-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--ink-mute);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
+}
+.archive-year-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+.archive-year-count {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
 }
 .archive-year-list {
   list-style: none;
   margin: 0;
-  padding: 6px 0;
+  padding: 0;
 }
-.archive-year-list li + li { border-top: 1px dashed var(--rule-soft); }
 .archive-item {
   display: grid;
-  grid-template-columns: 64px 1fr auto;
-  gap: 20px;
-  padding: 12px 22px;
+  grid-template-columns: 64px minmax(0, 1fr) 76px;
+  gap: 24px;
+  padding: 13px 0;
   align-items: baseline;
+  border-bottom: 1px solid var(--rule-soft);
   text-decoration: none;
   color: var(--ink);
-  transition: color .15s, background .15s;
+  transition: color .15s;
 }
-.archive-item:hover {
-  color: var(--accent-ink);
-  background: color-mix(in srgb, var(--accent) 5%, transparent);
-}
-.archive-item-num {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  color: var(--ink-faint);
-  letter-spacing: 0.04em;
-}
+.archive-year-list li:last-child .archive-item { border-bottom: 0; }
+.archive-item:hover { color: var(--accent-ink); }
+.archive-item:hover .archive-item-title { background-size: 100% 1px; }
 .archive-item-title {
   font-family: "Noto Serif SC", serif;
   font-size: 15.5px;
   line-height: 1.45;
   text-wrap: pretty;
+  /* 和 .feature-link / .row-link 一样，下划线从左边长出来 */
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size .25s cubic-bezier(.2,.7,.3,1);
 }
-.archive-item-date {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  color: var(--ink-mute);
-  white-space: nowrap;
-}
+.archive-item-date { text-align: right; }
 
 /* ——— About page ——— */
 .about-page { position: relative; }
@@ -1528,21 +1474,28 @@ html.dark #theme-xiyu {
 
 @media (max-width: 1024px) {
   .page { padding: 32px 28px 80px; }
-  /* 平板：article-layout 三栏先收成单栏，TOC 隐藏 */
+  /* 平板：两栏收成单栏，TOC 隐藏。
+     左轨在 DOM 里排在正文前面，这里必须用 flex + order 把它挪到正文下方，
+     否则阅读信息卡会顶在文章标题上面。block 流做不到这件事。 */
   .article-layout {
-    display: block;
+    display: flex;
+    flex-direction: column;
     max-width: 100%;
     width: 100%;
     margin: 0 auto;
   }
-  .toc { display: none; }
-  /* 平板：ArticleSide 落到文章正下方，卡片内改成横排 */
-  .article-side {
+  .article-layout > article { order: 1; }
+  .article-rail {
+    order: 2;
     position: static;
+    max-height: none;
+    overflow: visible;
     padding-top: 0;
     margin: 48px auto 0;
     max-width: 680px;
+    width: 100%;
   }
+  .toc { display: none; }
   .side-card {
     display: flex;
     align-items: center;
@@ -1592,8 +1545,8 @@ html.dark #theme-xiyu {
   .hero-meta-num { font-size: 28px; }
   .hero-card { padding: 22px 24px 20px; border-radius: var(--r-md); }
   .hero-card-label { padding: 6px 9px; }
-  .hero-card-item-title { font-size: 14px; }
-  .hero-card-footer { margin-top: 16px; }
+  .hero-card-quote { font-size: 15px; line-height: 1.7; }
+  .hero-card-footer { margin-top: 20px; }
   .hero-revisit { margin-bottom: 10px; }
 
   /* —— 列表 —— */
@@ -1623,26 +1576,23 @@ html.dark #theme-xiyu {
   /* —— 归档 —— */
   .archive-head { margin-bottom: 28px; }
   .archive-title { font-size: 30px; }
-  .archive-facts { max-width: 100%; margin-top: 20px; }
-  .archive-fact { padding: 10px 12px; }
-  .archive-fact-num { font-size: 17px; }
-  .archive-jump { margin-top: 18px; }
-  .archive-year-head { padding: 13px 16px; }
-  .archive-year-label { font-size: 22px; }
+  .archive-meta { gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .archive-jump { margin-top: 20px; padding-top: 16px; gap: 12px; }
+  .archive-year-head { margin-top: 32px; }
   .archive-item {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas: "num title" "date date";
     gap: 4px 12px;
-    padding: 12px 16px;
+    padding: 12px 0;
   }
-  .archive-item-num { grid-area: num; }
+  .archive-item .post-num { grid-area: num; }
   .archive-item-title { grid-area: title; font-size: 15px; }
-  .archive-item-date { grid-area: date; }
+  .archive-item-date { grid-area: date; text-align: left; }
 
   /* —— 文章详情：完全 block 流，没有 grid，永不可能溢出 —— */
   .article-layout { display: block; padding: 0; max-width: 100%; }
   article { display: block; max-width: 100%; }
-  .article-side { display: none !important; }
+  .article-rail { display: none; }
   .article-hero { padding: 4px 0 24px; max-width: 100%; }
   .article-head-meta { font-size: 11px; gap: 6px 10px; flex-wrap: wrap; margin-bottom: 16px; }
   .article-h1 { font-size: 26px; line-height: 1.25; margin-bottom: 14px; letter-spacing: -0.01em; }
