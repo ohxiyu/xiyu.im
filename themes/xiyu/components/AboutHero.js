@@ -1,52 +1,46 @@
-import Image from 'next/image'
+import Badge from '@/components/ui/badge'
 import { siteConfig } from '@/lib/config'
+import Image from 'next/image'
 import CONFIG from '../config'
 
-// 关于页 Hero：个人简介 + 头像 + 当前身份
+/**
+ * 关于页头部：头像紧跟名字与介绍，整组左对齐。
+ *
+ * 旧版是名字在左、头像被推到右端，中间留一大片空。
+ */
 const AboutHero = () => {
   const author = siteConfig('AUTHOR') || 'xiyu'
-  const lead = siteConfig('BIO') || '一个普通的干饭人，长期主义者。'
-  const location = siteConfig(
-    'XIYU_ABOUT_LOCATION',
-    'Based in Shanghai · CN',
-    CONFIG
-  )
+  const lead = siteConfig('BIO') || '用 AI Agent 给自己造系统。'
+  const location = siteConfig('XIYU_ABOUT_LOCATION', 'Based in anywhere', CONFIG)
 
   return (
-    <section className='about-hero'>
-      <div className='about-intro'>
-        <div className='eyebrow'>About · 关于我</div>
+    <header className='about-profile'>
+      <div className='about-avatar'>
+        <Image
+          src='/images/xiyu-avatar.png'
+          alt={`${author} 的头像`}
+          width={1254}
+          height={1254}
+          sizes='(max-width: 560px) 60px, 76px'
+          className='about-avatar-img'
+          priority
+        />
+      </div>
+      <div className='about-profile-body'>
         <h1 className='about-h1'>
           {author}
-          <span aria-hidden='true'>.</span>
+          <span className='about-h1-dot' aria-hidden='true'>
+            .
+          </span>
         </h1>
         <p className='about-lead'>{lead}</p>
-        <div className='about-signals' aria-label='个人标签'>
-          <span>Agent builder</span>
-          <span>Long-term thinker</span>
+        <div className='about-badges'>
+          <Badge>Agent builder</Badge>
+          <Badge>Long-term thinker</Badge>
+          <Badge variant='outline'>{location}</Badge>
         </div>
       </div>
-
-      <figure className='portrait-col'>
-        <div className='portrait'>
-          <Image
-            src='/images/xiyu-avatar.png'
-            alt={`${author} 的头像`}
-            width={1254}
-            height={1254}
-            sizes='(max-width: 768px) 100vw, 380px'
-            className='portrait-image'
-            priority
-          />
-          <div className='portrait-scrim' aria-hidden='true' />
-          <span className='portrait-badge'>Stay curious · Keep building</span>
-        </div>
-        <figcaption className='portrait-caption'>
-          <span>独立开发者 · 长期主义者</span>
-          <span>{location}</span>
-        </figcaption>
-      </figure>
-    </section>
+    </header>
   )
 }
 
