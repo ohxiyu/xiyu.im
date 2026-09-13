@@ -27,7 +27,8 @@ jest.mock('@/lib/config', () => ({
   siteConfig: (key, defaultVal, extendConfig) => {
     if (key === 'AUTHOR') return 'xiyu'
     if (key === 'SINCE') return 2013
-    if (key === 'BIO') return '用 AI Agent 给自己造系统。'
+    // 和 blog.config.js 的默认值保持一致：两句话，第二句会走 em
+    if (key === 'BIO') return '用 AI Agent 给自己造系统。写作是公开的思考存档。'
     if (extendConfig && extendConfig[key] !== undefined) return extendConfig[key]
     return defaultVal
   }
@@ -38,13 +39,37 @@ jest.mock('@/lib/config', () => ({
  * 这里把「和首页用同一套类」这件事钉住，别再飘回去。
  */
 describe('xiyu 关于页：和首页共用同一套视觉类', () => {
-  it('头部用 .eyebrow 和首页的「在想」那一行，不再有 Badge 胶囊', () => {
+  it('头部就是首页的 .hero 两栏骨架，不是自己另起的一套', () => {
     const { container } = render(<AboutHero />)
-    expect(container.querySelector('.eyebrow')).toBeInTheDocument()
-    // .hero-status 就是首页那一行，关于页复用它
-    expect(container.querySelector('.hero-status')).toBeInTheDocument()
+    const hero = container.querySelector('.hero')
+    expect(hero).toBeInTheDocument()
+    // 两栏：左边文字块，右边头像
+    expect(hero.children).toHaveLength(2)
+    expect(hero.querySelector('.eyebrow')).toBeInTheDocument()
+    expect(hero.querySelector('.hero-title')).toBeInTheDocument()
+    expect(hero.querySelector('.hero-status')).toBeInTheDocument()
+    expect(hero.querySelector('.about-avatar')).toBeInTheDocument()
     expect(screen.getByText('在做')).toBeInTheDocument()
     expect(container.querySelector('.about-badges')).toBeNull()
+  })
+
+  it('大字是 BIO 那句自述，不是只有两个字符的名字', () => {
+    const { container } = render(<AboutHero />)
+    const title = container.querySelector('.hero-title')
+    expect(title.textContent.length).toBeGreaterThan(10)
+    // BIO 两句话，第二句走 em（和首页大标题同一个处理）
+    expect(title.querySelector('em')).toBeInTheDocument()
+    // 名字退进 eyebrow
+    expect(container.querySelector('.eyebrow').textContent).toContain('xiyu')
+  })
+
+  it('头部大字不和时间轴里的小标题重复', () => {
+    const { container: hero } = render(<AboutHero />)
+    const big = hero.querySelector('.hero-title').textContent
+    const { container: tl } = render(<AboutTimeline paragraphs={[]} />)
+    for (const el of tl.querySelectorAll('.about-era-title')) {
+      expect(big).not.toContain(el.textContent)
+    }
   })
 
   it('数字用首页的 .hero-meta，不是自带边框的横条', () => {
@@ -82,10 +107,20 @@ describe('xiyu 关于页：和首页共用同一套视觉类', () => {
     expect(eras[2].textContent).toContain(CONFIG.XIYU_ABOUT_TIMELINE[2].fallback)
   })
 
-  it('联系入口是文字链，不是按钮', () => {
+  it('时间轴是「左年份 + 右正文」两列，和归档条目同一个骨架', () => {
+    const { container } = render(<AboutTimeline paragraphs={[]} />)
+    const era = container.querySelector('.about-era')
+    expect(era.querySelector('.about-era-when')).toBeInTheDocument()
+    expect(era.querySelector('.about-era-body')).toBeInTheDocument()
+    // 竖线圆点那套已经去掉了，全站只有这一处长那样
+    expect(container.querySelector('.about-era-head')).toBeNull()
+  })
+
+  it('收尾是文字链，且不占一条 rule-head（全页只留两条）', () => {
     const { container } = render(<Elsewhere />)
     expect(container.querySelectorAll('.inline-link').length).toBeGreaterThanOrEqual(2)
     expect(container.querySelector('button')).toBeNull()
+    expect(container.querySelector('.rule-head')).toBeNull()
   })
 
   it('折叠区仍是原生 <details>，内容始终在 DOM 里（给搜索引擎读）', () => {
