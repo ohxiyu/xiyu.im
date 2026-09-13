@@ -14,10 +14,10 @@ const ArchiveYear = ({ year, posts }) => {
   if (!list.length) return null
   return (
     <section className='archive-year' id={`year-${year}`}>
-      <h2 className='archive-year-head'>
-        <span className='archive-year-num'>{year}</span>
-        <span className='archive-year-rule' aria-hidden='true' />
-        <span className='archive-year-count'>{list.length} posts</span>
+      <h2 className='rule-head archive-year-head'>
+        <span>{year}</span>
+        <span className='rule-head-rule' aria-hidden='true' />
+        <span className='rule-head-count'>{list.length} posts</span>
       </h2>
       <ol className='archive-year-list'>
         {list.map(p => {

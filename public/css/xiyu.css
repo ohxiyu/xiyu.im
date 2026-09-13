@@ -559,6 +559,42 @@ html.dark .hero-card {
   transform: translateX(2px);
 }
 
+/* ——— 分区标题：橙短线 + 标签 + 一条延伸到右侧的细线 ———
+   首页的年份分组、归档的年份、关于页的每个区块共用这一个。
+   以前首页是写在 JSX 里的 inline style、关于页是另一套 CSS，
+   长得像但各改各的，很容易飘。 */
+.rule-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0 20px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.rule-head::before {
+  content: "";
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--accent);
+}
+.rule-head-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+.rule-head-count {
+  flex: none;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ——— Section header ——— */
 .section-head {
   display: flex;
@@ -1095,31 +1131,8 @@ html.dark .hero-card {
   /* 锚点跳过来时不要贴着视口顶边 */
   scroll-margin-top: 24px;
 }
-.archive-year-head {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin: 44px 0 4px;
-  font-weight: 400;
-}
-.archive-year-num {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--ink-mute);
-  font-variant-numeric: tabular-nums;
-}
-.archive-year-rule {
-  flex: 1;
-  height: 1px;
-  background: var(--rule);
-}
-.archive-year-count {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.08em;
-  color: var(--ink-faint);
-}
+/* 年份标题用共用的 .rule-head，这里只调间距 */
+.archive-year-head { margin: 44px 0 4px; }
 .archive-year-list {
   list-style: none;
   margin: 0;
@@ -1530,11 +1543,8 @@ html.dark #theme-xiyu {
   .side-section + .side-section { margin-top: 0; }
   .side-actions { flex-direction: row; gap: 20px; }
   /* 关于页等收紧 */
-  .about-hero {
-    grid-template-columns: minmax(0, 1fr) minmax(280px, .8fr);
-    gap: 48px;
-  }
   .hero { gap: 48px; }
+  .about-avatar { width: min(150px, 100%); }
   .topics-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
@@ -1666,7 +1676,19 @@ html.dark #theme-xiyu {
   .pn-right { text-align: left; }
 
   /* —— 关于页 —— */
-  .about-hero { display: block; padding: 4px 0 34px; }
+  /* .hero 在这个断点已经是 display:block，头像回到大字上面并缩小 */
+  .about-hero { padding: 4px 0 28px; }
+  .about-hero > .about-avatar { width: 84px; margin-top: 22px; }
+  .about-hero-title { margin-bottom: 16px; }
+  /* 年份那一列在手机上放不下，退回上下堆叠 */
+  .about-era {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 20px 0;
+  }
+  .about-era-when { padding-top: 0; }
+  .about-era-title { font-size: 16px; }
+  .about-foot { margin-top: 32px; gap: 14px; }
   .editorial-section { grid-template-columns: 1fr; gap: 18px; padding: 32px 0; }
   .about-section-index { display: inline-block; margin: 0 10px 0 0; }
   .about-section-label h2 { display: inline; }
@@ -1821,146 +1843,43 @@ html.dark #theme-xiyu {
   flex-direction: column;
 }
 
-/* ── 头部：头像紧跟名字，整组左对齐 ── */
-.about-profile {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  padding: 6px 0 22px;
-}
+/* ── 头部：直接用首页的 .hero 两栏骨架，右栏放头像（首页那格是 Now 卡）── */
+.about-hero { align-items: center; }
+/* 名字退进 eyebrow 之后，大字是那句自述。比首页略小一档：
+   首页大字是文章标题、一屏只有一句，这里下面紧跟着数字和时间轴 */
+.about-hero-title { font-size: clamp(30px, 5.4vw, 46px); margin-bottom: 22px; }
 .about-avatar {
-  width: 76px;
-  height: 76px;
-  flex: none;
-  border-radius: var(--r-md);
+  width: min(200px, 100%);
+  aspect-ratio: 1;
+  justify-self: end;
+  border-radius: var(--r-lg);
   border: 1px solid var(--rule);
   overflow: hidden;
   background: var(--tag-bg);
 }
 .about-avatar-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.about-profile-body { min-width: 0; padding-top: 2px; }
-.about-h1 {
-  font-family: "Noto Serif SC", "Songti SC", Georgia, serif;
-  font-size: clamp(27px, 4.4vw, 34px);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin: 0 0 8px;
-  color: var(--ink);
-}
-.about-h1-dot { color: var(--accent); }
-.about-lead {
-  font-size: 14.5px;
-  color: var(--ink-mute);
-  max-width: 50ch;
-  margin: 0 0 12px;
-  line-height: 1.62;
-}
-.about-badges { display: flex; gap: 6px; flex-wrap: wrap; }
 
-@media (max-width: 560px) {
-  .about-profile { gap: 16px; }
-  .about-avatar { width: 60px; height: 60px; }
-}
+/* 数字用首页的 .hero-meta，这里只调间距 */
+.about-meta { margin-bottom: 10px; }
 
-/* ── 数据条：一行三项，取代旧版四张卡 ── */
-.about-facts {
-  display: flex;
-  align-items: stretch;
-  flex-wrap: wrap;
-  border: 1px solid var(--rule);
-  border-radius: var(--r-md);
-  background: var(--bg-elev);
-  overflow: hidden;
-  margin-bottom: 34px;
-}
-.about-fact {
-  display: flex;
-  align-items: baseline;
-  gap: 7px;
-  padding: 11px 16px;
-  flex: 1 1 auto;
-  min-width: 130px;
-}
-.about-fact + .about-fact { border-left: 1px solid var(--rule-soft); }
-.about-fact-value {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  font-variant-numeric: tabular-nums;
-  color: var(--ink);
-}
-.about-fact-unit { font-size: 0.62em; color: var(--ink-mute); margin-left: 1px; }
-.about-fact-label {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-@media (max-width: 520px) {
-  .about-fact { flex: 1 1 100%; min-width: 0; }
-  .about-fact + .about-fact { border-left: 0; border-top: 1px solid var(--rule-soft); }
-}
+/* 区块标题用全站共用的 .rule-head（定义在「分区标题」那一节），
+   这里只调它在关于页里的上下间距 */
+.about-sec-label { margin: 38px 0 16px; }
 
-/* ── 区块标签：小字 + 一条延伸到右侧的细线 ── */
-.about-sec-label {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin: 26px 0 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.about-sec-label::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--rule-soft);
-}
-
-/* ── 时间轴 ── */
+/* ── 时间轴：和归档条目、首页文章行同一个骨架（左列定宽 + 右列正文 + 细线）──
+   之前是竖线加圆点的那种时间轴，全站只有这一处长那样 */
 .about-timeline {
-  position: relative;
-  padding-left: 26px;
   margin: 0;
+  padding: 0;
   list-style: none;
+  border-top: 1px solid var(--rule-soft);
 }
-.about-timeline::before {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 6px;
-  bottom: 10px;
-  width: 1px;
-  background: var(--rule);
-}
-.about-era { position: relative; padding-bottom: 24px; }
-.about-era:last-child { padding-bottom: 0; }
-/* 圆点悬停变橙——与文章行左侧那根橙条是同一个视觉母题 */
-.about-era::before {
-  content: "";
-  position: absolute;
-  left: -25px;
-  top: 5px;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: var(--bg-elev);
-  border: 2px solid var(--rule);
-  transition: border-color .2s, background .2s;
-}
-.about-era:hover::before { border-color: var(--accent); background: var(--accent); }
-.about-era-head {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 6px;
+.about-era {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: 32px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--rule-soft);
 }
 .about-era-when {
   font-family: "JetBrains Mono", monospace;
@@ -1968,63 +1887,56 @@ html.dark #theme-xiyu {
   color: var(--ink-faint);
   letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
+  padding-top: 3px;
 }
 .about-era-title {
-  font-size: 14.5px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  margin: 0;
+  font-family: "Noto Serif SC", serif;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
   color: var(--ink);
-  transition: color .2s;
 }
-.about-era:hover .about-era-title { color: var(--accent-ink); }
 .about-era-text {
   margin: 0;
   font-size: 13.5px;
   color: var(--ink-mute);
   line-height: 1.7;
-}
-
-.about-footer-link {
-  margin-left: auto;
-  font-size: 12px;
-  color: var(--ink-mute);
-  text-decoration: none;
-  transition: color .15s;
-}
-.about-footer-link:hover { color: var(--accent-ink); }
-
-/* ── 三个框架 ── */
-.about-methods {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-@media (max-width: 760px) { .about-methods { grid-template-columns: 1fr; } }
-.about-method-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: var(--r-sm);
-  background: var(--tag-bg);
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 11px;
-}
-/* 两个类名（0,2,0）稳压 CardTitle 自带的 .m-0（0,1,0），不依赖产物里的先后顺序 */
-.about-methods .about-method-name { margin-bottom: 6px; }
-.about-methods-note {
-  margin: 14px 2px 0;
-  font-size: 13px;
-  color: var(--ink-mute);
   max-width: 62ch;
 }
+.about-era-text + .about-era-text { margin-top: 10px; }
+/* 「它们不保证结论对」那句是对上一段的注解，压得比正文再轻一档 */
+.about-era-note { color: var(--ink-faint); font-size: 13px; }
 
-/* ── 折叠区：原生 <details>，长得像 shadcn Accordion ── */
-/* summary 行自己带 15px 上下内距，所以这里不套 CardContent（它的 py 会叠成两倍），
-   只补齐和其它卡片一致的左右内距 */
-.about-disclosure-list { padding: 5px 22px; }
+/* 时间轴最后一行自己带下边框，这里不用再画一条 */
+.about-timeline-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.about-timeline-topics {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+}
+/* 和首页 Now 卡页脚的「查看近况 →」同款 */
+.about-footer-link {
+  flex: 0 0 auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--accent-ink);
+  text-decoration: none;
+  transition: color .15s ease, transform .15s ease;
+}
+.about-footer-link:hover { color: var(--accent); transform: translateX(2px); }
+
+/* ── 折叠区：原生 <details>，细线分隔，不再套卡片 ── */
+.about-disclosure-list { border-top: 1px solid var(--rule-soft); }
 .about-disclosure { border-bottom: 1px solid var(--rule-soft); }
 .about-disclosure:last-child { border-bottom: 0; }
 .about-disclosure-summary {
@@ -2068,8 +1980,33 @@ html.dark #theme-xiyu {
 .about-disclosure-body p { margin: 0 0 10px; }
 .about-disclosure-body p:last-child { margin: 0; }
 
-/* ── 联系入口 ── */
-.about-links { display: flex; gap: 9px; flex-wrap: wrap; }
+/* ── 收尾：一条细线 + 一句话 + 一行链接。
+   刻意不给它 .rule-head——三条一模一样的横条会把页面切成三段等重的块，
+   但时间轴是主体、这里只有三个链接 ── */
+.about-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 44px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+}
+.about-foot-text {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--ink-mute);
+  line-height: 1.7;
+  max-width: 52ch;
+}
+.about-links {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  font-size: 13.5px;
+  flex: 0 0 auto;
+}
 
 
 /* ============================================================

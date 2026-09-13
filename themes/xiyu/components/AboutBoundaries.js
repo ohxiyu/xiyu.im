@@ -1,5 +1,3 @@
-import { Card } from '@/components/ui/card'
-
 /**
  * 「这个博客是什么 / 边界与免责」折叠区。
  *
@@ -11,8 +9,8 @@ import { Card } from '@/components/ui/card'
  * 3. 内容始终在 DOM 里，搜索引擎和 AI 摘要能读到折叠起来的免责声明；
  *    Radix 默认会把未展开的面板从 DOM 移除。
  *
- * 视觉上按 shadcn Accordion 的样子做（summary 行 + 右侧 chevron，展开时旋转），
- * 所以看不出差别，但不用为此加一个依赖。
+ * 外面原来套了一张 Card，现在去掉了：折叠行用细线分隔，和归档页的条目、
+ * 首页的文章行是同一种语言。
  *
  * sections: [{ heading, paragraphs: string[] }]
  */
@@ -21,40 +19,39 @@ const AboutBoundaries = ({ sections = [] }) => {
 
   return (
     <section aria-labelledby='about-boundaries-title'>
-      <div className='about-sec-label' id='about-boundaries-title'>
-        这个博客是什么
+      <h2 className='rule-head about-sec-label' id='about-boundaries-title'>
+        <span>这个博客是什么</span>
+              <span className='rule-head-rule' aria-hidden='true' />
+      </h2>
+      <div className='about-disclosure-list'>
+        {sections.map((section, index) => (
+          <details
+            className='about-disclosure'
+            key={section.heading}
+            open={index === 0}>
+            <summary className='about-disclosure-summary'>
+              {section.heading}
+              <svg
+                className='about-disclosure-chevron'
+                width='15'
+                height='15'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                strokeWidth='2'
+                strokeLinecap='round'
+                aria-hidden='true'>
+                <path d='m6 9 6 6 6-6' />
+              </svg>
+            </summary>
+            <div className='about-disclosure-body'>
+              {section.paragraphs.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+            </div>
+          </details>
+        ))}
       </div>
-      <Card>
-        <div className='about-disclosure-list'>
-          {sections.map((section, index) => (
-            <details
-              className='about-disclosure'
-              key={section.heading}
-              open={index === 0}>
-              <summary className='about-disclosure-summary'>
-                {section.heading}
-                <svg
-                  className='about-disclosure-chevron'
-                  width='15'
-                  height='15'
-                  viewBox='0 0 24 24'
-                  fill='none'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  aria-hidden='true'>
-                  <path d='m6 9 6 6 6-6' />
-                </svg>
-              </summary>
-              <div className='about-disclosure-body'>
-                {section.paragraphs.map((paragraph, i) => (
-                  <p key={i}>{paragraph}</p>
-                ))}
-              </div>
-            </details>
-          ))}
-        </div>
-      </Card>
     </section>
   )
 }
