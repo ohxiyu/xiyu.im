@@ -559,6 +559,42 @@ html.dark .hero-card {
   transform: translateX(2px);
 }
 
+/* ——— 分区标题：橙短线 + 标签 + 一条延伸到右侧的细线 ———
+   首页的年份分组、归档的年份、关于页的每个区块共用这一个。
+   以前首页是写在 JSX 里的 inline style、关于页是另一套 CSS，
+   长得像但各改各的，很容易飘。 */
+.rule-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0 20px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.rule-head::before {
+  content: "";
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--accent);
+}
+.rule-head-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+.rule-head-count {
+  flex: none;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ——— Section header ——— */
 .section-head {
   display: flex;
@@ -1095,31 +1131,8 @@ html.dark .hero-card {
   /* 锚点跳过来时不要贴着视口顶边 */
   scroll-margin-top: 24px;
 }
-.archive-year-head {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin: 44px 0 4px;
-  font-weight: 400;
-}
-.archive-year-num {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--ink-mute);
-  font-variant-numeric: tabular-nums;
-}
-.archive-year-rule {
-  flex: 1;
-  height: 1px;
-  background: var(--rule);
-}
-.archive-year-count {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.08em;
-  color: var(--ink-faint);
-}
+/* 年份标题用共用的 .rule-head，这里只调间距 */
+.archive-year-head { margin: 44px 0 4px; }
 .archive-year-list {
   list-style: none;
   margin: 0;
@@ -1821,13 +1834,15 @@ html.dark #theme-xiyu {
   flex-direction: column;
 }
 
-/* ── 头部：头像紧跟名字，整组左对齐 ── */
-.about-profile {
+/* ── 头部：骨架同首页 Hero（eyebrow → 大字 → 一句话 →「在做」那行） ── */
+.about-profile { padding: 6px 0 26px; }
+.about-eyebrow { margin-bottom: 18px; }
+.about-profile-row {
   display: flex;
   align-items: flex-start;
   gap: 20px;
-  padding: 6px 0 22px;
 }
+.about-status { margin: 16px 0 0; }
 .about-avatar {
   width: 76px;
   height: 76px;
@@ -1856,72 +1871,17 @@ html.dark #theme-xiyu {
   margin: 0 0 12px;
   line-height: 1.62;
 }
-.about-badges { display: flex; gap: 6px; flex-wrap: wrap; }
-
 @media (max-width: 560px) {
-  .about-profile { gap: 16px; }
+  .about-profile-row { gap: 16px; }
   .about-avatar { width: 60px; height: 60px; }
 }
 
-/* ── 数据条：一行三项，取代旧版四张卡 ── */
-.about-facts {
-  display: flex;
-  align-items: stretch;
-  flex-wrap: wrap;
-  border: 1px solid var(--rule);
-  border-radius: var(--r-md);
-  background: var(--bg-elev);
-  overflow: hidden;
-  margin-bottom: 34px;
-}
-.about-fact {
-  display: flex;
-  align-items: baseline;
-  gap: 7px;
-  padding: 11px 16px;
-  flex: 1 1 auto;
-  min-width: 130px;
-}
-.about-fact + .about-fact { border-left: 1px solid var(--rule-soft); }
-.about-fact-value {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  font-variant-numeric: tabular-nums;
-  color: var(--ink);
-}
-.about-fact-unit { font-size: 0.62em; color: var(--ink-mute); margin-left: 1px; }
-.about-fact-label {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-@media (max-width: 520px) {
-  .about-fact { flex: 1 1 100%; min-width: 0; }
-  .about-fact + .about-fact { border-left: 0; border-top: 1px solid var(--rule-soft); }
-}
+/* 数字用首页的 .hero-meta，这里只调间距 */
+.about-meta { margin-bottom: 10px; }
 
-/* ── 区块标签：小字 + 一条延伸到右侧的细线 ── */
-.about-sec-label {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin: 26px 0 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.about-sec-label::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--rule-soft);
-}
+/* 区块标题用全站共用的 .rule-head（定义在「分区标题」那一节），
+   这里只调它在关于页里的上下间距 */
+.about-sec-label { margin: 38px 0 16px; }
 
 /* ── 时间轴 ── */
 .about-timeline {
@@ -1983,48 +1943,42 @@ html.dark #theme-xiyu {
   font-size: 13.5px;
   color: var(--ink-mute);
   line-height: 1.7;
-}
-
-.about-footer-link {
-  margin-left: auto;
-  font-size: 12px;
-  color: var(--ink-mute);
-  text-decoration: none;
-  transition: color .15s;
-}
-.about-footer-link:hover { color: var(--accent-ink); }
-
-/* ── 三个框架 ── */
-.about-methods {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-@media (max-width: 760px) { .about-methods { grid-template-columns: 1fr; } }
-.about-method-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: var(--r-sm);
-  background: var(--tag-bg);
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 11px;
-}
-/* 两个类名（0,2,0）稳压 CardTitle 自带的 .m-0（0,1,0），不依赖产物里的先后顺序 */
-.about-methods .about-method-name { margin-bottom: 6px; }
-.about-methods-note {
-  margin: 14px 2px 0;
-  font-size: 13px;
-  color: var(--ink-mute);
   max-width: 62ch;
 }
+.about-era-text + .about-era-text { margin-top: 10px; }
+/* 「它们不保证结论对」那句是对上一段的注解，压得比正文再轻一档 */
+.about-era-note { color: var(--ink-faint); font-size: 13px; }
 
-/* ── 折叠区：原生 <details>，长得像 shadcn Accordion ── */
-/* summary 行自己带 15px 上下内距，所以这里不套 CardContent（它的 py 会叠成两倍），
-   只补齐和其它卡片一致的左右内距 */
-.about-disclosure-list { padding: 5px 22px; }
+.about-timeline-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule-soft);
+}
+.about-timeline-topics {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+}
+/* 和首页 Now 卡页脚的「查看近况 →」同款 */
+.about-footer-link {
+  flex: 0 0 auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--accent-ink);
+  text-decoration: none;
+  transition: color .15s ease, transform .15s ease;
+}
+.about-footer-link:hover { color: var(--accent); transform: translateX(2px); }
+
+/* ── 折叠区：原生 <details>，细线分隔，不再套卡片 ── */
+.about-disclosure-list { border-top: 1px solid var(--rule-soft); }
 .about-disclosure { border-bottom: 1px solid var(--rule-soft); }
 .about-disclosure:last-child { border-bottom: 0; }
 .about-disclosure-summary {
@@ -2068,8 +2022,21 @@ html.dark #theme-xiyu {
 .about-disclosure-body p { margin: 0 0 10px; }
 .about-disclosure-body p:last-child { margin: 0; }
 
-/* ── 联系入口 ── */
-.about-links { display: flex; gap: 9px; flex-wrap: wrap; }
+/* ── 联系入口：一句话 + 一行文字链 ── */
+.about-elsewhere-text {
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  color: var(--ink-mute);
+  line-height: 1.7;
+  max-width: 62ch;
+}
+.about-links {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  font-size: 13.5px;
+  padding-bottom: 8px;
+}
 
 
 /* ============================================================

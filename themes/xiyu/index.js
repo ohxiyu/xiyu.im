@@ -23,7 +23,6 @@ import ArchiveYear from './components/ArchiveYear'
 import AboutHero from './components/AboutHero'
 import AboutBoundaries from './components/AboutBoundaries'
 import AboutFacts from './components/AboutFacts'
-import AboutMethods from './components/AboutMethods'
 import AboutTimeline from './components/AboutTimeline'
 import Elsewhere from './components/Elsewhere'
 import { Badge } from '@/components/ui/badge'
@@ -137,9 +136,9 @@ const LayoutIndex = props => {
           {grouped.map(group => (
             <div key={group.year || 'no-year'}>
               {group.year && (
-                <h3 className='eyebrow' style={{ margin: '32px 0 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                <h3 className='rule-head'>
                   <span>{group.year}</span>
-                  <span style={{ flex: 1, height: 1, background: 'var(--rule)' }}></span>
+                  <span className='rule-head-rule' aria-hidden='true' />
                 </h3>
               )}
               {group.posts.map(p => {
@@ -626,9 +625,6 @@ const renderAboutPage = props => {
       <AboutHero />
       <AboutFacts postCount={postCount} tagCount={tagOptions?.length} />
       <AboutTimeline paragraphs={paragraphs} />
-      <AboutMethods
-        note={siteConfig('XIYU_ABOUT_METHODS_NOTE', '', CONFIG)}
-      />
       <AboutBoundaries sections={agenticPages.about.sections} />
       <Elsewhere />
     </div>

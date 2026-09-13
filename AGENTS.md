@@ -56,7 +56,7 @@ public/css/xiyu.css         站点自定义样式
 ```bash
 yarn dev            # 本地开发
 yarn build          # 生产构建（BUILD_MODE=true）
-yarn test           # jest，54 个 suite / 295 个用例
+yarn test           # jest（不写具体数量，写了就会过期）
 yarn lint           # next lint
 yarn type-check     # tsc --noEmit
 yarn bundle-report  # ANALYZE=true 构建，看产物构成
@@ -168,7 +168,7 @@ Dialog / DropdownMenu 的内容挂在 `document.body` 下，而站点的颜色�
 
 | | 依赖 | 给谁用 |
 |---|---|---|
-| `lib/cx.js` 的 `cx` | 只有 `clsx` | 会进首屏的（Card / Badge / Button） |
+| `lib/cx.js` 的 `cx` | 只有 `clsx` | 会进首屏的（Card / Badge） |
 | `lib/cn.js` 的 `cn` | `clsx` + `tailwind-merge` | 只在懒加载的（CommandDialog / MobileNavDrawer） |
 
 **它们必须待在两个文件里。** 放同一个模块时，只要首屏组件 import 了其中任何一个导出，
@@ -179,8 +179,8 @@ webpack 就会把整个模块连同 `tailwind-merge` 一起打进 `_app` chunk�
 
 代价：用 `cx` 的组件，调用方**不能**靠传 `className` 去覆盖同属性的基础工具类
 （给 `py-[18px]` 的组件传 `py-1.5` 不保证赢，胜负取决于产物顺序）。
-需要不同尺寸时加语义类——用两个类名（`.about-methods .about-method-name`，0-2-0）
-稳压 Tailwind 的单类（0-1-0）——或者给组件开一个 variant。
+需要不同尺寸时加语义类——用两个类名（`.a .b`，0-2-0）稳压 Tailwind 的单类（0-1-0）——
+或者给组件开一个 variant。
 
 ### 11. 不要用 `extend.fontFamily` 覆盖 `sans` / `serif`
 
@@ -188,7 +188,25 @@ webpack 就会把整个模块连同 `tailwind-merge` 一起打进 `_app` chunk�
 在 `extend` 里写同名 key 会把它覆盖掉，全站字体都变。
 shadcn 组件要用的字体已另起名为 `font-xiyu-serif` / `font-xiyu-mono`。
 
-### 12. 组件里不能直接读 `Date`，日期要从 `getStaticProps` 传进来
+### 12. 站点只有一套视觉语言，加新区块前先去找现成的类
+
+这个博客的语言是**细线、留白、大衬线字 + mono 小标签**，全站只有一张卡
+（首页右上角的 Now）。有过三次返工：关于页、归档页、文章左轨都曾被改成
+shadcn 的卡片风，然后又一个个改回来。加区块之前先看有没有现成的：
+
+| 想要的东西 | 用这个 | 别新造 |
+|---|---|---|
+| 区块标题（橙短线 + 标签 + 延伸到右的细线） | `.rule-head` + `.rule-head-rule` / `.rule-head-count` | 首页年份、归档年份、关于页区块**都是它** |
+| 一组数字 | `.hero-meta` + `.hero-meta-num` / `.hero-meta-label` | 首页、归档、关于页共用 |
+| 「在想 / 在做」那一行 | `.hero-status` + `.hero-status-label` / `.hero-status-topics` | |
+| 页面顶部的小字 | `.eyebrow` | |
+| 行内链接 | `.inline-link`（常态带下划线，hover 变色） | 别用按钮 |
+| 左轨里的段落起头 | `.toc-label` / `.side-label`（同一条规则） | |
+
+**别把共用样式写成 inline style。** `.rule-head` 就是因为首页当初写成了 JSX 里的
+inline style、关于页另写一套 CSS，两边长得像但各改各的，后来才合并的。
+
+### 13. 组件里不能直接读 `Date`，日期要从 `getStaticProps` 传进来
 
 首页大标题「旧文重读」每天换一篇。轮换的种子是 `pages/index.js` 里算好、
 当作 `props.renderedOn` 传下来的 UTC 日期字符串（`Hero` 再拿它做 FNV-1a 取模）。
@@ -198,7 +216,7 @@ shadcn 组件要用的字体已另起名为 `font-xiyu-serif` / `font-xiyu-mono`
 同理不能用 `Math.random()`。`themes/xiyu/lib/format.js` 里所有日期函数都走 UTC，
 也是这个原因（`formatYear` / `parseUTC`）。
 
-### 13. 沙箱里跑不出真实页面，别拿本地渲染当验证
+### 14. 沙箱里跑不出真实页面，别拿本地渲染当验证
 
 构建时到 `app.notion.com` 的请求会 403（每次 9 条错误，`main` 上也一样，
 不是谁改坏的），于是**文章数据是空的**——首页 Hero、归档列表在本地都渲染不出内容。
@@ -225,7 +243,7 @@ shadcn 组件要用的字体已另起名为 `font-xiyu-serif` / `font-xiyu-mono`
 4. Vercel 的 PR preview —— 视觉/运行时问题只有这里能发现
 
 **改主题布局、CSS、目录提取逻辑时，测试全绿不代表没问题**——这三处的问题通常只在渲染后可见，
-一定要看 preview（原因见第 13 条）。
+一定要看 preview（原因见第 14 条）。
 
 ---
 
