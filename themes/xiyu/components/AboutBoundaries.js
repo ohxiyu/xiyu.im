@@ -18,10 +18,10 @@ const AboutBoundaries = ({ sections = [] }) => {
   if (!sections.length) return null
 
   return (
-    <section aria-labelledby='about-boundaries-title'>
+    <section aria-labelledby='about-boundaries-title' id='about-boundaries'>
       <h2 className='rule-head about-sec-label' id='about-boundaries-title'>
         <span>这个博客是什么</span>
-              <span className='rule-head-rule' aria-hidden='true' />
+        <span className='rule-head-rule' aria-hidden='true' />
       </h2>
       <div className='about-disclosure-list'>
         {sections.map((section, index) => (
