@@ -21,10 +21,9 @@ import ArticleSide from './components/ArticleSide'
 import PrevNext from './components/PrevNext'
 import ArchiveYear from './components/ArchiveYear'
 import AboutHero from './components/AboutHero'
+import AboutRail from './components/AboutRail'
 import AboutBoundaries from './components/AboutBoundaries'
-import AboutFacts from './components/AboutFacts'
 import AboutTimeline from './components/AboutTimeline'
-import Elsewhere from './components/Elsewhere'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 
@@ -620,13 +619,27 @@ const renderAboutPage = props => {
   // 抽不到时各时期用 config 里的 fallback，见 XIYU_ABOUT_TIMELINE。
   const paragraphs = extractAboutParagraphs(post)
 
+  // 关于页整页套用文章详情的骨架：左边一根轨（目录 + 站点数字 + 联系方式），
+  // 右边正文。它的内容本来就来自 Notion 的一个页面，不该是站里的第三种版式。
+  //
+  // ⚠️ 和 LayoutSlug 一样，grid 的直接子元素必须恒为 .article-rail + <article>
+  //（AGENTS.md 第 1 条）。别把 <TOC> 从 rail 里提出来。
   return (
-    <div className='about-page'>
-      <AboutHero />
-      <AboutFacts postCount={postCount} tagCount={tagOptions?.length} />
-      <AboutTimeline paragraphs={paragraphs} />
-      <AboutBoundaries sections={agenticPages.about.sections} />
-      <Elsewhere />
+    <div className='article-layout about-layout'>
+      <div className='article-rail'>
+        <AboutRail
+          eras={siteConfig('XIYU_ABOUT_TIMELINE', [], CONFIG) || []}
+          postCount={postCount}
+          tagCount={tagOptions?.length}
+        />
+      </div>
+      <article>
+        <AboutHero />
+        <div className='about-prose'>
+          <AboutTimeline paragraphs={paragraphs} />
+          <AboutBoundaries sections={agenticPages.about.sections} />
+        </div>
+      </article>
     </div>
   )
 }
