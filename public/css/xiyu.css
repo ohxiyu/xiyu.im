@@ -1867,13 +1867,13 @@ html.dark #theme-xiyu {
 }
 .about-era-text {
   margin: 0;
-  font-size: 13.5px;
+  font-size: 15px;
   color: var(--ink-mute);
-  line-height: 1.7;
+  line-height: 1.85;
 }
 .about-era-text + .about-era-text { margin-top: 10px; }
 /* 「它们不保证结论对」那句是对上一段的注解，压得比正文再轻一档 */
-.about-era-note { color: var(--ink-faint); font-size: 13px; }
+.about-era-note { color: var(--ink-mute); font-size: 13px; }
 
 /* 原生折叠区，保留键盘操作和可见焦点。 */
 .about-disclosure + .about-disclosure { margin-top: 4px; }
@@ -1910,9 +1910,9 @@ html.dark #theme-xiyu {
 }
 .about-disclosure-body {
   padding: 0 0 16px;
-  font-size: 13.5px;
+  font-size: 15px;
   color: var(--ink-mute);
-  line-height: 1.75;
+  line-height: 1.85;
   max-width: 66ch;
 }
 .about-disclosure-body p { margin: 0 0 10px; }
@@ -1920,8 +1920,6 @@ html.dark #theme-xiyu {
 
 .about-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
 .about-site-meta { margin: 24px 0 0; font-size: 12px; color: var(--ink-mute); }
-.about-era-text, .about-disclosure-body { font-size: 15px; line-height: 1.85; }
-.about-era-note { font-size: 13px; color: var(--ink-mute); }
 @media (max-width: 768px) {
   .about-hero { padding-top: 4px; }
   .about-avatar { width: 56px; height: 56px; }

@@ -8,4 +8,8 @@
 - acceptance: contact links and Notion paragraphs preserved; mobile and desktop single column; article layout unchanged; checks pass; Vercel preview and production inspected.
 - limits: Only about UI; no Notion content edits or homepage redesign.
 - blocked_format: cause / evidence / next action
-- status: implementation complete; validation in progress
+- status: implementation complete; local validation passed; preview review and release pending
+- PR: https://github.com/ohxiyu/xiyu.im/pull/73
+- local validation: 45 suites / 284 tests passed; lint passed with existing warnings; type-check passed.
+- release: User authorized merge/deploy. Verify latest CI and Vercel Preview before merge, then production /about. Final release evidence is recorded on PR #73.
+- issue: Repository issues are disabled; this task and PR track delivery.
