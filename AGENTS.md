@@ -90,15 +90,11 @@ CI（`.github/workflows/ci.yml`）跑四件事：`Lint & type-check`、`Unit tes
 顺带：rail 在 DOM 里排在 `<article>` 前面，所以 ≤1024px 收成单栏时用的是
 `flex-direction: column` + `order`，不是 `display: block`——block 流没法把它挪到正文下方。
 
-**`/about` 也走这套骨架**（`.article-layout.about-layout`），左轨里是
-目录 + 站点数字 + 联系方式。两个差别：
-
-- 关于页的目录是**合成**的（`AboutRail` 用 `eraAnchor(i)` 生成 `{id,text,indentLevel}`
-  喂给同一个 `<TOC>`），正文那边的 `id` 必须用同一个 `eraAnchor()` 生成——
-  两边对不上，滚动高亮就是死的，页面看不出问题。测试盯着这条。
-- ≤768px 时文章页把整根 rail `display:none` 了；关于页**不能**跟着藏，
-  站点数字和联系方式只存在于轨里。所以 `.about-layout` 在那个断点单独
-  保持 flex + order。
+**`/about` 使用独立的 `.about-page` 单栏**，最大宽度 760px、居中，
+不使用 `.article-layout` / `.article-rail`，也不显示目录。
+经历按「年份 → 标题 → 正文」纵向排列，联系方式与站点数字在正文之后。
+沿用首页字体、颜色和状态行，以留白分段，不添加横线、竖线或卡片边框。
+文章页的两栏防线仍需保留。
 
 ### 2. Notion 的折叠标题既是标题、又有子内容
 

@@ -1,27 +1,11 @@
-/**
- * 「这个博客是什么 / 边界与免责」折叠区。
- *
- * 这里刻意用原生 <details>/<summary> 而不是 Radix Accordion：
- *
- * 1. 零 JS。Radix Accordion 约 20 kB，而这里只需要展开收起。
- * 2. 可访问性原生具备——展开状态、键盘操作、屏幕阅读器语义都由浏览器提供，
- *    不需要手写 aria-expanded / aria-controls，也不会因为实现疏漏而失效。
- * 3. 内容始终在 DOM 里，搜索引擎和 AI 摘要能读到折叠起来的免责声明；
- *    Radix 默认会把未展开的面板从 DOM 移除。
- *
- * 外面原来套了一张 Card，现在去掉了：折叠行用细线分隔，和归档页的条目、
- * 首页的文章行是同一种语言。
- *
- * sections: [{ heading, paragraphs: string[] }]
- */
+// 原生折叠区保留全部内容，通过留白分组，不增加分隔线或客户端依赖。
 const AboutBoundaries = ({ sections = [] }) => {
   if (!sections.length) return null
 
   return (
     <section aria-labelledby='about-boundaries-title' id='about-boundaries'>
-      <h2 className='rule-head about-sec-label' id='about-boundaries-title'>
+      <h2 className='section-title about-sec-label' id='about-boundaries-title'>
         <span>这个博客是什么</span>
-        <span className='rule-head-rule' aria-hidden='true' />
       </h2>
       <div className='about-disclosure-list'>
         {sections.map((section, index) => (

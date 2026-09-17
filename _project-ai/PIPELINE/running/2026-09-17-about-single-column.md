@@ -1,0 +1,11 @@
+# About page single column
+- id: 2026-09-17-about-single-column
+- type: UI
+- goal: Center the about page in one column, matching home typography and colors without extra dividing lines.
+- priority: user requested
+- inputs: AGENTS.md; current about components; user authorization to merge and deploy.
+- deliverables: about components, scoped CSS, regression updates, PR and deployment evidence.
+- acceptance: contact links and Notion paragraphs preserved; mobile and desktop single column; article layout unchanged; checks pass; Vercel preview and production inspected.
+- limits: Only about UI; no Notion content edits or homepage redesign.
+- blocked_format: cause / evidence / next action
+- status: implementation complete; validation in progress
