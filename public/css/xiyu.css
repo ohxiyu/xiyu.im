@@ -1673,42 +1673,6 @@ html.dark #theme-xiyu {
   .pn-title { font-size: 14px; }
   .pn-right { text-align: left; }
 
-  /* —— 关于页 —— */
-  /* 上面那条把 .article-layout 变回 block、把 .article-rail 整根藏掉。
-     文章页可以（阅读时长和分享是可选的），关于页不行——站点数字和联系方式
-     只存在于轨里，藏了就彻底没了。所以这一页继续用 flex + order 把轨留在
-     正文下方，只保持目录隐藏（目录在 ≤1024 已经藏了）。 */
-  .about-layout {
-    display: flex;
-    flex-direction: column;
-  }
-  .about-layout > article { order: 1; }
-  .about-layout .article-rail {
-    display: block;
-    order: 2;
-    margin: 36px auto 0;
-    max-width: 680px;
-    padding-top: 22px;
-    border-top: 1px solid var(--rule);
-  }
-  .about-layout .article-side {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    align-items: start;
-  }
-  .about-hero { padding: 4px 0 22px; max-width: 100%; }
-  .about-idrow { gap: 14px; margin-bottom: 20px; }
-  .about-avatar { width: 56px; height: 56px; }
-  .about-prose { max-width: 100%; }
-  /* 年份那一列在手机上放不下，退回上下堆叠 */
-  .about-era {
-    grid-template-columns: 1fr;
-    gap: 6px;
-    padding: 20px 0;
-  }
-  .about-era-when { padding-top: 0; }
-  .about-era-title { font-size: 16px; }
   .editorial-section { grid-template-columns: 1fr; gap: 18px; padding: 32px 0; }
   .about-section-index { display: inline-block; margin: 0 10px 0 0; }
   .about-section-label h2 { display: inline; }
@@ -1851,19 +1815,11 @@ html.dark #theme-xiyu {
   .theme-toggle { width: 40px; height: 40px; }
 }
 
-/* ═══════════════ About page ═══════════════
-   按 shadcn 的组合模式重排：卡片承载内容，页面靠 section 标签分段。
-   Card / Badge / Button 三个原语在 components/ui/ 下，用 Tailwind 写；
-   这里只放它们装不下的版式（头部、数据条、时间轴、折叠区）。
-   ═══════════════════════════════════════════ */
-
-/* 关于页整页套用 .article-layout（左轨 + 正文），下面都是在那套骨架里的微调 */
-
-/* 文章的 .article-hero 下边距是给正文留的 64px，关于页头部后面紧接着
-   Timeline 那条横线，不需要那么空 */
-.about-hero { padding-bottom: 28px; max-width: 680px; }
-/* 名字和头像并排成一行。头像 64px——它是身份标记，不是版面主体，
-   不该像之前那样做成全站最大的方块 */
+/* 关于页：单栏阅读，复用首页字体与颜色，仅用留白区分段落。 */
+.about-page { width: 100%; max-width: 760px; margin: 0 auto; }
+.about-hero { padding: 12px 0 8px; }
+.about-hero > .eyebrow { display: flex; gap: 16px; margin-bottom: 24px; }
+.about-bio { margin: 0; color: var(--ink-soft); font-size: 18px; line-height: 1.8; }
 .about-idrow {
   display: flex;
   align-items: center;
@@ -1871,48 +1827,35 @@ html.dark #theme-xiyu {
   margin-bottom: 24px;
 }
 .about-idrow-body { min-width: 0; }
-.about-h1 { margin: 0; font-size: clamp(26px, 3.4vw, 38px); }
+.about-h1 { margin: 0; font-size: clamp(26px, 3.4vw, 38px); font-weight: 500; line-height: 1.25; }
 .about-status { margin: 8px 0 0; }
 .about-avatar {
   width: 64px;
   height: 64px;
   flex: none;
   border-radius: var(--r-md);
-  border: 1px solid var(--rule);
   overflow: hidden;
   background: var(--tag-bg);
 }
 .about-avatar-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-/* 正文宽度和文章一致。不复用 .article-body——它的 h2/h3 规则
-  （0,1,1）会盖掉 .rule-head（0,1,0），把区块标题变成大衬线标题 */
-.about-prose { max-width: 680px; }
+.about-prose { width: 100%; }
 
-/* 区块标题用全站共用的 .rule-head（定义在「分区标题」那一节），
-   这里只调它在关于页里的上下间距 */
-.about-sec-label { margin: 34px 0 14px; }
+.about-sec-label { margin: 44px 0 20px; }
 
-/* ── 时间轴：和归档条目、首页文章行同一个骨架（左列定宽 + 右列正文 + 细线）──
-   之前是竖线加圆点的那种时间轴，全站只有这一处长那样 */
 .about-timeline {
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--rule-soft);
 }
-.about-era {
-  display: grid;
-  grid-template-columns: 130px minmax(0, 1fr);
-  gap: 32px;
-  padding: 24px 0;
-  border-bottom: 1px solid var(--rule-soft);
-}
+.about-era { padding: 0; margin: 0 0 30px; }
+.about-era:last-child { margin-bottom: 0; }
 .about-era-when {
   font-family: "JetBrains Mono", monospace;
   font-size: 11px;
   color: var(--ink-faint);
   letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
-  padding-top: 3px;
+  margin-bottom: 8px;
 }
 .about-era-title {
   font-family: "Noto Serif SC", serif;
@@ -1924,19 +1867,16 @@ html.dark #theme-xiyu {
 }
 .about-era-text {
   margin: 0;
-  font-size: 13.5px;
+  font-size: 15px;
   color: var(--ink-mute);
-  line-height: 1.7;
-  max-width: 62ch;
+  line-height: 1.85;
 }
 .about-era-text + .about-era-text { margin-top: 10px; }
 /* 「它们不保证结论对」那句是对上一段的注解，压得比正文再轻一档 */
-.about-era-note { color: var(--ink-faint); font-size: 13px; }
+.about-era-note { color: var(--ink-mute); font-size: 13px; }
 
-/* ── 折叠区：原生 <details>，细线分隔，不再套卡片 ── */
-.about-disclosure-list { border-top: 1px solid var(--rule-soft); }
-.about-disclosure { border-bottom: 1px solid var(--rule-soft); }
-.about-disclosure:last-child { border-bottom: 0; }
+/* 原生折叠区，保留键盘操作和可见焦点。 */
+.about-disclosure + .about-disclosure { margin-top: 4px; }
 .about-disclosure-summary {
   display: flex;
   align-items: center;
@@ -1970,15 +1910,24 @@ html.dark #theme-xiyu {
 }
 .about-disclosure-body {
   padding: 0 0 16px;
-  font-size: 13.5px;
+  font-size: 15px;
   color: var(--ink-mute);
-  line-height: 1.75;
+  line-height: 1.85;
   max-width: 66ch;
 }
 .about-disclosure-body p { margin: 0 0 10px; }
 .about-disclosure-body p:last-child { margin: 0; }
 
-/* 站点数字和联系方式都搬进左轨了，页面本身不再有收尾区块 */
+.about-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+.about-site-meta { margin: 24px 0 0; font-size: 12px; color: var(--ink-mute); }
+@media (max-width: 768px) {
+  .about-hero { padding-top: 4px; }
+  .about-avatar { width: 56px; height: 56px; }
+  .about-idrow { gap: 14px; margin-bottom: 20px; }
+  .about-bio { font-size: 16px; }
+  .about-sec-label { margin-top: 36px; }
+}
+
 
 
 /* ============================================================

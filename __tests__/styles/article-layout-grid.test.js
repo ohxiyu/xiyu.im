@@ -70,6 +70,16 @@ describe('article-layout 网格：TOC 为空时不应导致正文错位', () => 
     expect(outsideRail).not.toMatch(/<TOC\b/)
   })
 
+  test('关于页独立单栏，文章页仍保留两栏骨架', () => {
+    const about = themeSrc.slice(themeSrc.indexOf('const renderAboutPage'), themeSrc.indexOf('const LayoutInfoPage'))
+    expect(about).toContain("className='about-page'")
+    expect(about).not.toContain('article-layout')
+    expect(about).not.toContain('article-rail')
+    expect(about.indexOf('<AboutFooter')).toBeGreaterThan(about.indexOf('<AboutBoundaries'))
+    expect(ruleBodyFor('.about-page')).toMatch(/max-width:\s*760px/)
+    expect(ruleBodyFor('.about-era')).not.toMatch(/grid|border/)
+  })
+
   test('CSS 文件括号配对平衡（本次编辑未破坏文件结构）', () => {
     const open = (clean.match(/{/g) || []).length
     const close = (clean.match(/}/g) || []).length
