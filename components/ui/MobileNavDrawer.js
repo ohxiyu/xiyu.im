@@ -40,14 +40,14 @@ export default function MobileNavDrawer({ links = [], tools = null, open, onOpen
             'duration-[260ms]'
           )}>
           <div className='mb-[18px] flex items-center justify-between'>
-            <Dialog.Title className='font-xiyu-serif text-[17px] font-semibold text-ink'>
+            <Dialog.Title className='text-[17px] font-semibold text-ink'>
               菜单
             </Dialog.Title>
             <Dialog.Close asChild>
               <button
                 type='button'
                 aria-label='关闭菜单'
-                className='rounded-sm p-1 text-ink-mute transition-colors hover:text-accent-ink'>
+                className='flex h-11 w-11 items-center justify-center rounded-sm text-ink-mute transition-colors hover:text-accent-ink'>
                 <svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' aria-hidden='true'>
                   <path d='m6 6 12 12M18 6 6 18' />
                 </svg>
@@ -67,9 +67,9 @@ export default function MobileNavDrawer({ links = [], tools = null, open, onOpen
                 </>
               )
               const className = cn(
-                'flex items-center gap-[11px] rounded-sm border-b border-rule-soft',
+                'flex items-center gap-[11px] rounded-sm',
                 'px-2 py-[11px] text-[14.5px] text-ink-soft no-underline',
-                'transition-all duration-150 hover:pl-[13px] hover:text-accent-ink'
+                'transition-all duration-150 hover:bg-tag-bg hover:text-accent-ink'
               )
               return link.external
                 ? (

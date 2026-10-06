@@ -99,15 +99,15 @@ const Nav = props => {
         <div
           id='xiyu-primary-navigation'
           className='nav-primary'>
-          <SmartLink href='/' className={'nav-link' + (active === 'writing' ? ' active' : '')}>
+          <SmartLink href='/' aria-current={active === 'writing' ? 'page' : undefined} className={'nav-link' + (active === 'writing' ? ' active' : '')}>
             <NavIcon name='writing' />
             <span className='nav-link-label'>写作</span>
           </SmartLink>
-          <SmartLink href='/archive' className={'nav-link' + (active === 'archive' ? ' active' : '')}>
+          <SmartLink href='/archive' aria-current={active === 'archive' ? 'page' : undefined} className={'nav-link' + (active === 'archive' ? ' active' : '')}>
             <NavIcon name='archive' />
             <span className='nav-link-label'>归档</span>
           </SmartLink>
-          <SmartLink href='/about' className={'nav-link' + (active === 'about' ? ' active' : '')}>
+          <SmartLink href='/about' aria-current={active === 'about' ? 'page' : undefined} className={'nav-link' + (active === 'about' ? ' active' : '')}>
             <NavIcon name='about' />
             <span className='nav-link-label'>关于</span>
           </SmartLink>

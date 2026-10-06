@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import ArticleShare from './ArticleShare'
 
 /**
  * 左轨下半：阅读信息与分享。
@@ -10,27 +10,6 @@ import { useCallback, useState } from 'react'
 const ArticleSide = ({ post }) => {
   const wordCount = post?.wordCount
   const readTime = post?.readTime || (wordCount ? Math.max(1, Math.ceil(wordCount / 400)) : null)
-  const [copied, setCopied] = useState(false)
-
-  const copyLink = useCallback(e => {
-    e?.preventDefault?.()
-    if (typeof window === 'undefined') return
-    try {
-      navigator.clipboard?.writeText(window.location.href)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1600)
-    } catch (_) {}
-  }, [])
-
-  // window 只在点击时读，避免 SSR 算出 '#'、hydration 后才变成真链接
-  const openTweet = useCallback(e => {
-    e?.preventDefault?.()
-    if (typeof window === 'undefined') return
-    const url = encodeURIComponent(window.location.href)
-    const text = encodeURIComponent(post?.title || '')
-    window.open(`https://x.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'noopener,noreferrer')
-  }, [post?.title])
-
   return (
     <aside className='article-side'>
       <section className='side-section'>
@@ -49,14 +28,7 @@ const ArticleSide = ({ post }) => {
 
       <section className='side-section'>
         <div className='side-label'>Share</div>
-        <div className='side-actions'>
-          <button type='button' className='side-action' onClick={openTweet}>
-            分享到 X
-          </button>
-          <button type='button' className='side-action' onClick={copyLink}>
-            {copied ? '已复制' : '复制链接'}
-          </button>
-        </div>
+        <ArticleShare post={post} />
       </section>
     </aside>
   )

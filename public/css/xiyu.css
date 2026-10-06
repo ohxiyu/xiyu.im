@@ -3,20 +3,20 @@
 /* xiyu.im — Design System */
 
 :root {
-  /* Light — warm paper */
-  --bg: #faf7f2;
-  --bg-elev: #fffdf9;
-  --ink: #1a1612;
-  --ink-soft: #2d2720;
-  --ink-mute: #6b6358;
-  --ink-faint: #a69e92;
-  --rule: #e8e1d3;
-  --rule-soft: #f0eade;
-  --accent: #e67e22;      /* bitcoin-ish orange, slightly desaturated */
-  --accent-ink: #b85e10;
-  --tag-bg: #f2ede2;
-  --tag-ink: #5a5046;
-  --selection: #f9dcb6;
+  /* Light — neutral surfaces */
+  --bg: #fafafa;
+  --bg-elev: #ffffff;
+  --ink: #202124;
+  --ink-soft: #44464b;
+  --ink-mute: #656870;
+  --ink-faint: #777b83;
+  --rule: #e3e5e8;
+  --rule-soft: #f0f1f3;
+  --accent: #405a99;      /* sparse blue interaction accent */
+  --accent-ink: #344c86;
+  --tag-bg: #f1f2f4;
+  --tag-ink: #565b65;
+  --selection: #dfe6f5;
 
   /* ——— 圆角尺度 ———
      参照苹果官网的克制用法：小控件轻微收角，只有最大的表面才明显圆。
@@ -29,19 +29,19 @@
 }
 
 html.dark {
-  --bg: #14110d;
-  --bg-elev: #1c1813;
-  --ink: #f2ede2;
-  --ink-soft: #d9d2c3;
-  --ink-mute: #8f877a;
-  --ink-faint: #5e574c;
-  --rule: #2a251e;
-  --rule-soft: #201b15;
-  --accent: #f39c3e;
-  --accent-ink: #f5b565;
-  --tag-bg: #221d16;
-  --tag-ink: #a69d8c;
-  --selection: #4a3a1e;
+  --bg: #171819;
+  --bg-elev: #202224;
+  --ink: #ededee;
+  --ink-soft: #d0d1d3;
+  --ink-mute: #abafb5;
+  --ink-faint: #9298a1;
+  --rule: #36393d;
+  --rule-soft: #292c30;
+  --accent: #94aeea;
+  --accent-ink: #b4c8f5;
+  --tag-bg: #282b30;
+  --tag-ink: #bdc3ce;
+  --selection: #344367;
 }
 
 * { box-sizing: border-box; }
@@ -51,7 +51,7 @@ html, body {
   padding: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Noto Sans SC", "PingFang SC", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-feature-settings: "kern", "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -72,9 +72,9 @@ html, body {
 ::selection { background: var(--selection); color: var(--ink); }
 
 /* ——— Type ——— */
-.serif { font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, serif; }
-.sans  { font-family: "Noto Sans SC", "PingFang SC", -apple-system, system-ui, sans-serif; }
-.mono  { font-family: "JetBrains Mono", "Menlo", "Consolas", ui-monospace, monospace; font-feature-settings: "zero", "ss01"; }
+.serif { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; }
+.sans  { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; }
+.mono  { font-family: "SFMono-Regular", "Menlo", "Consolas", ui-monospace, monospace; font-feature-settings: "zero", "ss01"; }
 
 /* ——— Page chrome ——— */
 .page {
@@ -100,7 +100,7 @@ html, body {
   color: var(--ink);
 }
 .brand-mark {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 26px;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -116,7 +116,7 @@ html, body {
 /* 副标是配角：字号压到 10px、颜色退到 faint、字距收紧，
    和 logo 之间也不要 .brand 那 12px 的间距——那会让它像并列的第二个标题 */
 .brand-tag {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 10px;
   color: var(--ink-faint);
   letter-spacing: 0.02em;
@@ -168,7 +168,7 @@ html, body {
 
 /* ——— Labels ——— */
 .eyebrow {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -186,21 +186,21 @@ html, body {
 
 /* ——— Article atoms ——— */
 .post-num {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 12px;
   color: var(--ink-faint);
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
 }
 .post-date {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 11px;
   color: var(--ink-mute);
   letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
 }
 .post-title {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   color: var(--ink);
   font-weight: 500;
   letter-spacing: -0.005em;
@@ -219,13 +219,13 @@ html, body {
   background: var(--tag-bg);
   padding: 2px 8px;
   border-radius: var(--r-xs);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   letter-spacing: 0.02em;
 }
 .tag-dot {
   color: var(--ink-faint);
   font-size: 11px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   letter-spacing: 0.04em;
 }
 
@@ -302,7 +302,7 @@ html.dark .paper-grain { opacity: 0.06; mix-blend-mode: screen; }
   align-items: baseline;
   font-size: 12px;
   color: var(--ink-mute);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   letter-spacing: 0.04em;
   gap: 28px;
 }
@@ -360,13 +360,13 @@ html { scroll-behavior: smooth; }
   margin-bottom: 14px;
 }
 .hero-revisit-when {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 10.5px;
   letter-spacing: 0.08em;
   color: var(--ink-faint);
 }
 .hero-title {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 58px;
   line-height: 1.12;
   letter-spacing: -0.02em;
@@ -379,7 +379,7 @@ html { scroll-behavior: smooth; }
   font-style: italic;
   font-weight: 500;
   color: var(--accent-ink);
-  font-family: "Noto Serif SC", Georgia, serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
 }
 /* 大字本身是链接：去掉默认下划线，hover 时 em 段加深 */
 .hero-title-link {
@@ -418,7 +418,7 @@ html { scroll-behavior: smooth; }
 }
 .hero-status-label {
   flex: 0 0 auto;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -441,12 +441,12 @@ html { scroll-behavior: smooth; }
 .hero-meta {
   display: flex;
   gap: 36px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 12px;
   color: var(--ink-mute);
 }
 .hero-meta-num {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 32px;
   font-weight: 500;
   color: var(--ink);
@@ -487,7 +487,7 @@ html.dark .hero-card {
   gap: 16px;
 }
 .hero-card-label {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -509,7 +509,7 @@ html.dark .hero-card {
 }
 .hero-card-month {
   flex: 0 0 auto;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 10px;
   letter-spacing: 0.08em;
   color: var(--ink-mute);
@@ -519,7 +519,7 @@ html.dark .hero-card {
   50% { opacity: 0.35; }
 }
 .hero-card-quote {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.75;
   color: var(--ink-soft);
@@ -542,13 +542,13 @@ html.dark .hero-card {
   min-width: 0;
   font-size: 11px;
   color: var(--ink-mute);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   letter-spacing: 0.02em;
 }
 .hero-card-link {
   flex: 0 0 auto;
   color: var(--accent-ink);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 11px;
   text-decoration: none;
   letter-spacing: 0.02em;
@@ -568,7 +568,7 @@ html.dark .hero-card {
   align-items: center;
   gap: 12px;
   margin: 32px 0 20px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.14em;
@@ -606,7 +606,7 @@ html.dark .hero-card {
   margin-bottom: 0;
 }
 .section-title {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 22px;
   font-weight: 500;
   color: var(--ink);
@@ -614,7 +614,7 @@ html.dark .hero-card {
   letter-spacing: -0.005em;
 }
 .section-count {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 11px;
   color: var(--ink-mute);
   letter-spacing: 0.08em;
@@ -707,7 +707,7 @@ html.dark .hero-card {
   text-decoration: none;
 }
 .row-flag {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 14px;
   margin-right: 8px;
   opacity: 0.75;
@@ -731,7 +731,7 @@ html.dark .hero-card {
 .tag-plain {
   font-size: 11px;
   color: var(--ink-mute);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   letter-spacing: 0.02em;
 }
 
@@ -741,7 +741,7 @@ html.dark .hero-card {
   justify-content: space-between;
   align-items: center;
   padding: 40px 0 0;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 13px;
 }
 .page-link {
@@ -770,7 +770,7 @@ html.dark .hero-card {
   padding-bottom: 0;
 }
 .article-h1 {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 44px;
   line-height: 1.25;
   font-weight: 500;
@@ -779,7 +779,7 @@ html.dark .hero-card {
   text-wrap: balance;
 }
 .article-lead {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 20px;
   line-height: 1.7;
   color: var(--ink-soft);
@@ -806,7 +806,7 @@ html.dark .hero-card {
   color: var(--ink-soft);
 }
 .article-body h2 {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 26px;
   font-weight: 500;
   color: var(--ink);
@@ -814,7 +814,7 @@ html.dark .hero-card {
   letter-spacing: -0.01em;
 }
 .article-body h3 {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 19px;
   font-weight: 500;
   color: var(--ink);
@@ -822,7 +822,7 @@ html.dark .hero-card {
 }
 .article-body p { margin: 0 0 20px; text-wrap: pretty; }
 .article-body p:first-of-type::first-letter {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 3.2em;
   float: left;
   line-height: 0.95;
@@ -839,7 +839,7 @@ html.dark .hero-card {
   font-style: italic;
 }
 .article-body code {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 0.88em;
   background: var(--tag-bg);
   color: var(--ink);
@@ -852,7 +852,7 @@ html.dark .hero-card {
   padding: 20px 24px;
   margin: 28px 0;
   overflow-x: auto;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 13.5px;
   line-height: 1.7;
   color: var(--ink-soft);
@@ -880,7 +880,7 @@ html.dark .hero-card {
   color: var(--ink-mute);
   margin-top: 10px;
   text-align: center;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
 }
 
 /* Inline callout */
@@ -910,7 +910,7 @@ html.dark .hero-card {
 }
 .article-foot-card { margin-bottom: 0; }
 .article-foot-label {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -954,7 +954,7 @@ html.dark .hero-card {
   background: color-mix(in srgb, var(--accent) 4%, var(--bg-elev));
 }
 .pn-label {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -962,7 +962,7 @@ html.dark .hero-card {
   margin-bottom: 8px;
 }
 .pn-title {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 15.5px;
   line-height: 1.45;
   color: var(--ink);
@@ -1006,7 +1006,7 @@ html.dark .hero-card {
 /* 左轨里每一段的起头：目录、阅读信息、分享共用同一个 */
 .toc-label,
 .side-label {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1049,7 +1049,7 @@ html.dark .hero-card {
 }
 .side-stat dd {
   margin: 0;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 12.5px;
   color: var(--ink);
   font-variant-numeric: tabular-nums;
@@ -1089,7 +1089,7 @@ html.dark .hero-card {
   margin-bottom: 56px;
 }
 .archive-title {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 56px;
   line-height: 1.1;
   font-weight: 500;
@@ -1116,7 +1116,7 @@ html.dark .hero-card {
   border-top: 1px solid var(--rule-soft);
 }
 .archive-jump-link {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 11.5px;
   letter-spacing: 0.06em;
   color: var(--ink-faint);
@@ -1153,7 +1153,7 @@ html.dark .hero-card {
 .archive-item:hover { color: var(--accent-ink); }
 .archive-item:hover .archive-item-title { background-size: 100% 1px; }
 .archive-item-title {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 15.5px;
   line-height: 1.45;
   text-wrap: pretty;
@@ -1171,14 +1171,14 @@ html.dark .hero-card {
 .about-section-index {
   display: block;
   margin-bottom: 12px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 10px;
   letter-spacing: .14em;
   color: var(--accent-ink);
 }
 .about-section-label h2 {
   margin: 0;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 10px;
   line-height: 1.6;
   font-weight: 500;
@@ -1217,7 +1217,7 @@ html.dark .hero-card {
 .info-hero h1 {
   max-width: 15ch;
   margin: 18px 0 20px;
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: clamp(44px, 6vw, 66px);
   line-height: 1.12;
   font-weight: 500;
@@ -1228,7 +1228,7 @@ html.dark .hero-card {
   max-width: 58ch;
   margin: 0;
   color: var(--ink-soft);
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 18px;
   line-height: 1.75;
 }
@@ -1241,7 +1241,7 @@ html.dark .hero-card {
 }
 .info-resource-heading h2 {
   margin: 12px 0 22px;
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 24px;
   font-weight: 500;
 }
@@ -1266,14 +1266,14 @@ html.dark .hero-card {
 }
 .info-resource-link span {
   display: block;
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 17px;
 }
 .info-resource-link small {
   display: block;
   margin-top: 10px;
   color: var(--ink-mute);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 10px;
   letter-spacing: .05em;
 }
@@ -1308,12 +1308,12 @@ html.dark .hero-card {
   color: var(--accent-ink);
 }
 .topic-name {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 18px;
   line-height: 1.3;
 }
 .topic-count {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 11px;
   color: var(--ink-mute);
   margin-top: 12px;
@@ -1326,7 +1326,7 @@ html.dark .hero-card {
 .article-body .notion-h1,
 .article-body .notion-h2,
 .article-body .notion-h3 {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-weight: 500;
   color: var(--ink);
   letter-spacing: -0.01em;
@@ -1350,7 +1350,7 @@ html.dark .hero-card {
 .about-body .notion-h1,
 .about-body .notion-h2,
 .about-body .notion-h3 {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-weight: 500;
   color: var(--ink);
   letter-spacing: -0.01em;
@@ -1383,14 +1383,14 @@ html.dark .hero-card {
 }
 .article-body .notion-inline-code,
 .article-body .notion-code-inline {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 0.88em; background: var(--tag-bg);
   color: var(--ink); padding: 2px 6px; border-radius: var(--r-xs);
 }
 .article-body .notion-code {
   background: var(--bg-elev); border: 1px solid var(--rule);
   padding: 20px 24px; margin: 28px 0;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 13.5px; line-height: 1.7; color: var(--ink-soft);
 }
 .article-body .notion-callout {
@@ -1414,7 +1414,7 @@ html.dark .hero-card {
 .article-body .notion-link:hover { color: var(--accent-ink); }
 .article-body .notion > .notion-text:first-of-type::first-letter,
 .article-body .notion-page-content > .notion-text:first-of-type::first-letter {
-  font-family: "Noto Serif SC", serif; font-size: 3.2em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; font-size: 3.2em;
   float: left; line-height: 0.95; padding: 6px 10px 0 0;
   color: var(--accent-ink); font-weight: 500;
 }
@@ -1443,18 +1443,18 @@ html.dark .hero-card {
 
 /* 把 :root 下的 CSS 变量同时挂到 #theme-xiyu，避免被外层覆盖 */
 #theme-xiyu {
-  --bg: #faf7f2; --bg-elev: #fffdf9;
-  --ink: #1a1612; --ink-soft: #2d2720; --ink-mute: #6b6358; --ink-faint: #a69e92;
-  --rule: #e8e1d3; --rule-soft: #f0eade;
-  --accent: #e67e22; --accent-ink: #b85e10;
-  --tag-bg: #f2ede2; --tag-ink: #5a5046; --selection: #f9dcb6;
+  --bg: #fafafa; --bg-elev: #ffffff;
+  --ink: #202124; --ink-soft: #44464b; --ink-mute: #656870; --ink-faint: #777b83;
+  --rule: #e3e5e8; --rule-soft: #f0f1f3;
+  --accent: #405a99; --accent-ink: #344c86;
+  --tag-bg: #f1f2f4; --tag-ink: #565b65; --selection: #dfe6f5;
 }
 html.dark #theme-xiyu {
-  --bg: #14110d; --bg-elev: #1c1813;
-  --ink: #f2ede2; --ink-soft: #d9d2c3; --ink-mute: #8f877a; --ink-faint: #5e574c;
-  --rule: #2a251e; --rule-soft: #201b15;
-  --accent: #f39c3e; --accent-ink: #f5b565;
-  --tag-bg: #221d16; --tag-ink: #a69d8c; --selection: #4a3a1e;
+  --bg: #171819; --bg-elev: #202224;
+  --ink: #ededee; --ink-soft: #d0d1d3; --ink-mute: #abafb5; --ink-faint: #9298a1;
+  --rule: #36393d; --rule-soft: #292c30;
+  --accent: #94aeea; --accent-ink: #b4c8f5;
+  --tag-bg: #282b30; --tag-ink: #bdc3ce; --selection: #344367;
 }
 
 /* ===== xiyu Nav logo ===== */
@@ -1734,7 +1734,7 @@ html.dark #theme-xiyu {
   gap: 10px;
 }
 .brand-mark {
-  font-family: "Noto Sans SC", "PingFang SC", system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -.025em;
@@ -1850,7 +1850,7 @@ html.dark #theme-xiyu {
 .about-era { padding: 0; margin: 0 0 30px; }
 .about-era:last-child { margin-bottom: 0; }
 .about-era-when {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "SFMono-Regular", monospace;
   font-size: 11px;
   color: var(--ink-faint);
   letter-spacing: 0.04em;
@@ -1858,7 +1858,7 @@ html.dark #theme-xiyu {
   margin-bottom: 8px;
 }
 .about-era-title {
-  font-family: "Noto Serif SC", serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 17px;
   font-weight: 500;
   letter-spacing: -0.01em;
@@ -1943,70 +1943,70 @@ html.dark #theme-xiyu {
    ⚠️ 改颜色时上面的 hex 和这里的 rgb 必须一起改。
    ============================================================ */
 :root {
-  --bg-rgb: 250 247 242;
-  --bg-elev-rgb: 255 253 249;
-  --ink-rgb: 26 22 18;
-  --ink-soft-rgb: 45 39 32;
-  --ink-mute-rgb: 107 99 88;
-  --ink-faint-rgb: 166 158 146;
-  --rule-rgb: 232 225 211;
-  --rule-soft-rgb: 240 234 222;
-  --accent-rgb: 230 126 34;
-  --accent-ink-rgb: 184 94 16;
-  --tag-bg-rgb: 242 237 226;
-  --tag-ink-rgb: 90 80 70;
-  --selection-rgb: 249 220 182;
+  --bg-rgb: 250 250 250;
+  --bg-elev-rgb: 255 255 255;
+  --ink-rgb: 32 33 36;
+  --ink-soft-rgb: 68 70 75;
+  --ink-mute-rgb: 101 104 112;
+  --ink-faint-rgb: 119 123 131;
+  --rule-rgb: 227 229 232;
+  --rule-soft-rgb: 240 241 243;
+  --accent-rgb: 64 90 153;
+  --accent-ink-rgb: 52 76 134;
+  --tag-bg-rgb: 241 242 244;
+  --tag-ink-rgb: 86 91 101;
+  --selection-rgb: 223 230 245;
 }
 html.dark {
-  --bg-rgb: 20 17 13;
-  --bg-elev-rgb: 28 24 19;
-  --ink-rgb: 242 237 226;
-  --ink-soft-rgb: 217 210 195;
-  --ink-mute-rgb: 143 135 122;
-  --ink-faint-rgb: 94 87 76;
-  --rule-rgb: 42 37 30;
-  --rule-soft-rgb: 32 27 21;
-  --accent-rgb: 243 156 62;
-  --accent-ink-rgb: 245 181 101;
-  --tag-bg-rgb: 34 29 22;
-  --tag-ink-rgb: 166 157 140;
-  --selection-rgb: 74 58 30;
+  --bg-rgb: 23 24 25;
+  --bg-elev-rgb: 32 34 36;
+  --ink-rgb: 237 237 238;
+  --ink-soft-rgb: 208 209 211;
+  --ink-mute-rgb: 171 175 181;
+  --ink-faint-rgb: 146 152 161;
+  --rule-rgb: 54 57 61;
+  --rule-soft-rgb: 41 44 48;
+  --accent-rgb: 148 174 234;
+  --accent-ink-rgb: 180 200 245;
+  --tag-bg-rgb: 40 43 48;
+  --tag-ink-rgb: 189 195 206;
+  --selection-rgb: 52 67 103;
 }
 #theme-xiyu {
-  --bg-rgb: 250 247 242;
-  --bg-elev-rgb: 255 253 249;
-  --ink-rgb: 26 22 18;
-  --ink-soft-rgb: 45 39 32;
-  --ink-mute-rgb: 107 99 88;
-  --ink-faint-rgb: 166 158 146;
-  --rule-rgb: 232 225 211;
-  --rule-soft-rgb: 240 234 222;
-  --accent-rgb: 230 126 34;
-  --accent-ink-rgb: 184 94 16;
-  --tag-bg-rgb: 242 237 226;
-  --tag-ink-rgb: 90 80 70;
-  --selection-rgb: 249 220 182;
+  --bg-rgb: 250 250 250;
+  --bg-elev-rgb: 255 255 255;
+  --ink-rgb: 32 33 36;
+  --ink-soft-rgb: 68 70 75;
+  --ink-mute-rgb: 101 104 112;
+  --ink-faint-rgb: 119 123 131;
+  --rule-rgb: 227 229 232;
+  --rule-soft-rgb: 240 241 243;
+  --accent-rgb: 64 90 153;
+  --accent-ink-rgb: 52 76 134;
+  --tag-bg-rgb: 241 242 244;
+  --tag-ink-rgb: 86 91 101;
+  --selection-rgb: 223 230 245;
 }
 html.dark #theme-xiyu {
-  --bg-rgb: 20 17 13;
-  --bg-elev-rgb: 28 24 19;
-  --ink-rgb: 242 237 226;
-  --ink-soft-rgb: 217 210 195;
-  --ink-mute-rgb: 143 135 122;
-  --ink-faint-rgb: 94 87 76;
-  --rule-rgb: 42 37 30;
-  --rule-soft-rgb: 32 27 21;
-  --accent-rgb: 243 156 62;
-  --accent-ink-rgb: 245 181 101;
-  --tag-bg-rgb: 34 29 22;
-  --tag-ink-rgb: 166 157 140;
-  --selection-rgb: 74 58 30;
+  --bg-rgb: 23 24 25;
+  --bg-elev-rgb: 32 34 36;
+  --ink-rgb: 237 237 238;
+  --ink-soft-rgb: 208 209 211;
+  --ink-mute-rgb: 171 175 181;
+  --ink-faint-rgb: 146 152 161;
+  --rule-rgb: 54 57 61;
+  --rule-soft-rgb: 41 44 48;
+  --accent-rgb: 148 174 234;
+  --accent-ink-rgb: 180 200 245;
+  --tag-bg-rgb: 40 43 48;
+  --tag-ink-rgb: 189 195 206;
+  --selection-rgb: 52 67 103;
 }
 
 /* ============================================================
    shadcn 组件的站点皮肤
    —— 结构与可访问性由 Radix / cmdk 负责，长相在这里定。
-   刻意沿用站点既有手法：锐角、等宽标注、悬停只动颜色。
+   使用中性表面和系统字体；portal 颜色来自全局令牌。
    ============================================================ */
 
 /* ⌘K 触发按钮：桌面端是一个带快捷键提示的搜索框，移动端收成图标 */
@@ -2036,7 +2036,7 @@ html.dark #theme-xiyu {
 .xiyu-cmd-trigger-label { line-height: 1; }
 
 .xiyu-kbd {
-  font-family: "JetBrains Mono", Menlo, Consolas, ui-monospace, monospace;
+  font-family: "SFMono-Regular", Menlo, Consolas, ui-monospace, monospace;
   font-size: 10px;
   line-height: 1;
   color: var(--ink-faint);
@@ -2049,7 +2049,7 @@ html.dark #theme-xiyu {
 
 /* cmdk 内部结构 */
 .xiyu-cmd [cmdk-group-heading] {
-  font-family: "JetBrains Mono", Menlo, Consolas, ui-monospace, monospace;
+  font-family: "SFMono-Regular", Menlo, Consolas, ui-monospace, monospace;
   font-size: 10px;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -2070,7 +2070,7 @@ html.dark #theme-xiyu {
 .xiyu-cmd-title {
   flex: 1;
   min-width: 0;
-  font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 14.5px;
   color: var(--ink);
   transition: color .12s;
@@ -2080,7 +2080,7 @@ html.dark #theme-xiyu {
 }
 .xiyu-cmd-date {
   flex: none;
-  font-family: "JetBrains Mono", Menlo, Consolas, ui-monospace, monospace;
+  font-family: "SFMono-Regular", Menlo, Consolas, ui-monospace, monospace;
   font-size: 10.5px;
   color: var(--ink-faint);
   font-variant-numeric: tabular-nums;
@@ -2091,4 +2091,262 @@ html.dark #theme-xiyu {
   .xiyu-cmd-trigger { width: 40px; height: 40px; justify-content: center; padding: 0; }
   .xiyu-cmd-trigger-label,
   .xiyu-cmd-trigger .xiyu-kbd { display: none; }
+}
+
+/* Beautiful UI direction: neutral sans typography, compact rows and quiet surfaces.
+   This section owns the responsive theme layout; Notion media safeguards above stay in place. */
+#theme-xiyu { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; }
+.page { max-width: 1120px; padding: 24px 48px 48px; }
+.site-nav { min-height: 52px; padding: 0; margin-bottom: 48px; border: 0; background: none; box-shadow: none; backdrop-filter: none; }
+.brand { min-height: 44px; gap: 9px; }
+.brand-mark { font-size: 21px; font-weight: 650; }
+.brand-dot { display: none; }
+.brand-tag { font-size: 11px; margin-left: 8px; color: var(--ink-mute); }
+.brand-logo { width: 28px; height: 28px; border-radius: 8px; }
+.nav-link { min-height: 44px; padding: 10px 12px; color: var(--ink-mute); }
+.nav-link.active { background: var(--tag-bg); color: var(--ink); }
+.nav-link:hover { transform: none; }
+.nav-link svg { display: none; }
+.theme-toggle { width: 44px; height: 44px; border: 0; background: transparent; }
+.theme-toggle:hover { background: var(--tag-bg); box-shadow: none; }
+.xiyu-cmd-trigger { min-height: 44px; height: 44px; background: var(--tag-bg); border: 0; padding: 0 12px; gap: 9px; }
+.xiyu-kbd { border: 0; color: var(--ink-mute); background: var(--bg-elev); padding: 4px 5px; }
+.eyebrow { font-family: inherit; font-size: 12px; letter-spacing: .025em; color: var(--ink-mute); }
+.eyebrow::before, .rule-head::before, .article-row::before { display: none; }
+.hero { display: block; padding: 0; margin-bottom: 24px; }
+.notebook-head { display: flex; justify-content: space-between; align-items: center; gap: 32px; margin-bottom: 28px; }
+.notebook-title { margin: 8px 0; font-size: 32px; line-height: 1.2; letter-spacing: -.04em; font-weight: 650; }
+.notebook-bio { margin: 0; font-size: 14px; color: var(--ink-mute); }
+.hero-meta { margin: 0; gap: 28px; padding: 0; border: 0; }
+.hero-meta > div { display: flex; flex-direction: column; gap: 5px; }
+.hero-meta-num { font-size: 24px; line-height: 1.2; font-weight: 550; letter-spacing: -.035em; color: var(--ink); }
+.hero-meta-label { margin: 0; font-family: inherit; font-size: 11px; color: var(--ink-mute); letter-spacing: 0; }
+.hero-context { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 16px; }
+.hero-revisit-card, .hero-card { background: var(--tag-bg); border: 0; border-radius: var(--r-lg); padding: 24px; box-shadow: none; display: flex; flex-direction: column; min-width: 0; }
+.hero-card:hover { box-shadow: none; transform: none; border: 0; }
+html.dark .hero-card { background: var(--tag-bg); box-shadow: none; }
+.hero-revisit { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 14px; }
+.context-label, .hero-card-label { font-family: inherit; font-size: 12px; font-weight: 550; letter-spacing: 0; text-transform: none; color: var(--ink-soft); }
+.hero-revisit-when { font-size: 11px; letter-spacing: 0; color: var(--ink-mute); }
+.hero-title { margin: 0 0 12px; font-size: 25px; line-height: 1.45; font-weight: 600; letter-spacing: -.025em; text-wrap: pretty; }
+.hero-title-link { color: var(--ink); text-decoration: none; }
+.hero-title-link:hover { color: var(--accent-ink); }
+.hero-revisit-summary { font-size: 13px; color: var(--ink-mute); line-height: 1.8; margin: 0 0 20px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.context-link { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-soft); font-size: 12px; text-decoration: none; min-height: 44px; }
+.hero-revisit-card > .context-link { margin-top: auto; align-self: flex-start; }
+.context-link:hover, .topics-more:hover { color: var(--accent-ink); }
+.hero-card-head { margin-bottom: 14px; }
+.hero-card-label::before { display: none; }
+.hero-card-month { border: 0; padding: 0; color: var(--ink-mute); font-size: 11px; background: none; }
+.hero-card-quote { font-family: inherit; font-size: 13px; line-height: 1.85; font-style: normal; color: var(--ink-soft); margin: 0 0 16px; }
+.hero-card-quote::before, .hero-card-quote::after { content: none; }
+.hero-card-footer { margin-top: auto; padding-top: 0; border: 0; gap: 8px; }
+.hero-card-attr { font-size: 11px; color: var(--ink-mute); }
+.hero-card-link { font-family: inherit; font-size: 12px; color: var(--ink-soft); min-height: 44px; display: inline-flex; align-items: center; gap: 8px; }
+.hero-topics { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+.hero-topics-label { font-size: 11px; color: var(--ink-mute); margin-right: 4px; }
+.topic-chip { display: inline-flex; align-items: center; min-height: 28px; padding: 4px 9px; background: var(--tag-bg); border-radius: 6px; color: var(--tag-ink); font-size: 11px; line-height: 1.5; text-decoration: none; }
+.topic-chip:hover { background: var(--rule); color: var(--ink); }
+.topics-more { color: var(--ink-mute); font-size: 11px; text-decoration: none; min-height: 44px; display: flex; align-items: center; gap: 6px; margin-left: auto; }
+.section-head { padding: 20px 0 8px; gap: 16px; align-items: center; }
+.section-title { font-size: 18px; font-weight: 600; letter-spacing: -.015em; }
+.section-actions { display: flex; gap: 20px; align-items: center; }
+.section-count { letter-spacing: 0; font-size: 11px; color: var(--ink-mute); }
+.rule-head { gap: 12px; margin: 18px 0 8px; font-size: 12px; color: var(--ink-mute); letter-spacing: 0; }
+.rule-head-rule { display: none; }
+.rule-head-count { font-size: 11px; letter-spacing: 0; }
+.article-row, .feature-card { display: grid; grid-template-columns: 52px minmax(0, 1fr) 128px; gap: 16px; padding: 22px 16px; border: 0; border-radius: var(--r-md); align-items: start; }
+.article-row:hover { background: var(--tag-bg); }
+.feature-card { background: var(--bg-elev); box-shadow: 0 1px 4px rgb(0 0 0 / .035); margin: 8px 0; }
+.feature-card .feature-meta { padding-top: 4px; gap: 9px; }
+.feature-label { color: var(--accent-ink); font-size: 10px; }
+.post-title { font-weight: 550; }
+.row-title, .feature-title { font-size: 19px; line-height: 1.5; margin: 0 0 9px; letter-spacing: -.015em; }
+.feature-link { background: none; padding: 0; }
+.feature-link:hover { color: var(--accent-ink); }
+.row-excerpt, .feature-excerpt { font-size: 13px; line-height: 1.8; margin: 0 0 12px; max-width: none; color: var(--ink-mute); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.post-num, .post-date { font-size: 10.5px; letter-spacing: 0; color: var(--ink-mute); font-variant-numeric: tabular-nums; }
+.row-date-col { padding-top: 6px; white-space: nowrap; }
+.post-tags { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.tags-overflow { position: relative; font-size: 11px; color: var(--ink-mute); }
+.tags-overflow > summary { list-style: none; cursor: pointer; min-height: 28px; display: flex; align-items: center; padding: 4px 8px; border-radius: 6px; }
+.tags-overflow > summary::-webkit-details-marker { display: none; }
+.tags-overflow[open] > summary, .tags-overflow > summary:hover { background: var(--rule); }
+.tags-popover { position: absolute; top: 100%; left: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 6px; width: 180px; padding: 10px; border: 1px solid var(--rule); border-radius: var(--r-sm); background: var(--bg-elev); box-shadow: 0 6px 20px rgb(0 0 0 / .08); }
+.pagination { margin-top: 16px; padding-top: 20px; font-size: 11px; }
+.page-link { min-height: 44px; padding: 8px 10px; border-radius: var(--r-sm); }
+.page-link:hover { background: var(--tag-bg); gap: 10px; }
+.article-layout { grid-template-columns: 184px minmax(0, 1fr); gap: 56px; max-width: 1024px; }
+.article-layout > article { min-width: 0; }
+.article-rail { padding-top: 6px; top: 24px; }
+.article-hero { max-width: 740px; padding: 0 0 32px; }
+.article-head-meta { margin-bottom: 16px; gap: 14px; }
+.article-h1 { font-size: 36px; line-height: 1.45; font-weight: 600; margin-bottom: 18px; letter-spacing: -.03em; text-wrap: pretty; }
+.article-lead { font-family: inherit; font-size: 15px; line-height: 1.85; font-style: normal; padding: 0; border: 0; color: var(--ink-mute); margin-bottom: 18px; }
+.article-head-tags { margin: 0; gap: 6px; }
+.article-body { width: 100%; max-width: 740px; font-size: 17px; line-height: 1.85; }
+.article-body .notion { font-family: inherit; font-size: inherit; }
+.article-body p:first-of-type::first-letter, .article-body .notion > .notion-text:first-of-type::first-letter, .article-body .notion-page-content > .notion-text:first-of-type::first-letter { float: none; font-family: inherit; font-size: inherit; line-height: inherit; padding: 0; color: inherit; }
+.article-body .notion-page, .article-body .notion-page-content { padding-top: 0; padding-left: 0; padding-right: 0; }
+.article-body h2, .article-body .notion-h1, .article-body .notion-h2 { font-size: 24px; font-weight: 600; margin: 40px 0 16px; letter-spacing: -.02em; }
+.article-body h3, .article-body .notion-h3 { font-size: 19px; font-weight: 600; margin: 28px 0 12px; }
+.article-body blockquote, .article-body .notion-quote { font-family: inherit; font-style: normal; font-size: inherit; border-left-color: var(--rule); }
+.article-body pre, .article-body .notion-code { background: var(--tag-bg); border: 0; border-radius: var(--r-md); font-size: 13px; }
+.article-body .notion-callout { border: 0; background: var(--tag-bg); border-radius: var(--r-md); }
+.toc-label, .side-label { font-family: inherit; font-size: 11px; letter-spacing: 0; border: 0; padding: 0; color: var(--ink-mute); margin-bottom: 10px; }
+.toc-list li { margin: 2px 0; }
+.toc-link { border: 0; margin: 0; padding: 7px 8px; border-radius: 6px; font-size: 12px; line-height: 1.65; }
+.toc-link.active, .toc-link:hover { background: var(--tag-bg); color: var(--ink); }
+.toc-mobile { display: none; }
+.side-stat { font-size: 11px; }
+.article-share { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.article-share button { min-height: 44px; border: 0; border-radius: var(--r-sm); background: var(--tag-bg); color: var(--ink-soft); font: inherit; font-size: 12px; padding: 8px 12px; cursor: pointer; }
+.article-share button:hover { color: var(--accent-ink); background: var(--rule); }
+.article-side .article-share button { padding: 6px 8px; font-size: 11px; }
+.share-status { width: 100%; font-size: 12px; color: var(--ink-mute); }
+.share-status:empty { display: none; }
+.article-foot { border: 0; margin-top: 40px; padding-top: 0; }
+.article-endnote { background: var(--tag-bg); padding: 24px; border-radius: var(--r-md); }
+.article-foot-label { font-family: inherit; letter-spacing: 0; font-size: 12px; }
+.article-foot-note { font-family: inherit; font-size: 13px; margin: 8px 0 16px; }
+.article-endnote .article-share button { background: var(--bg-elev); }
+.prev-next { gap: 12px; margin-top: 20px; }
+.pn-card { background: none; border: 0; box-shadow: none; padding: 16px 0; }
+.pn-link:hover .pn-card { background: none; box-shadow: none; border: 0; }
+.pn-title { font-size: 14px; line-height: 1.6; }
+.pn-label { font-size: 10px; letter-spacing: 0; }
+.archive-head, .search-head { margin-bottom: 28px; padding-top: 0; }
+.archive-title, .info-hero h1 { font-size: 32px; line-height: 1.4; font-weight: 600; letter-spacing: -.03em; margin: 12px 0 16px; }
+.archive-sub, .info-hero > p { font-family: inherit; font-size: 14px; line-height: 1.85; max-width: 62ch; color: var(--ink-mute); }
+.archive-meta { margin-top: 24px; gap: 36px; }
+.archive-jump { margin-top: 24px; padding: 0; border: 0; gap: 6px; flex-wrap: wrap; }
+.archive-jump-link { min-height: 44px; padding: 10px 12px; display: inline-flex; align-items: center; border-radius: var(--r-sm); background: var(--tag-bg); color: var(--ink-soft); font-size: 12px; }
+.archive-year { scroll-margin-top: 24px; }
+.archive-year-head { margin: 36px 0 12px; color: var(--ink); font-size: 16px; }
+.archive-year-head .rule-head-count { margin-left: auto; color: var(--ink-mute); }
+.archive-item { border: 0; grid-template-columns: 52px minmax(0, 1fr) 74px; gap: 16px; padding: 12px 16px; border-radius: var(--r-sm); min-height: 48px; }
+.archive-item:hover { background: var(--tag-bg); }
+.archive-item-title { font-size: 14px; line-height: 1.65; background: none; }
+.search-page { max-width: 880px; margin: 0 auto; }
+.search-form { display: flex; align-items: center; gap: 12px; margin: 24px 0 14px; padding: 8px 10px 8px 18px; background: var(--bg-elev); border: 1px solid var(--rule); border-radius: var(--r-md); color: var(--ink-mute); }
+.search-form:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / .08); }
+.search-form svg { flex: none; }
+.search-input { flex: 1; min-width: 0; min-height: 44px; font: inherit; font-size: 15px; color: var(--ink); background: transparent; border: 0; outline: none; }
+.search-submit { min-height: 44px; padding: 0 16px; border: 0; border-radius: var(--r-sm); background: var(--tag-bg); color: var(--ink); font: inherit; font-size: 12px; cursor: pointer; }
+.search-count { font-size: 12px; color: var(--ink-mute); }
+.search-empty { margin: 40px 0; padding: 48px 24px; border-radius: var(--r-md); background: var(--tag-bg); text-align: center; }
+.search-empty p { margin: 0 0 10px; font-size: 16px; color: var(--ink); }
+.search-empty > span { display: block; margin-bottom: 14px; font-size: 13px; color: var(--ink-mute); }
+.about-hero { padding-top: 0; }
+.about-h1 { font-size: 32px; font-weight: 600; }
+.about-bio { font-size: 16px; }
+.about-era-when { color: var(--ink-mute); font-size: 11px; }
+.about-era-title { font-size: 18px; font-weight: 550; }
+.about-era-text, .about-disclosure-body { color: var(--ink-soft); font-size: 15px; }
+.about-sec-label { font-size: 16px; }
+.hero-status-label { font-family: inherit; letter-spacing: 0; }
+.hero-status-label::before { display: none; }
+.about-links .inline-link { min-height: 44px; display: inline-flex; align-items: center; border: 0; }
+.topics-grid { border: 0; gap: 12px; margin-top: 20px; }
+.topic-cell { border: 0; padding: 20px; background: var(--tag-bg); border-radius: var(--r-md); min-height: 100px; }
+.topic-name { font-size: 17px; font-weight: 550; }
+.topic-count { font-size: 11px; letter-spacing: 0; }
+.info-hero { padding: 0 0 24px; }
+.editorial-section { padding: 28px 0; border: 0; }
+.about-section-label h2 { font-size: 17px; font-weight: 550; }
+.about-body, .about-body p:first-child { font-family: inherit; font-size: 15px; }
+.info-resources { background: var(--tag-bg); border: 0; border-radius: var(--r-lg); padding: 24px; }
+.info-resource-heading h2 { font-size: 18px; }
+.info-resource-link { background: var(--bg-elev); border: 0; border-radius: var(--r-sm); }
+.site-foot { border: 0; margin-top: 64px; padding-top: 0; gap: 24px; font-size: 11px; color: var(--ink-mute); }
+.site-foot-copy { gap: 6px; }
+.site-foot-links { gap: 14px; }
+.site-foot-links a { font-size: 11px; min-height: 44px; display: inline-flex; align-items: center; }
+.xiyu-search-dialog { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", system-ui, sans-serif; }
+.xiyu-cmd-title { font-size: 14px; }
+.xiyu-cmd-item { min-height: 44px; align-items: center; }
+.xiyu-cmd [cmdk-group-heading] { letter-spacing: 0; font-size: 11px; }
+#theme-xiyu :is(a, button, summary):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 1024px) {
+  .page { padding: 24px 28px 40px; }
+  .article-layout { display: flex; flex-direction: column; gap: 0; max-width: 740px; }
+  .article-rail { display: block; order: 0; width: 100%; max-width: none; position: static; margin: 0 0 24px; padding: 0; }
+  .article-layout > article { order: 1; }
+  .article-rail .article-side, .toc-desktop { display: none; }
+  .toc { display: block; }
+  .toc-mobile { display: block; border-radius: var(--r-sm); background: var(--tag-bg); padding: 0 14px; }
+  .toc-mobile summary { display: flex; justify-content: space-between; align-items: center; min-height: 44px; font-size: 12px; cursor: pointer; list-style: none; }
+  .toc-mobile summary::-webkit-details-marker { display: none; }
+  .toc-mobile summary > span { color: var(--ink-mute); font-size: 11px; }
+  .toc-mobile nav { padding-bottom: 12px; }
+  .toc-mobile .toc-link { min-height: 44px; display: flex; align-items: center; }
+}
+@media (max-width: 768px) {
+  .page { padding: 16px 20px 32px; }
+  .site-nav { margin-bottom: 32px; padding: 0; min-height: 44px; }
+  .nav-links { gap: 4px; }
+  .nav-primary, .nav-desktop-tools { display: none; }
+  .nav-menu-toggle { display: flex; }
+  .xiyu-cmd-trigger, .theme-toggle { width: 44px; height: 44px; }
+  .xiyu-cmd-trigger-label, .xiyu-cmd-trigger .xiyu-kbd, .brand-tag { display: none; }
+  .notebook-head { gap: 20px; align-items: flex-start; margin-bottom: 24px; }
+  .notebook-title { font-size: 26px; }
+  .notebook-bio { font-size: 12px; }
+  .notebook-head .hero-meta { gap: 16px; padding-top: 28px; flex: none; }
+  .hero-meta-num { font-size: 20px; }
+  .hero-meta-label { font-size: 10px; }
+  .hero-context { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .hero-revisit-card, .hero-card { padding: 20px; }
+  .hero-title { font-size: 22px; }
+  .hero-card-quote { font-size: 13px; }
+  .hero-topics { gap: 6px; margin-top: 12px; }
+  .hero-topics-label { width: 100%; margin-bottom: 2px; }
+  .topic-chip, .tags-overflow > summary { min-height: 44px; padding: 8px 10px; }
+  .topics-more { margin-left: 0; }
+  .section-head { padding-top: 12px; }
+  .section-title { font-size: 17px; }
+  .section-actions { gap: 8px; }
+  .section-actions .section-count { display: none; }
+  .article-row, .feature-card { grid-template-columns: 42px minmax(0, 1fr); gap: 8px 10px; padding: 18px 0; grid-template-areas: 'num date' 'body body'; }
+  .feature-card { padding: 18px 14px; }
+  .row-num-col, .feature-card .feature-meta { grid-area: num; padding: 0; }
+  .feature-card .feature-meta { flex-direction: row; align-items: center; gap: 8px; }
+  .row-main, .feature-body { grid-area: body; }
+  .row-date-col { grid-area: date; padding: 0; text-align: right; }
+  .row-title, .feature-title { font-size: 17px; line-height: 1.65; margin-bottom: 8px; }
+  .row-excerpt, .feature-excerpt { font-size: 13px; margin-bottom: 8px; }
+  .article-row:hover { background: none; }
+  .pagination { font-size: 10px; gap: 6px; }
+  .page-link { padding: 8px 0; }
+  .article-h1 { font-size: 27px; line-height: 1.5; }
+  .article-lead { font-size: 14px; line-height: 1.85; }
+  .article-head-tags { margin-bottom: 0; }
+  .article-body, .article-body .notion-text { font-size: 16px; line-height: 1.85; }
+  .article-body h2, .article-body .notion-h1, .article-body .notion-h2 { font-size: 21px; margin: 32px 0 14px; }
+  .article-body h3, .article-body .notion-h3 { font-size: 18px; }
+  .article-endnote { padding: 20px; }
+  .article-foot { margin-top: 32px; }
+  .archive-title, .info-hero h1 { font-size: 27px; }
+  .archive-sub { font-size: 13px; }
+  .archive-meta { gap: 28px; }
+  .archive-item { grid-template-columns: 42px minmax(0, 1fr) 52px; grid-template-areas: none; gap: 10px; padding: 12px 0; align-items: baseline; }
+  .archive-item .post-num, .archive-item-title, .archive-item-date { grid-area: auto; }
+  .archive-item-date { text-align: right; font-size: 10px; }
+  .archive-item-title { font-size: 13px; }
+  .search-form { padding-left: 12px; gap: 8px; }
+  .search-input { font-size: 16px; }
+  .search-submit { padding: 0 12px; }
+  .search-page .article-row { padding-left: 0; padding-right: 0; }
+  .about-h1 { font-size: 28px; }
+  .about-era-title { font-size: 17px; }
+  .topics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .topic-cell { padding: 16px; }
+  .info-hero { padding-bottom: 18px; }
+  .info-resource-list { grid-template-columns: minmax(0, 1fr); }
+  .site-foot { margin-top: 48px; flex-direction: column; gap: 12px; align-items: flex-start; }
+  .site-foot-links { gap: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  #theme-xiyu *, .xiyu-search-dialog * { transition: none !important; animation: none !important; }
 }

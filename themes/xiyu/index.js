@@ -25,11 +25,10 @@ import AboutFooter from './components/AboutFooter'
 import AboutBoundaries from './components/AboutBoundaries'
 import AboutTimeline from './components/AboutTimeline'
 import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import ArticleShare from './components/ArticleShare'
 
 const Comment = dynamic(() => import('@/components/Comment'), { ssr: false })
 const ArticleLock = dynamic(() => import('./components/ArticleLock'), { ssr: false })
-const ShareBar = dynamic(() => import('@/components/ShareBar'), { ssr: false })
 const AlgoliaSearchModal = dynamic(() => import('@/components/AlgoliaSearchModal'), { ssr: false })
 
 // 主题全局状态
@@ -90,7 +89,6 @@ const LayoutBase = props => {
     <ThemeGlobalXiyu.Provider value={{ searchModal }}>
       <div id='theme-xiyu'>
         <Style />
-        <div className='paper-grain' aria-hidden='true' />
         <div className='page'>
           <Nav {...props} />
           <div style={{ opacity: onLoading ? 0.6 : 1, transition: 'opacity .2s' }}>
@@ -113,7 +111,7 @@ const LayoutIndex = props => {
   const list = Array.isArray(posts) ? posts : []
   const total = typeof postCount === 'number' ? postCount : list.length
   const [featured] = list
-  const currentYear = new Date().getFullYear()
+  const currentYear = String(props.renderedOn || list[0]?.publishDay || '').slice(0, 4)
   // 全部文章（含 featured）一起按年份分组：featured 与同年文章归入同一「年份」标题下，
   // 不再游离于分隔线之外。featured 用 index 0 大卡渲染，其余用 BlogPost 行。
   const grouped = groupByYear(list)
@@ -129,7 +127,7 @@ const LayoutIndex = props => {
       <section>
         <div className='section-head'>
           <h2 className='section-title'>最新写作</h2>
-          <span className='section-count'>{currentYear} · {list.length} posts shown</span>
+          <div className='section-actions'><span className='section-count'>{currentYear} · {list.length} 篇</span><SmartLink href='/archive' className='context-link'>全部文章 <span aria-hidden='true'>→</span></SmartLink></div>
         </div>
         <div>
           {grouped.map(group => (
@@ -278,26 +276,11 @@ const LayoutSlug = props => {
           <NotionPage post={post} />
         </div>
         <footer className='article-foot'>
-          <Card className='article-foot-card'>
-            <CardContent>
-              <div className='article-foot-label'>读完了</div>
-              <p className='article-foot-note'>
-                写于 {dateFmt || '——'}。结论会过期，日期就是它的免责声明。
-              </p>
-              {tags.length > 0 && (
-                <div className='article-foot-tags'>
-                  {tags.map(t => (
-                    <SmartLink key={t} href={`/tag/${encodeURIComponent(t)}`}>
-                      <Badge variant='secondary'>{t}</Badge>
-                    </SmartLink>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-            <CardFooter>
-              <ShareBar post={post} />
-            </CardFooter>
-          </Card>
+          <div className='article-endnote'>
+            <div className='article-foot-label'>读完了</div>
+            <p className='article-foot-note'>写于 {dateFmt || '——'}。结论会过期，日期就是它的免责声明。</p>
+            <ArticleShare post={post} />
+          </div>
           <PrevNext prev={prev} next={next} />
         </footer>
         <Comment frontMatter={post} />
@@ -431,39 +414,33 @@ const LayoutSearch = props => {
   }
 
   return (
-    <section>
-      <header className='archive-head' style={{ marginBottom: 32 }}>
+    <section className='search-page'>
+      <header className='search-head'>
         <div className='eyebrow'>Search · 搜索</div>
-        <form onSubmit={onSubmit} role='search' style={{ marginTop: 18 }}>
+        <h1 className='archive-title'>找一篇文章。</h1>
+        <form onSubmit={onSubmit} role='search' className='search-form'>
+          <svg aria-hidden='true' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.6'><circle cx='10.5' cy='10.5' r='6.5' /><path d='m16 16 5 5' /></svg>
           <input
             type='search'
             value={input}
             onChange={e => setInput(e.target.value)}
-            placeholder='输入关键词，输入即过滤…'
+            aria-label='搜索文章'
+            placeholder='搜索标题、摘要或主题…'
             autoFocus
-            style={{
-              width: '100%',
-              padding: '14px 18px',
-              fontSize: 17,
-              fontFamily: 'inherit',
-              color: 'var(--ink)',
-              background: 'var(--bg-elev)',
-              border: '1px solid var(--rule)',
-              borderRadius: 2,
-              outline: 'none'
-            }}
+            className='search-input'
           />
+          <button type='submit' className='search-submit'>搜索</button>
         </form>
         {input.trim() && (
-          <p className='archive-sub' style={{ marginTop: 14, fontSize: 14 }}>
+          <p className='search-count' role='status'>
             &quot;<strong style={{ color: 'var(--ink)' }}>{input.trim()}</strong>&quot; · 找到 {filtered.length} 篇
           </p>
         )}
       </header>
       {!input.trim()
-        ? <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>输入关键词开始搜索（标题、摘要、标签、分类都会匹配）。</p>
+        ? <div className='search-empty'><p>输入关键词开始搜索</p><span>标题、摘要、标签和分类都会匹配。</span><SmartLink href='/tag' className='context-link'>浏览所有主题 →</SmartLink></div>
         : filtered.length === 0
-          ? <p style={{ color: 'var(--ink-mute)', padding: '40px 0' }}>没有匹配结果。试试别的词？</p>
+          ? <div className='search-empty' role='status'><p>没有匹配的文章</p><span>试试更短的关键词，或浏览归档。</span><SmartLink href='/archive' className='context-link'>查看归档 →</SmartLink></div>
           : (
               <div>
                 {filtered.map((p, idx) => (
