@@ -29,7 +29,6 @@ function hashIndex(seed, size) {
  */
 const Hero = props => {
   const { posts, postCount, allNavPages, renderedOn } = props
-  const author = siteConfig('AUTHOR') || 'xiyu'
   const total = typeof postCount === 'number' ? postCount : (posts?.length ?? 0)
   const year = parseInt(String(renderedOn || '').slice(0, 4)) || parseInt(siteConfig('SINCE')) || 2013
   const since = parseInt(siteConfig('SINCE')) || year
@@ -62,19 +61,9 @@ const Hero = props => {
 
   return (
     <section className='hero' aria-label='笔记概览'>
-      <header className='notebook-head'>
-        <div>
-          <div className='eyebrow'>个人博客 · since {since}</div>
-          <h1 className='notebook-title'>{author}&apos;s notebook</h1>
-          <p className='notebook-bio'>{siteConfig('BIO') || '在喧嚣与噪声里，写点经得住时间的东西。'}</p>
-        </div>
-        <div className='hero-meta'>
-          <div><span className='hero-meta-num'>{total}</span><span className='hero-meta-label'>篇文章</span></div>
-          <div><span className='hero-meta-num'>{years}</span><span className='hero-meta-label'>年记录</span></div>
-        </div>
-      </header>
       <div className='hero-context'>
-        <div className='hero-revisit-card'>
+        <div className='hero-feature'>
+          <div className='eyebrow'>xiyu&apos;s notebook · est. {since}</div>
           {picked
             ? <>
                 <div className='hero-revisit'>
@@ -82,22 +71,23 @@ const Hero = props => {
                   <span className='hero-revisit-when'>{[pickedYear, pickedNum && `#${pickedNum}`].filter(Boolean).join(' · ')}</span>
                 </div>
                 <SmartLink href={picked.href || `/${picked.slug}`} className='hero-title-link' title={`阅读：${picked.title}`}>
-                  <h2 className='hero-title'>{picked.title}</h2>
+                  <h1 className='hero-title'>{picked.title}</h1>
                 </SmartLink>
-                {picked.summary && <p className='hero-revisit-summary'>{picked.summary}</p>}
-                <SmartLink href={picked.href || `/${picked.slug}`} className='context-link'>重新读读 <span aria-hidden='true'>↗</span></SmartLink>
               </>
-            : <h2 className='hero-title'>在喧嚣与噪声里，写点经得住时间的东西。</h2>}
+            : <h1 className='hero-title'>在喧嚣与噪声里，写点经得住时间的东西。</h1>}
+          {topics.length > 0 && (
+            <div className='hero-topics'>
+              <span className='hero-topics-label'>在想</span>
+              {topics.map(t => <SmartLink key={t} href={`/tag/${encodeURIComponent(t)}`} className='topic-chip'>{t}</SmartLink>)}
+            </div>
+          )}
+          <div className='hero-meta'>
+            <div><span className='hero-meta-num'>{total}</span><span className='hero-meta-label'>ESSAYS</span></div>
+            <div><span className='hero-meta-num'>{years}</span><span className='hero-meta-label'>YEARS WRITING</span></div>
+          </div>
         </div>
         <NowCard posts={posts} postCount={postCount} allNavPages={allNavPages} />
       </div>
-      {topics.length > 0 && (
-        <div className='hero-topics'>
-          <span className='hero-topics-label'>最近在想</span>
-          {topics.map(t => <SmartLink key={t} href={`/tag/${encodeURIComponent(t)}`} className='topic-chip'>{t}</SmartLink>)}
-          <SmartLink href='/tag' className='topics-more'>所有主题 <span aria-hidden='true'>→</span></SmartLink>
-        </div>
-      )}
     </section>
   )
 }

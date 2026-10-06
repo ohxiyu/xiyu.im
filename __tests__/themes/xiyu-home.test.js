@@ -38,7 +38,7 @@ describe('xiyu 首页 Hero', () => {
   it('大标题跳过最近几篇，不和列表里的头条重复', () => {
     render(<Hero posts={posts} postCount={12} allNavPages={posts} renderedOn='2026-09-08' />)
     // 用全等比，别用 toHaveTextContent——它是子串匹配，「文章 12」会命中「文章 1」
-    const picked = screen.getByRole('heading', { level: 2 }).textContent
+    const picked = screen.getByRole('heading', { level: 1 }).textContent
     expect(['文章 1', '文章 2', '文章 3']).not.toContain(picked)
     expect(posts.map(p => p.title)).toContain(picked)
     expect(screen.getByText('旧文重读')).toBeInTheDocument()
@@ -65,7 +65,7 @@ describe('xiyu 首页 Hero', () => {
     const few = posts.slice(0, 2)
     render(<Hero posts={few} postCount={2} allNavPages={few} renderedOn='2026-09-08' />)
     expect(screen.queryByText('旧文重读')).not.toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('经得住时间')
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('经得住时间')
   })
 })
 
