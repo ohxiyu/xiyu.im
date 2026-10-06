@@ -49,7 +49,7 @@ const TOC = ({ toc }) => {
   return (
     <aside className='toc'>
       <nav className='toc-desktop' aria-label='文章目录'>
-        <div className='toc-label'>文章目录</div>
+        <div className='toc-label'>CONTENTS</div>
         {links}
       </nav>
       <details className='toc-mobile'>

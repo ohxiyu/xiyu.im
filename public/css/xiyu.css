@@ -2181,7 +2181,7 @@ html.dark .hero-card { background: var(--tag-bg); box-shadow: none; }
 .feature-link:hover { color: var(--accent-ink); }
 .row-excerpt, .feature-excerpt { font-size: 12px; line-height: 1.75; margin: 0 0 10px; max-width: none; color: var(--ink-mute); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .post-num, .post-date { font-size: 10.5px; letter-spacing: 0; color: var(--ink-mute); font-variant-numeric: tabular-nums; }
-.row-date-col { padding-top: 6px; white-space: nowrap; }
+.row-date-col { padding-top: 25px; white-space: nowrap; }
 .post-tags { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 .tags-overflow { position: relative; font-size: 11px; color: var(--ink-mute); }
 .tags-overflow > summary { list-style: none; cursor: pointer; min-height: 28px; display: flex; align-items: center; padding: 4px 8px; border-radius: 6px; }
@@ -2197,7 +2197,7 @@ html.dark .hero-card { background: var(--tag-bg); box-shadow: none; }
 .article-rail { padding-top: 6px; top: 24px; }
 .article-hero { max-width: 740px; padding: 0 0 42px; }
 .article-head-meta { margin-bottom: 16px; gap: 14px; }
-.article-h1 { font-size: 42px; line-height: 1.23; font-weight: 670; margin-bottom: 23px; letter-spacing: -.035em; text-wrap: pretty; }
+.article-h1 { font-size: 42px; line-height: 1.23; font-weight: 670; margin-bottom: 23px; letter-spacing: -.035em; text-wrap: balance; }
 .article-lead { font-family: inherit; font-size: 16px; line-height: 1.8; font-style: normal; padding: 20px 23px; border: 1px solid var(--rule-soft); border-radius: 13px; background: var(--tag-bg); color: var(--ink-soft); margin-bottom: 20px; }
 .article-head-tags { margin: 0; gap: 6px; }
 .article-head-tags a { text-decoration: none; }
