@@ -2172,7 +2172,8 @@ html.dark .hero-card { background: var(--tag-bg); box-shadow: none; }
 .tags-overflow > summary { list-style: none; cursor: pointer; min-height: 28px; display: flex; align-items: center; padding: 4px 8px; border-radius: 6px; }
 .tags-overflow > summary::-webkit-details-marker { display: none; }
 .tags-overflow[open] > summary, .tags-overflow > summary:hover { background: var(--rule); }
-.tags-popover { position: absolute; top: 100%; left: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 6px; width: 180px; padding: 10px; border: 1px solid var(--rule); border-radius: var(--r-sm); background: var(--bg-elev); box-shadow: 0 6px 20px rgb(0 0 0 / .08); }
+.tags-overflow[open] { flex-basis: 100%; }
+.tags-popover { display: flex; flex-wrap: wrap; gap: 6px; max-width: 100%; padding-top: 6px; }
 .pagination { margin-top: 16px; padding-top: 20px; font-size: 11px; }
 .page-link { min-height: 44px; padding: 8px 10px; border-radius: var(--r-sm); }
 .page-link:hover { background: var(--tag-bg); gap: 10px; }

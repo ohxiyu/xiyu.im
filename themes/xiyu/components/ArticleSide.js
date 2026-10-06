@@ -1,12 +1,6 @@
 import ArticleShare from './ArticleShare'
 
-/**
- * 左轨下半：阅读信息与分享。
- *
- * 排版跟上面的 TOC 用同一套：mono 小标题 + 一条细线，下面是内容。
- * 这里刻意不用 Card 和带边框的按钮——整根轨只有目录一种语言，
- * 中途插一张卡会把左栏切成两块（和站点其它列表页也不一致）。
- */
+// 桌面阅读轨：阅读信息及与文末共用的精简分享控件。
 const ArticleSide = ({ post }) => {
   const wordCount = post?.wordCount
   const readTime = post?.readTime || (wordCount ? Math.max(1, Math.ceil(wordCount / 400)) : null)
