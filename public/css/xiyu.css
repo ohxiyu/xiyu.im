@@ -1285,6 +1285,23 @@ html.dark .hero-card {
   gap: 10px;
   flex-wrap: wrap;
 }
+.server-error {
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.server-error-code {
+  margin-top: 18px;
+  color: var(--ink);
+  font: 650 90px/1 "SFMono-Regular", Menlo, monospace;
+  letter-spacing: -.08em;
+}
+.server-error h1 { margin: 18px 0 8px; font-size: 24px; line-height: 1.4; }
+.server-error p { margin: 0 0 18px; color: var(--ink-mute); font-size: 13px; }
+.server-error .context-link { color: var(--accent-ink); }
 
 .topics-grid {
   display: grid;
