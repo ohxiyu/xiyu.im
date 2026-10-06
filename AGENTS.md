@@ -42,7 +42,7 @@
 
 ```
 pages/[prefix]/index.js     文章详情页
-lib/db/getSiteData.js       Notion 数据聚合入口
+lib/db/SiteDataApi.js       Notion 数据聚合入口
 lib/db/notion/              Notion 解析（目录提取、页面属性等）
 themes/xiyu/                唯一主题
 conf/                       分领域配置，blog.config.js 汇总
@@ -87,8 +87,8 @@ CI（`.github/workflows/ci.yml`）跑四件事：`Lint & type-check`、`Unit tes
 **别把 TOC 从 rail 里挪出去，也别删那两行 `grid-column`**，
 `__tests__/styles/article-layout-grid.test.js` 两层都盯着。
 
-顺带：rail 在 DOM 里排在 `<article>` 前面，所以 ≤1024px 收成单栏时用的是
-`flex-direction: column` + `order`，不是 `display: block`——block 流没法把它挪到正文下方。
+窄屏收成单栏：rail 中只显示原生可折叠目录，位于标题前；阅读信息隐藏，分享仍在文末。
+桌面和手机目录共用活动锚点状态，不添加第三个 grid 直接子元素。
 
 **`/about` 使用独立的 `.about-page` 单栏**，最大宽度 760px、居中，
 不使用 `.article-layout` / `.article-rail`，也不显示目录。
@@ -196,21 +196,18 @@ shadcn 组件要用的字体已另起名为 `font-xiyu-serif` / `font-xiyu-mono`
 
 ### 12. 站点只有一套视觉语言，加新区块前先去找现成的类
 
-这个博客的语言是**细线、留白、大衬线字 + mono 小标签**，全站只有一张卡
-（首页右上角的 Now）。有过三次返工：关于页、归档页、文章左轨都曾被改成
-shadcn 的卡片风，然后又一个个改回来。加区块之前先看有没有现成的：
+当前主题参考 Beautiful UI 的**中性灰阶、无衬线字、紧凑列表和轻量控件**。
+颜色、RGB 令牌和圆角统一在 `public/css/xiyu.css`；文件末尾的 Beautiful UI 区块管理响应式主题布局。
+保留品牌 logo 和作者正文，不引入 AI 聊天等与阅读无关的模块。
 
-| 想要的东西 | 用这个 | 别新造 |
-|---|---|---|
-| 区块标题（橙短线 + 标签 + 延伸到右的细线） | `.rule-head` + `.rule-head-rule` / `.rule-head-count` | 首页年份、归档年份、关于页区块**都是它** |
-| 一组数字 | `.hero-meta` + `.hero-meta-num` / `.hero-meta-label` | 首页、归档、关于页共用 |
-| 「在想 / 在做」那一行 | `.hero-status` + `.hero-status-label` / `.hero-status-topics` | |
-| 页面顶部的小字 | `.eyebrow` | |
-| 行内链接 | `.inline-link`（常态带下划线，hover 变色） | 别用按钮 |
-| 左轨里的段落起头 | `.toc-label` / `.side-label`（同一条规则） | |
-
-**别把共用样式写成 inline style。** `.rule-head` 就是因为首页当初写成了 JSX 里的
-inline style、关于页另写一套 CSS，两边长得像但各改各的，后来才合并的。
+- 导航无外框和阴影，活动项使用浅灰背景。
+- 首页旧文和近况使用同一浅灰表面，标题、摘要、标签、日期按固定网格对齐。
+- 列表标签由 `PostTags` 显示两个，其余原生展开，所有标签链接保留在 DOM。
+- 文章宽度最多 740px，摘要无斜体或装饰竖线；文末使用 `ArticleShare` 分享。
+- 关于页仍为单栏，以留白分段，无装饰线或卡片边框。
+- `.hero-meta`、`.eyebrow`、`.topic-chip`、`.rule-head` 等跨页面共用，避免内联重复样式。
+- 字体使用系统字体，不在主题 head 下载 Web 字体。
+- Radix / cmdk 保留懒加载，键盘焦点和 reduced motion 不能退化。
 
 ### 13. 组件里不能直接读 `Date`，日期要从 `getStaticProps` 传进来
 

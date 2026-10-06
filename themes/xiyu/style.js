@@ -22,13 +22,6 @@ export const Style = () => (
     <meta key='xiyu-theme-color' name='theme-color' content='#ffc828' />
     <meta key='xiyu-app-title' name='apple-mobile-web-app-title' content='xiyu' />
     <link key='xiyu-manifest' rel='manifest' href='/manifest.json' />
-    <link key='xiyu-fonts-preconnect' rel='preconnect' href='https://fonts.googleapis.com' />
-    <link key='xiyu-fonts-static-preconnect' rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='anonymous' />
-    <link
-      key='xiyu-fonts'
-      rel='stylesheet'
-      href='https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600&family=Noto+Sans+SC:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap'
-    />
     <link key='xiyu-css' rel='stylesheet' href='/css/xiyu.css' />
   </Head>
 )

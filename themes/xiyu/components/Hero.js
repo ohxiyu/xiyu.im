@@ -1,31 +1,8 @@
 import { siteConfig } from '@/lib/config'
 import SmartLink from '@/components/SmartLink'
-import { Badge } from '@/components/ui/badge'
 import CONFIG from '../config'
 import NowCard from './NowCard'
 import { formatNum, formatYear } from '../lib/format'
-
-// 标题里如果有 ：/，/——/—/- 分隔符，自动把最后一段当 em
-// 例："AI 交易的护城河不是 Alpha，是纪律" → ["AI 交易的护城河不是 Alpha，", "是纪律"(em)]
-// 没分隔符返回整段不 em
-const SPLITTERS = ['——', '：', '—', '：', ':', '，', ',', '、']
-function splitTitleForEm(title) {
-  if (!title || typeof title !== 'string') return [{ text: title || '', em: false }]
-  let lastIdx = -1
-  let lastSep = ''
-  for (const sep of SPLITTERS) {
-    const idx = title.lastIndexOf(sep)
-    if (idx > lastIdx) { lastIdx = idx; lastSep = sep }
-  }
-  // 不在末尾太靠后、也不在开头太靠前才切；否则整句不 em
-  if (lastIdx < 4 || lastIdx > title.length - 3) {
-    return [{ text: title, em: false }]
-  }
-  return [
-    { text: title.slice(0, lastIdx + lastSep.length), em: false },
-    { text: title.slice(lastIdx + lastSep.length), em: true }
-  ]
-}
 
 // FNV-1a。要的不是散列质量，是**确定性**：同一个 seed 在服务端和客户端算出同一个数，
 // 否则 hydration 会不一致。所以这里不能用 Math.random()，也不能直接读 Date——
@@ -43,8 +20,8 @@ function hashIndex(seed, size) {
 /**
  * 首页 Hero。
  *
- * 大标题刻意**不取最新文章**：最新的那篇下面的列表已经用大卡讲了一遍，
- * 再放到 hero 就是同一篇文章在一屏里出现两次。这里改成从更早的文章里
+ * 旧文推荐刻意**不取最新文章**：最新的那篇下面的列表已经用大卡讲了一遍，
+ * 再放到 hero 就是同一篇文章在一屏里出现两次。从更早的文章里
  * 轮换一篇「旧文重读」——既避开重复，也让 170 多篇旧文有个露面的位置。
  *
  * 轮换的种子是 renderedOn（getStaticProps 给的 UTC 日期），所以 ISR 每天
@@ -52,10 +29,10 @@ function hashIndex(seed, size) {
  */
 const Hero = props => {
   const { posts, postCount, allNavPages, renderedOn } = props
-  const author = siteConfig('AUTHOR') || 'xiyu'
   const total = typeof postCount === 'number' ? postCount : (posts?.length ?? 0)
-  const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
-  const years = Math.max(1, new Date().getFullYear() - since + 1)
+  const year = parseInt(String(renderedOn || '').slice(0, 4)) || parseInt(siteConfig('SINCE')) || 2013
+  const since = parseInt(siteConfig('SINCE')) || year
+  const years = Math.max(1, year - since + 1)
 
   const list = Array.isArray(posts) ? posts : []
 
@@ -66,7 +43,6 @@ const Hero = props => {
   const source = Array.isArray(allNavPages) && allNavPages.length > list.length ? allNavPages : list
   const pool = source.slice(Number.isFinite(skip) ? skip : 3, (Number.isFinite(skip) ? skip : 3) + poolSize)
   const picked = pool.length ? pool[hashIndex(String(renderedOn || total), pool.length)] : null
-  const titleSpans = picked ? splitTitleForEm(picked.title) : null
   const pickedYear = picked ? formatYear(picked.publishDay || picked.publishDate) : ''
   const pickedNum = picked ? formatNum(picked) : ''
 
@@ -84,68 +60,34 @@ const Hero = props => {
   }
 
   return (
-    <section className='hero'>
-      <div>
-        <div className='eyebrow hero-eyebrow'>{author}&apos;s notebook · est. {since}</div>
-        {titleSpans
-          ? (
-              <>
+    <section className='hero' aria-label='笔记概览'>
+      <div className='hero-context'>
+        <div className='hero-feature'>
+          <div className='eyebrow'>xiyu&apos;s notebook · est. {since}</div>
+          {picked
+            ? <>
                 <div className='hero-revisit'>
-                  <Badge variant='accent'>旧文重读</Badge>
-                  {(pickedYear || pickedNum) && (
-                    <span className='hero-revisit-when'>
-                      {[pickedYear, pickedNum && `#${pickedNum}`].filter(Boolean).join(' · ')}
-                    </span>
-                  )}
+                  <span className='context-label'>旧文重读</span>
+                  <span className='hero-revisit-when'>{[pickedYear, pickedNum && `#${pickedNum}`].filter(Boolean).join(' · ')}</span>
                 </div>
-                <SmartLink
-                  href={picked.href || `/${picked.slug}`}
-                  className='hero-title-link'
-                  title={`阅读：${picked.title}`}>
-                  <h2 className='hero-title'>
-                    {titleSpans.map((s, i) =>
-                      s.em
-                        ? <em key={i}>{s.text}</em>
-                        : <span key={i}>{s.text}</span>
-                    )}
-                  </h2>
+                <SmartLink href={picked.href || `/${picked.slug}`} className='hero-title-link' title={`阅读：${picked.title}`}>
+                  <h1 className='hero-title'>{picked.title}</h1>
                 </SmartLink>
               </>
-            )
-          : (
-              <h2 className='hero-title'>
-                在喧嚣与噪声里，<br />
-                写点<em>经得住时间</em>的东西。
-              </h2>
-            )
-        }
-        {topics.length > 0 && (
-          <div className='hero-status'>
-            <p className='hero-status-line'>
-              <span className='hero-status-label'>在想</span>
-              <span className='hero-status-topics'>
-                {topics.map((t, i) => (
-                  <span key={t}>
-                    {i > 0 && <span className='hero-status-dot'> · </span>}
-                    {t}
-                  </span>
-                ))}
-              </span>
-            </p>
-          </div>
-        )}
-        <div className='hero-meta'>
-          <div>
-            <span className='hero-meta-num'>{total}</span>
-            <span className='hero-meta-label'>Essays</span>
-          </div>
-          <div>
-            <span className='hero-meta-num'>{years}</span>
-            <span className='hero-meta-label'>Years writing</span>
+            : <h1 className='hero-title'>在喧嚣与噪声里，写点经得住时间的东西。</h1>}
+          {topics.length > 0 && (
+            <div className='hero-topics'>
+              <span className='hero-topics-label'>在想</span>
+              {topics.map(t => <SmartLink key={t} href={`/tag/${encodeURIComponent(t)}`} className='topic-chip'>{t}</SmartLink>)}
+            </div>
+          )}
+          <div className='hero-meta'>
+            <div><span className='hero-meta-num'>{total}</span><span className='hero-meta-label'>ESSAYS</span></div>
+            <div><span className='hero-meta-num'>{years}</span><span className='hero-meta-label'>YEARS WRITING</span></div>
           </div>
         </div>
+        <NowCard posts={posts} postCount={postCount} allNavPages={allNavPages} />
       </div>
-      <NowCard posts={posts} postCount={postCount} allNavPages={allNavPages} />
     </section>
   )
 }

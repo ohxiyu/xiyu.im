@@ -38,7 +38,7 @@ const NowCard = ({ posts, postCount, allNavPages }) => {
   const href =
     source?.href ||
     (source?.slug ? `/${String(source.slug).replace(/^\/+/, '')}` : '')
-  const attr = num ? `#${num} · 最近更新` : '最近更新'
+  const attr = now ? '近况笔记' : (num ? `#${num} · 最近更新` : '最近更新')
 
   return (
     <aside className='hero-card' aria-label='最近在想'>
@@ -55,7 +55,7 @@ const NowCard = ({ posts, postCount, allNavPages }) => {
             className='hero-card-link'
             aria-label='查看最近在想'
           >
-            查看近况 <span aria-hidden='true'>→</span>
+            {now ? '查看近况' : '继续阅读'} <span aria-hidden='true'>↗</span>
           </SmartLink>
         )}
       </div>

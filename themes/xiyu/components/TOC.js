@@ -36,20 +36,26 @@ const TOC = ({ toc }) => {
 
   if (!items.length) return null
 
+  const links = (
+    <ul className='toc-list'>
+      {items.map(it => (
+        <li key={it.id} style={it.indentLevel > 0 ? { paddingLeft: `${it.indentLevel * 12}px` } : undefined}>
+          <a href={`#${it.id}`} aria-current={activeId === it.id ? 'location' : undefined}
+            className={'toc-link' + (activeId === it.id ? ' active' : '')}>{it.text}</a>
+        </li>
+      ))}
+    </ul>
+  )
   return (
     <aside className='toc'>
-      <div className='toc-label'>Contents</div>
-      <ul className='toc-list'>
-        {items.map(it => (
-          <li key={it.id} style={it.indentLevel > 0 ? { paddingLeft: `${it.indentLevel * 12}px` } : undefined}>
-            <a
-              href={`#${it.id}`}
-              className={'toc-link' + (activeId === it.id ? ' active' : '')}>
-              {it.text}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <nav className='toc-desktop' aria-label='文章目录'>
+        <div className='toc-label'>CONTENTS</div>
+        {links}
+      </nav>
+      <details className='toc-mobile'>
+        <summary>文章目录 <span>{items.length} 节 <span aria-hidden='true'>⌄</span></span></summary>
+        <nav aria-label='手机文章目录'>{links}</nav>
+      </details>
     </aside>
   )
 }

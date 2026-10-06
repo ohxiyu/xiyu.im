@@ -77,7 +77,7 @@ export default function CommandDialog({ posts = [], open, onOpenChange, query, s
             aria-label='搜索文章'
             className={cn(
               'fixed left-1/2 top-[14vh] z-[100] w-[min(560px,calc(100vw-32px))] -translate-x-1/2',
-              'overflow-hidden rounded-md border border-rule bg-paper-elev',
+              'xiyu-search-dialog overflow-hidden rounded-xl border border-rule bg-paper-elev',
               'shadow-[0_18px_48px_rgba(26,22,18,.14)]',
               'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-[.985]',
               'data-[state=closed]:animate-out data-[state=closed]:fade-out-0'
@@ -130,7 +130,7 @@ export default function CommandDialog({ posts = [], open, onOpenChange, query, s
                   <Command.Group heading='更多' className='xiyu-cmd-group'>
                     <Command.Item
                       value='__all_results__'
-                      onSelect={() => go(`/search/${encodeURIComponent(query.trim())}`)}
+                      onSelect={() => go(`/search?s=${encodeURIComponent(query.trim())}`)}
                       className='xiyu-cmd-item'>
                       <span className='xiyu-cmd-title'>
                         在搜索页查看「{query.trim()}」的全部结果

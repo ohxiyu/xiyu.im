@@ -1,3 +1,4 @@
+import PostTags from './PostTags'
 import { memo } from 'react'
 import SmartLink from '@/components/SmartLink'
 import { formatNum, formatDateCN } from '../lib/format'
@@ -20,18 +21,11 @@ const BlogPost = ({ post, totalCount, index = 0 }) => {
             {post.title}
           </SmartLink>
         </h3>
-        <p className='post-excerpt row-excerpt'>{post.summary || ''}</p>
-        <div className='row-tags'>
-          {tags.map((t, i) => (
-            <span key={t}>
-              {i > 0 && <span className='tag-dot'>·</span>}
-              <span className='tag-plain'>{t}</span>
-            </span>
-          ))}
-        </div>
+        {post.summary && <p className='post-excerpt row-excerpt'>{post.summary}</p>}
+        <PostTags tags={tags} />
       </div>
       <div className='row-date-col'>
-        <span className='post-date'>{formatDateCN(post.publishDay || post.date?.start_date)}</span>
+        <time className='post-date' dateTime={post.publishDay || post.date?.start_date}>{formatDateCN(post.publishDay || post.date?.start_date)}</time>
       </div>
     </article>
   )
