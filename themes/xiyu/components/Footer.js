@@ -8,7 +8,7 @@ export const Footer = props => {
   const since = parseInt(siteConfig('SINCE')) || currentYear
   const dateRange = since < currentYear ? since + '—' + currentYear : String(currentYear)
   const author = siteConfig('AUTHOR') || 'xiyu'
-  const link = siteConfig('LINK') || ''
+  const link = props?.NOTION_CONFIG?.LINK || siteConfig('LINK') || ''
   const host = link.replace(/^https?:\/\//, '').replace(/\/$/, '') || 'xiyu.im'
   const tagline = siteConfig('XIYU_FOOT_QUOTE', null, CONFIG) || siteConfig('BIO') || '长期主义 · 记录思考'
   // 技术栈一行字（原关于页 Colophon 区块压缩至此）
