@@ -2114,8 +2114,8 @@ html.dark #theme-xiyu {
 
 /* Beautiful UI direction: neutral sans typography, compact rows and quiet surfaces.
    This section owns the responsive theme layout; Notion media safeguards above stay in place. */
-#theme-xiyu { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; min-height: 100vh; background: repeating-linear-gradient(135deg, var(--canvas) 0, var(--canvas) 6px, var(--rule-soft) 7px, var(--canvas) 8px); }
-.page { max-width: 1120px; min-height: 100vh; padding: 0 46px 48px; background: var(--bg); border-left: 1px solid var(--rule-soft); border-right: 1px solid var(--rule-soft); }
+#theme-xiyu { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; min-height: 100vh; background: var(--bg); }
+.page { max-width: 1120px; min-height: 100vh; padding: 0 46px 48px; background: var(--bg); border: 0; }
 .site-nav { min-height: 76px; padding: 0 46px; margin: 0 -46px 58px; border: 0; border-bottom: 1px solid var(--rule-soft); border-radius: 0; background: none; box-shadow: none; backdrop-filter: none; }
 .brand { min-height: 44px; gap: 9px; }
 .brand-mark { font-size: 21px; font-weight: 650; }
