@@ -20,8 +20,19 @@
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;overflow-x:clip}
 .m{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;font-variant-numeric:tabular-nums}
 .band{padding:clamp(28px,4vw,56px) max(5vw,16px)}
+.band.top{padding-top:14px}
 .wrap{max-width:1180px;margin:0 auto}
 .top{background:var(--btc);color:#121212}
+.sitenav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;padding-bottom:14px;margin-bottom:24px;border-bottom:2px solid #121212}
+.sitenav .brand{font:800 24px/1 ui-monospace,"SF Mono",Menlo,Consolas,monospace;letter-spacing:-.02em;color:#121212;text-decoration:none;display:inline-flex;align-items:baseline;gap:10px;min-height:44px;align-items:center}
+.sitenav .brand span{font-size:13px;font-weight:400;opacity:.75;letter-spacing:0}
+.navlinks{display:flex;flex-wrap:wrap;gap:4px}
+.navlinks a{min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border-radius:8px;color:#121212;font-weight:600;font-size:15px;text-decoration:none}
+.navlinks a:hover{background:rgb(18 18 18/.08)}
+.navlinks a[aria-current=page]{background:#121212;color:var(--btc)}
+.sitenav a:focus-visible{outline:3px solid #121212;outline-offset:2px}
+@media(max-width:600px){.sitenav .brand span{display:none}.navlinks a{padding:0 10px;font-size:14px}}
+
 .row{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
 h1{font:800 clamp(34px,6vw,52px)/1.05 ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;margin:0;letter-spacing:-.02em}
 h2{font-size:clamp(22px,3vw,28px);line-height:1.2;margin:0 0 14px;text-wrap:balance}
@@ -83,6 +94,15 @@ footer{border-top:1px solid var(--line)}footer a{color:var(--ink)}
 
 <header class="band top">
 <div class="wrap">
+  <nav class="sitenav" aria-label="主导航">
+    <a class="brand" href="/">xiyu<span>since 2013</span></a>
+    <div class="navlinks">
+      <a href="/">写作</a>
+      <a href="/archive">归档</a>
+      <a href="/about">关于</a>
+      <a href="/xiyu999.html" aria-current="page">xiyu999</a>
+    </div>
+  </nav>
   <div class="row">
     <div>
       <h1>xiyu999</h1>

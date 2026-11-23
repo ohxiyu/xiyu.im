@@ -14,7 +14,6 @@ import { agenticPages } from '@/lib/agentic/content'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
-import NowCard from './components/NowCard'
 import BlogPost from './components/BlogPost'
 import TOC from './components/TOC'
 import ArticleSide from './components/ArticleSide'
@@ -104,7 +103,7 @@ const LayoutBase = props => {
 }
 
 /**
- * 首页：橙色 Hero（自述 + xiyu999 指数）→ Now · 最近在想 → 最新写作（按年份分组的卡片列表 + 分页）
+ * 首页：橙色 Hero（Now + 自述 | xiyu999 指数）→ 最新写作（按年份分组的卡片列表 + 分页）
  */
 const LayoutIndex = props => {
   const { posts, postCount, allNavPages } = props
@@ -115,8 +114,7 @@ const LayoutIndex = props => {
 
   return (
     <>
-      <Hero posts={list} postCount={total} />
-      <NowCard posts={list} postCount={total} allNavPages={allNavPages} />
+      <Hero posts={list} postCount={total} allNavPages={allNavPages} />
       <section className='latest-section'>
         <div className='section-head'>
           <h2 className='section-title'>最新写作</h2>

@@ -51,6 +51,11 @@ describe('xiyu 首页 Hero', () => {
     expect(global.fetch).toHaveBeenCalledWith('/api/xiyu999?fields=now')
   })
 
+  it('左列带 Now · 最近在想', () => {
+    const { container } = render(<Hero posts={posts} postCount={12} allNavPages={posts} />)
+    expect(container.querySelector('.x9-hero-main .now-card')).not.toBeNull()
+  })
+
   it('不再有「旧文重读」', () => {
     render(<Hero posts={posts} postCount={12} />)
     expect(screen.queryByText('旧文重读')).not.toBeInTheDocument()
