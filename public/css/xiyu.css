@@ -2455,15 +2455,15 @@ html.dark .hero-card { background: var(--tag-bg); box-shadow: none; }
 #theme-xiyu .section-count { font-family: var(--mono); font-size: 13px; color: var(--ink-mute); letter-spacing: 0; }
 #theme-xiyu .context-link { color: var(--accent); }
 
-/* —— Now · 最近在想 —— */
-.now-section { margin-bottom: 48px; }
-.now-card { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 16px 32px; padding: 24px; background: var(--bg-elev); border: 1px solid var(--rule); border-radius: var(--r-md); }
-.now-year { display: block; font-family: var(--mono); font-size: 13px; color: var(--ink-mute); }
-.now-month { display: block; font-family: var(--mono); font-size: 56px; font-weight: 800; line-height: 1; letter-spacing: -.03em; color: var(--ink); }
-.now-month small { font-size: 20px; font-weight: 700; color: var(--ink-mute); letter-spacing: 0; }
-.now-quote { margin: 0; font-size: 17px; line-height: 1.75; color: var(--ink); max-width: 62ch; }
-.now-link { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin-top: 16px; padding: 0 16px; border-radius: var(--r-sm); background: var(--ink); color: var(--bg); font-weight: 600; text-decoration: none; }
-.now-link:hover { color: var(--bg); opacity: .88; }
+/* —— Now · 最近在想：Hero 左上的浅色面板 —— */
+.x9-hero-main { align-self: stretch; display: flex; flex-direction: column; justify-content: space-between; gap: 28px; }
+.now-card { padding: 16px 18px; border-radius: var(--r-md); background: rgb(255 255 255 / .32); color: var(--on-btc); }
+.now-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; font-family: var(--mono); font-size: 13px; }
+.now-label { font-weight: 700; }
+.now-when { opacity: .75; }
+.now-quote { margin: 8px 0 0; font-size: 15px; line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.now-link { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; margin-top: 6px; color: var(--on-btc); font-size: 14px; font-weight: 700; text-decoration: none; }
+.now-link:hover { color: var(--on-btc); text-decoration: underline; }
 
 /* —— 文章列表：每年一张卡 —— */
 #theme-xiyu .rule-head { font-family: var(--mono); font-size: 15px; font-weight: 800; color: var(--ink); margin: 28px 0 10px; letter-spacing: 0; }
@@ -2552,10 +2552,8 @@ html.dark #theme-xiyu .archive-jump-link:first-child { background: var(--btc); c
   .x9-val { font-size: 64px; }
   .x9-bar { height: 24px; font-size: 11px; }
   .x9-pin { height: 36px; top: -6px; }
-  .now-section { margin-bottom: 32px; }
-  .now-card { grid-template-columns: minmax(0, 1fr); padding: 16px; }
-  .now-month { font-size: 40px; }
-  .now-quote { font-size: 15px; }
+  .x9-hero-main { flex-direction: column-reverse; gap: 20px; }
+  .now-card { padding: 14px 16px; }
   #theme-xiyu .section-title { font-size: 20px; }
   #theme-xiyu .year-group { padding: 0 16px; }
   #theme-xiyu .row-title { font-size: 17px; }
