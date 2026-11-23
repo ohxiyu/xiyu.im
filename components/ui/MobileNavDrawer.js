@@ -13,7 +13,8 @@ import { useEffect } from 'react'
  * 那套实现没有焦点陷阱、Esc 不关闭、打开时背景仍能滚动。
  * Radix Dialog 这四件事都自带。
  *
- * links: [{ key, href, label, external? }]
+ * links: [{ key, href, label, external?, native? }]
+ * native：站内的静态页（public/ 下），用普通 <a> 同页整页跳转，不走 Next 路由
  */
 export default function MobileNavDrawer({ links = [], tools = null, open, onOpenChange }) {
   const router = useRouter()
@@ -71,6 +72,13 @@ export default function MobileNavDrawer({ links = [], tools = null, open, onOpen
                 'px-2 py-[11px] text-[14.5px] text-ink-soft no-underline',
                 'transition-all duration-150 hover:bg-tag-bg hover:text-accent-ink'
               )
+              if (link.native) {
+                return (
+                  <a key={link.key} href={link.href} className={className}>
+                    {content}
+                  </a>
+                )
+              }
               return link.external
                 ? (
                   <a

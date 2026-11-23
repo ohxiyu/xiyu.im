@@ -259,6 +259,12 @@ const nextConfig = {
           source: '/feed',
           destination: '/rss/feed.xml',
           permanent: true
+        },
+        // xiyu999 指数页是 public/ 下的独立静态页
+        {
+          source: '/xiyu999',
+          destination: '/xiyu999.html',
+          permanent: false
         }
       ]
     },
