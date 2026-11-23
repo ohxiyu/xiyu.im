@@ -1,13 +1,7 @@
 const CONFIG = {
-  // —— 首页 Hero 区配置 ——
-  // Hero 副文案下方：从最近文章 tags 里聚合 N 个关键词显示"在想：xxx · xxx"
-  XIYU_HERO_TOPICS_FROM: 8, // 取最近 N 篇文章聚合
-  XIYU_HERO_TOPICS_LIMIT: 5, // 最多显示几个关键词
-
-  // 大标题的「旧文重读」：跳过最近 N 篇（它们已经在下方列表里露脸了），
-  // 从接下来的 M 篇里按天轮换一篇。调小 SKIP 会让 hero 和列表重复。
-  XIYU_HERO_SKIP_RECENT: 3,
-  XIYU_HERO_POOL: 40,
+  // —— 首页 Hero ——
+  // 左侧自述的一段话；右侧是 xiyu999 指数模块（数据来自 /api/xiyu999）
+  XIYU_HERO_INTRO: '技术、AI、比特币、产品，和一些需要时间才能想清楚的事。也是一份公开档案，人和 agent 都能读。',
 
   // —— 关于页 ——
   // 头部「在做」那一行（和首页「在想」同款）。首页那行是从最近文章 tags 自动聚合的，
