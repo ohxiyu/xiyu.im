@@ -60,10 +60,13 @@ describe('xiyu999 计算', () => {
     expect(priceForIndex(1, { g: 100, rp: 100, s1: 0.5, s2: 0.5 })).toBeCloseTo(100, 10)
   })
 
-  it('周线最后一个点是最新一天', () => {
+  it('序列是逐日的，最后一个点是最新一天', () => {
     const last = out.series[out.series.length - 1]
     expect(last[0]).toBe(rows[rows.length - 1].date)
-    expect(out.series.length).toBeGreaterThan(50)
+    const d0 = Date.parse(out.series[0][0])
+    const d1 = Date.parse(out.series[1][0])
+    expect(d1 - d0).toBe(86400000)
+    expect(last).toHaveLength(5)
   })
 
   it('有金价时给出比特币/黄金市值比', () => {
