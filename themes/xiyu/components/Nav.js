@@ -37,6 +37,14 @@ const NavIcon = ({ name }) => {
       </svg>
     )
   }
+  if (name === 'index') {
+    return (
+      <svg {...common}>
+        <path d='M4 20h16' />
+        <path d='m5 15 4-4 3 3 7-7' />
+      </svg>
+    )
+  }
   if (name === 'about') {
     return (
       <svg {...common}>
@@ -111,6 +119,11 @@ const Nav = props => {
             <NavIcon name='about' />
             <span className='nav-link-label'>关于</span>
           </SmartLink>
+          {/* xiyu999 是 public/ 下的独立静态页，不走 Next 路由，用普通 <a> 整页跳转 */}
+          <a href='/xiyu999.html' className='nav-link'>
+            <NavIcon name='index' />
+            <span className='nav-link-label'>xiyu999</span>
+          </a>
         </div>
         <CommandPalette posts={allNavPages} />
         <div className='nav-desktop-tools'>
@@ -121,7 +134,8 @@ const Nav = props => {
           links={[
             { key: 'writing', href: '/', label: '写作' },
             { key: 'archive', href: '/archive', label: '归档' },
-            { key: 'about', href: '/about', label: '关于' }
+            { key: 'about', href: '/about', label: '关于' },
+            { key: 'xiyu999', href: '/xiyu999.html', label: 'xiyu999', native: true }
           ]}
           tools={<><ThemeToggle /><XLink /></>}
         />
