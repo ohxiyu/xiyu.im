@@ -3,22 +3,7 @@ import { siteConfig } from '@/lib/config'
 import CONFIG from '../config'
 import { formatNum } from '../lib/format'
 
-const CN_MONTHS = [
-  '一月',
-  '二月',
-  '三月',
-  '四月',
-  '五月',
-  '六月',
-  '七月',
-  '八月',
-  '九月',
-  '十月',
-  '十一月',
-  '十二月'
-]
-
-// 首页 "Now · 最近在想" 卡，引用最新文章 summary 作 fallback
+// 首页 "Now · 最近在想"：优先引用 slug=now 页的 summary，没有就回落到最新文章的摘要
 const NowCard = ({ posts, postCount, allNavPages }) => {
   const slug = siteConfig('XIYU_NOW_SLUG', 'now', CONFIG)
   const now = allNavPages?.find(p => p.slug === slug || p.slug === `/${slug}`)
@@ -28,10 +13,9 @@ const NowCard = ({ posts, postCount, allNavPages }) => {
     siteConfig('DESCRIPTION') ||
     '记录一些值得三年后再读的思考。'
   const latest = posts?.[0]
-  const mm = latest?.publishDay
-    ? parseInt(latest.publishDay.slice(5, 7), 10)
-    : 0
-  const monthLabel = mm >= 1 && mm <= 12 ? CN_MONTHS[mm - 1] : ''
+  const day = String(latest?.publishDay || '')
+  const year = day.slice(0, 4)
+  const mm = parseInt(day.slice(5, 7), 10)
   const total = typeof postCount === 'number' ? postCount : posts?.length
   const num = latest ? formatNum(latest, total, 0) : ''
   const source = now || latest
@@ -41,25 +25,29 @@ const NowCard = ({ posts, postCount, allNavPages }) => {
   const attr = now ? '近况笔记' : (num ? `#${num} · 最近更新` : '最近更新')
 
   return (
-    <aside className='hero-card' aria-label='最近在想'>
-      <div className='hero-card-head'>
-        <div className='hero-card-label'>Now · 最近在想</div>
-        <div className='hero-card-month'>{monthLabel || '最近'}</div>
+    <section className='now-section' aria-labelledby='now-title'>
+      <div className='section-head'>
+        <h2 id='now-title' className='section-title'>Now · 最近在想</h2>
+        <div className='section-actions'><span className='section-count'>{attr}</span></div>
       </div>
-      <p className='hero-card-quote'>{quote}</p>
-      <div className='hero-card-footer'>
-        <div className='hero-card-attr'>{attr}</div>
-        {href && (
-          <SmartLink
-            href={href}
-            className='hero-card-link'
-            aria-label='查看最近在想'
-          >
-            {now ? '查看近况' : '继续阅读'} <span aria-hidden='true'>↗</span>
-          </SmartLink>
-        )}
+      <div className='now-card' aria-label='最近在想'>
+        <div className='now-when'>
+          {year && <span className='now-year'>{year}</span>}
+          <span className='now-month'>
+            {mm >= 1 && mm <= 12 ? String(mm) : '—'}
+            <small> 月</small>
+          </span>
+        </div>
+        <div className='now-body'>
+          <p className='now-quote'>{quote}</p>
+          {href && (
+            <SmartLink href={href} className='now-link' aria-label='查看最近在想'>
+              {now ? '查看近况' : '继续阅读'} <span aria-hidden='true'>→</span>
+            </SmartLink>
+          )}
+        </div>
       </div>
-    </aside>
+    </section>
   )
 }
 

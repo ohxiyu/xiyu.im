@@ -196,28 +196,31 @@ shadcn 组件要用的字体已另起名为 `font-xiyu-serif` / `font-xiyu-mono`
 
 ### 12. 站点只有一套视觉语言，加新区块前先去找现成的类
 
-当前主题参考 Beautiful UI 的**中性灰阶、无衬线字、紧凑列表和轻量控件**。
-颜色、RGB 令牌和圆角统一在 `public/css/xiyu.css`；文件末尾的 Beautiful UI 区块管理响应式主题布局。
-保留品牌 logo 和作者正文，不引入 AI 聊天等与阅读无关的模块。
+主题与 `/xiyu999.html` 指数页统一（2026-11 起）：**比特币橙色带、墨黑正文、等宽数字、黑底代码块**。
+颜色、RGB 令牌和圆角统一在 `public/css/xiyu.css`：上方的 hex 与 `-rgb` 桥存放色值，
+文件末尾的「xiyu999 视觉」区块放结构与组件皮肤。
 
-- 导航无外框和阴影，活动项使用浅灰背景。
-- 首页旧文和近况使用同一浅灰表面，标题、摘要、标签、日期按固定网格对齐。
+- 橙色只用在：导航色带、首页 Hero 色带、当前项（黑底橙字）、文章标题区底线、引用竖线。别拿它当正文强调色。
+- 色带用 `box-shadow: 0 0 0 100vmax` + `clip-path: inset(0 -100vmax)` 铺满整屏，不改 `.page` 的宽度。
+- 色带上的文字固定用 `--on-btc`（#121212），深色模式也一样，不跟主题变。
+- 链接用 `--accent`（冷蓝）；等宽字体 `--mono` 只给站名、日期、编号、计数、读数和代码，中文标题和正文用系统无衬线。
+- 首页：Hero 左自述右 xiyu999 模块（`Xiyu999Card`，客户端取 `/api/xiyu999?fields=now`）→ `NowCard` → 按年份分组的卡片列表。
 - 列表标签由 `PostTags` 显示两个，其余原生展开，所有标签链接保留在 DOM。
-- 文章宽度最多 740px，摘要无斜体或装饰竖线；文末使用 `ArticleShare` 分享。
-- 关于页仍为单栏，以留白分段，无装饰线或卡片边框。
-- `.hero-meta`、`.eyebrow`、`.topic-chip`、`.rule-head` 等跨页面共用，避免内联重复样式。
+- 文章宽度最多 740px；代码块黑底，Prism token 颜色在同一区块里配好；文末使用 `ArticleShare` 分享。
+- 关于页仍为单栏，以留白分段。
 - 字体使用系统字体，不在主题 head 下载 Web 字体。
 - Radix / cmdk 保留懒加载，键盘焦点和 reduced motion 不能退化。
 
 ### 13. 组件里不能直接读 `Date`，日期要从 `getStaticProps` 传进来
 
-首页大标题「旧文重读」每天换一篇。轮换的种子是 `pages/index.js` 里算好、
-当作 `props.renderedOn` 传下来的 UTC 日期字符串（`Hero` 再拿它做 FNV-1a 取模）。
+`pages/index.js` 把 UTC 日期算好，当作 `props.renderedOn` 传下来（首页「最新写作」的年份用它）。
 
 **不能在组件里 `new Date()`**：SSG 的 HTML 是构建那天生成的，客户端 hydration
-是访问那天算的，两边选中的文章不一样，React 会报 hydration 不匹配。
+是访问那天算的，两边结果不一样，React 会报 hydration 不匹配。
 同理不能用 `Math.random()`。`themes/xiyu/lib/format.js` 里所有日期函数都走 UTC，
 也是这个原因（`formatYear` / `parseUTC`）。
+
+需要「当天」数据的模块（如 `Xiyu999Card`）在 `useEffect` 里取，服务端只渲染占位。
 
 ### 14. 沙箱里跑不出真实页面，别拿本地渲染当验证
 

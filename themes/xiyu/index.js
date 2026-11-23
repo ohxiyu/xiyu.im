@@ -14,7 +14,7 @@ import { agenticPages } from '@/lib/agentic/content'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
-import FeaturedCard from './components/FeaturedCard'
+import NowCard from './components/NowCard'
 import BlogPost from './components/BlogPost'
 import TOC from './components/TOC'
 import ArticleSide from './components/ArticleSide'
@@ -104,32 +104,25 @@ const LayoutBase = props => {
 }
 
 /**
- * 首页：Hero + 最新写作 section（FeaturedCard + ArticleRow list + 分页）
+ * 首页：橙色 Hero（自述 + xiyu999 指数）→ Now · 最近在想 → 最新写作（按年份分组的卡片列表 + 分页）
  */
 const LayoutIndex = props => {
   const { posts, postCount, allNavPages } = props
   const list = Array.isArray(posts) ? posts : []
   const total = typeof postCount === 'number' ? postCount : list.length
-  const [featured] = list
   const currentYear = String(props.renderedOn || list[0]?.publishDay || '').slice(0, 4)
-  // 全部文章（含 featured）一起按年份分组：featured 与同年文章归入同一「年份」标题下，
-  // 不再游离于分隔线之外。featured 用 index 0 大卡渲染，其余用 BlogPost 行。
   const grouped = groupByYear(list)
 
   return (
     <>
-      <Hero
-        posts={list}
-        postCount={total}
-        allNavPages={allNavPages}
-        renderedOn={props.renderedOn}
-      />
-      <section>
+      <Hero posts={list} postCount={total} />
+      <NowCard posts={list} postCount={total} allNavPages={allNavPages} />
+      <section className='latest-section'>
         <div className='section-head'>
           <h2 className='section-title'>最新写作</h2>
           <div className='section-actions'><span className='section-count'>{currentYear} · {list.length} 篇</span><SmartLink href='/archive' className='context-link'>全部文章 <span aria-hidden='true'>→</span></SmartLink></div>
         </div>
-        <div>
+        <div className='post-list'>
           {grouped.map(group => (
             <div key={group.year || 'no-year'}>
               {group.year && (
@@ -138,12 +131,11 @@ const LayoutIndex = props => {
                   <span className='rule-head-rule' aria-hidden='true' />
                 </h3>
               )}
-              {group.posts.map(p => {
-                const idx = list.indexOf(p)
-                return p === featured
-                  ? <FeaturedCard key={p.id || p.slug} post={p} totalCount={total} index={0} />
-                  : <BlogPost key={p.id || p.slug} post={p} totalCount={total} index={idx} />
-              })}
+              <div className='year-group'>
+                {group.posts.map(p => (
+                  <BlogPost key={p.id || p.slug} post={p} totalCount={total} index={list.indexOf(p)} />
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -161,7 +153,7 @@ const LayoutPostList = props => {
   const list = Array.isArray(posts) ? posts : []
   const total = typeof postCount === 'number' ? postCount : list.length
   const title = tag ? `# ${tag}` : category ? `分类 · ${category}` : keyword ? `搜索 · ${keyword}` : '文章'
-  const POSTS_PER_PAGE = parseInt(siteConfig('POSTS_PER_PAGE', 12)) || 12
+  const POSTS_PER_PAGE = parseInt(siteConfig('POSTS_PER_PAGE', 20)) || 20
   // 全局 idx：前几页累计 + 当前页内 idx，保证 BlogPost.formatNum(total - idx) 跨页连续
   const startIdx = (Math.max(1, +page) - 1) * POSTS_PER_PAGE
   return (
@@ -186,7 +178,7 @@ const LayoutPostList = props => {
  */
 const LayoutPagination = ({ page = 1, postCount }) => {
   const router = useRouter()
-  const POSTS_PER_PAGE = parseInt(siteConfig('POSTS_PER_PAGE', 12)) || 12
+  const POSTS_PER_PAGE = parseInt(siteConfig('POSTS_PER_PAGE', 20)) || 20
   const totalPage = Math.max(1, Math.ceil((postCount || 0) / POSTS_PER_PAGE))
   const currentPage = +page || 1
   if (totalPage <= 1) return null

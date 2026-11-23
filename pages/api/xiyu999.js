@@ -58,6 +58,10 @@ export default async function handler (req, res) {
       memo = { body: await build(), at: Date.now() }
     }
     res.setHeader('Cache-Control', 'public, s-maxage=21600, stale-while-revalidate=86400')
+    // 首页卡片只要当天读数：?fields=now 省掉 700 多个周线点
+    if (req.query?.fields === 'now') {
+      return res.status(200).json({ now: memo.body.now, builtAt: memo.body.builtAt })
+    }
     return res.status(200).json(memo.body)
   } catch (err) {
     console.error('[xiyu999] %s', err instanceof Error ? err.message : String(err))

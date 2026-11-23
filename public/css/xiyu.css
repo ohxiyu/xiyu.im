@@ -4,20 +4,20 @@
 
 :root {
   /* Light — neutral surfaces */
-  --bg: #fdfdfd;
-  --bg-elev: #fdfdfd;
-  --ink: #292a2e;
-  --ink-soft: #45464c;
-  --ink-mute: #75777e;
-  --ink-faint: #a2a4ab;
-  --rule: #dfe0e4;
-  --rule-soft: #e8e8eb;
-  --accent: #5877f2;      /* sparse blue interaction accent */
-  --accent-ink: #4f60cc;
-  --tag-bg: #f5f5f6;
-  --tag-ink: #75777e;
-  --selection: #eef1ff;
-  --canvas: #f4f4f5;
+  --bg: #f4f3ef;
+  --bg-elev: #ffffff;
+  --ink: #141414;
+  --ink-soft: #2f2e2b;
+  --ink-mute: #66655f;
+  --ink-faint: #7a7973;
+  --rule: #dcdad2;
+  --rule-soft: #e8e6df;
+  --accent: #1f5aa6;      /* sparse blue interaction accent */
+  --accent-ink: #163f75;
+  --tag-bg: #ebe9e1;
+  --tag-ink: #55544f;
+  --selection: #fde3bf;
+  --canvas: #ecebe5;
 
   /* ——— 圆角尺度 ———
      参照苹果官网的克制用法：小控件轻微收角，只有最大的表面才明显圆。
@@ -30,20 +30,20 @@
 }
 
 html.dark {
-  --bg: #1b1b1e;
-  --bg-elev: #1b1b1e;
-  --ink: #f1f1f3;
-  --ink-soft: #d4d4da;
-  --ink-mute: #a0a0aa;
-  --ink-faint: #73747d;
-  --rule: #414149;
-  --rule-soft: #303036;
-  --accent: #8796ff;
-  --accent-ink: #a7b0ff;
-  --tag-bg: #242428;
-  --tag-ink: #a0a0aa;
-  --selection: #282b42;
-  --canvas: #151518;
+  --bg: #121316;
+  --bg-elev: #1b1c20;
+  --ink: #ecebe6;
+  --ink-soft: #cfcec8;
+  --ink-mute: #9b9a94;
+  --ink-faint: #85847e;
+  --rule: #2c2d33;
+  --rule-soft: #232429;
+  --accent: #79aef0;
+  --accent-ink: #a3c6f5;
+  --tag-bg: #232429;
+  --tag-ink: #b5b4ae;
+  --selection: #4a3510;
+  --canvas: #0d0e10;
 }
 
 * { box-sizing: border-box; }
@@ -1462,18 +1462,18 @@ html.dark .hero-card {
 
 /* 把 :root 下的 CSS 变量同时挂到 #theme-xiyu，避免被外层覆盖 */
 #theme-xiyu {
-  --bg: #fafafa; --bg-elev: #ffffff;
-  --ink: #202124; --ink-soft: #44464b; --ink-mute: #656870; --ink-faint: #777b83;
-  --rule: #e3e5e8; --rule-soft: #f0f1f3;
-  --accent: #405a99; --accent-ink: #344c86;
-  --tag-bg: #f1f2f4; --tag-ink: #565b65; --selection: #dfe6f5;
+  --bg: #f4f3ef; --bg-elev: #ffffff;
+  --ink: #141414; --ink-soft: #2f2e2b; --ink-mute: #66655f; --ink-faint: #7a7973;
+  --rule: #dcdad2; --rule-soft: #e8e6df;
+  --accent: #1f5aa6; --accent-ink: #163f75;
+  --tag-bg: #ebe9e1; --tag-ink: #55544f; --selection: #fde3bf;
 }
 html.dark #theme-xiyu {
-  --bg: #171819; --bg-elev: #202224;
-  --ink: #ededee; --ink-soft: #d0d1d3; --ink-mute: #abafb5; --ink-faint: #9298a1;
-  --rule: #36393d; --rule-soft: #292c30;
-  --accent: #94aeea; --accent-ink: #b4c8f5;
-  --tag-bg: #282b30; --tag-ink: #bdc3ce; --selection: #344367;
+  --bg: #121316; --bg-elev: #1b1c20;
+  --ink: #ecebe6; --ink-soft: #cfcec8; --ink-mute: #9b9a94; --ink-faint: #85847e;
+  --rule: #2c2d33; --rule-soft: #232429;
+  --accent: #79aef0; --accent-ink: #a3c6f5;
+  --tag-bg: #232429; --tag-ink: #b5b4ae; --selection: #4a3510;
 }
 
 /* ===== xiyu Nav logo ===== */
@@ -1962,64 +1962,64 @@ html.dark #theme-xiyu {
    ⚠️ 改颜色时上面的 hex 和这里的 rgb 必须一起改。
    ============================================================ */
 :root {
-  --bg-rgb: 253 253 253;
-  --bg-elev-rgb: 253 253 253;
-  --ink-rgb: 41 42 46;
-  --ink-soft-rgb: 69 70 76;
-  --ink-mute-rgb: 117 119 126;
-  --ink-faint-rgb: 162 164 171;
-  --rule-rgb: 223 224 228;
-  --rule-soft-rgb: 232 232 235;
-  --accent-rgb: 88 119 242;
-  --accent-ink-rgb: 79 96 204;
-  --tag-bg-rgb: 245 245 246;
-  --tag-ink-rgb: 117 119 126;
-  --selection-rgb: 238 241 255;
+  --bg-rgb: 244 243 239;
+  --bg-elev-rgb: 255 255 255;
+  --ink-rgb: 20 20 20;
+  --ink-soft-rgb: 47 46 43;
+  --ink-mute-rgb: 102 101 95;
+  --ink-faint-rgb: 122 121 115;
+  --rule-rgb: 220 218 210;
+  --rule-soft-rgb: 232 230 223;
+  --accent-rgb: 31 90 166;
+  --accent-ink-rgb: 22 63 117;
+  --tag-bg-rgb: 235 233 225;
+  --tag-ink-rgb: 85 84 79;
+  --selection-rgb: 253 227 191;
 }
 html.dark {
-  --bg-rgb: 27 27 30;
-  --bg-elev-rgb: 27 27 30;
-  --ink-rgb: 241 241 243;
-  --ink-soft-rgb: 212 212 218;
-  --ink-mute-rgb: 160 160 170;
-  --ink-faint-rgb: 115 116 125;
-  --rule-rgb: 65 65 73;
-  --rule-soft-rgb: 48 48 54;
-  --accent-rgb: 135 150 255;
-  --accent-ink-rgb: 167 176 255;
-  --tag-bg-rgb: 36 36 40;
-  --tag-ink-rgb: 160 160 170;
-  --selection-rgb: 40 43 66;
+  --bg-rgb: 18 19 22;
+  --bg-elev-rgb: 27 28 32;
+  --ink-rgb: 236 235 230;
+  --ink-soft-rgb: 207 206 200;
+  --ink-mute-rgb: 155 154 148;
+  --ink-faint-rgb: 133 132 126;
+  --rule-rgb: 44 45 51;
+  --rule-soft-rgb: 35 36 41;
+  --accent-rgb: 121 174 240;
+  --accent-ink-rgb: 163 198 245;
+  --tag-bg-rgb: 35 36 41;
+  --tag-ink-rgb: 181 180 174;
+  --selection-rgb: 74 53 16;
 }
 #theme-xiyu {
-  --bg-rgb: 253 253 253;
-  --bg-elev-rgb: 253 253 253;
-  --ink-rgb: 41 42 46;
-  --ink-soft-rgb: 69 70 76;
-  --ink-mute-rgb: 117 119 126;
-  --ink-faint-rgb: 162 164 171;
-  --rule-rgb: 223 224 228;
-  --rule-soft-rgb: 232 232 235;
-  --accent-rgb: 88 119 242;
-  --accent-ink-rgb: 79 96 204;
-  --tag-bg-rgb: 245 245 246;
-  --tag-ink-rgb: 117 119 126;
-  --selection-rgb: 238 241 255;
+  --bg-rgb: 244 243 239;
+  --bg-elev-rgb: 255 255 255;
+  --ink-rgb: 20 20 20;
+  --ink-soft-rgb: 47 46 43;
+  --ink-mute-rgb: 102 101 95;
+  --ink-faint-rgb: 122 121 115;
+  --rule-rgb: 220 218 210;
+  --rule-soft-rgb: 232 230 223;
+  --accent-rgb: 31 90 166;
+  --accent-ink-rgb: 22 63 117;
+  --tag-bg-rgb: 235 233 225;
+  --tag-ink-rgb: 85 84 79;
+  --selection-rgb: 253 227 191;
 }
 html.dark #theme-xiyu {
-  --bg-rgb: 27 27 30;
-  --bg-elev-rgb: 27 27 30;
-  --ink-rgb: 241 241 243;
-  --ink-soft-rgb: 212 212 218;
-  --ink-mute-rgb: 160 160 170;
-  --ink-faint-rgb: 115 116 125;
-  --rule-rgb: 65 65 73;
-  --rule-soft-rgb: 48 48 54;
-  --accent-rgb: 135 150 255;
-  --accent-ink-rgb: 167 176 255;
-  --tag-bg-rgb: 36 36 40;
-  --tag-ink-rgb: 160 160 170;
-  --selection-rgb: 40 43 66;
+  --bg-rgb: 18 19 22;
+  --bg-elev-rgb: 27 28 32;
+  --ink-rgb: 236 235 230;
+  --ink-soft-rgb: 207 206 200;
+  --ink-mute-rgb: 155 154 148;
+  --ink-faint-rgb: 133 132 126;
+  --rule-rgb: 44 45 51;
+  --rule-soft-rgb: 35 36 41;
+  --accent-rgb: 121 174 240;
+  --accent-ink-rgb: 163 198 245;
+  --tag-bg-rgb: 35 36 41;
+  --tag-ink-rgb: 181 180 174;
+  --selection-rgb: 74 53 16;
 }
 
 /* ============================================================
@@ -2389,4 +2389,180 @@ html.dark .hero-card { background: var(--tag-bg); box-shadow: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   #theme-xiyu *, .xiyu-search-dialog * { transition: none !important; animation: none !important; }
+}
+
+/* ============================================================
+   xiyu999 视觉（2026-11）
+   与 /xiyu999.html 统一：比特币橙色带、墨黑正文、等宽数字、黑底代码块。
+   颜色令牌已在文件上方的 hex 与 -rgb 两处同步替换；这里只放结构与组件皮肤。
+   橙色带用 box-shadow + clip-path 铺满整屏，不改 .page 的宽度约束。
+   ============================================================ */
+:root { --btc: #f7931a; --on-btc: #121212; --mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace; }
+#theme-xiyu ::selection { background: var(--selection); }
+
+/* —— 导航：橙色色带 —— */
+#theme-xiyu .site-nav { background: var(--btc); color: var(--on-btc); border-bottom: 0; margin-bottom: 0; box-shadow: 0 0 0 100vmax var(--btc); clip-path: inset(0 -100vmax); }
+#theme-xiyu .page > .site-nav + div { padding-top: 48px; }
+#theme-xiyu .brand { color: var(--on-btc); }
+#theme-xiyu .brand-logo { display: none; }
+#theme-xiyu .brand-mark { font-family: var(--mono); font-size: 24px; font-weight: 800; letter-spacing: -.02em; color: var(--on-btc); }
+#theme-xiyu .brand-tag { font-family: var(--mono); font-size: 13px; color: var(--on-btc); opacity: .75; }
+#theme-xiyu .nav-link { color: var(--on-btc); font-weight: 600; font-size: 15px; border-radius: var(--r-sm); }
+#theme-xiyu .nav-link:hover { background: rgb(18 18 18 / .08); color: var(--on-btc); }
+#theme-xiyu .nav-link.active { background: var(--on-btc); color: var(--btc); font-weight: 700; }
+#theme-xiyu .site-nav .theme-toggle, #theme-xiyu .site-nav .theme-toggle:hover { color: var(--on-btc); background: transparent; }
+#theme-xiyu .site-nav .theme-toggle:hover, #theme-xiyu .site-nav a[aria-label*="X"]:hover { background: rgb(18 18 18 / .08); }
+#theme-xiyu .site-nav a, #theme-xiyu .site-nav button { color: var(--on-btc); }
+#theme-xiyu .site-nav .nav-link.active { color: var(--btc); }
+#theme-xiyu .xiyu-cmd-trigger { border: 2px solid var(--on-btc); background: transparent; color: var(--on-btc); box-shadow: none; }
+#theme-xiyu .xiyu-cmd-trigger:hover { background: rgb(18 18 18 / .08); }
+#theme-xiyu .site-nav .xiyu-kbd { background: transparent; border-color: rgb(18 18 18 / .35); color: var(--on-btc); font-family: var(--mono); }
+#theme-xiyu .site-nav .nav-menu-toggle { background: var(--on-btc); color: var(--btc); border: 0; border-radius: var(--r-sm); }
+#theme-xiyu .site-nav :is(a, button):focus-visible { outline-color: var(--on-btc); }
+
+/* —— 首页 Hero：橙色色带延续，左自述右指数 —— */
+.x9-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 32px 56px; align-items: end; margin: -48px 0 48px; padding: 44px 0 56px; border-top: 2px solid var(--on-btc); background: var(--btc); color: var(--on-btc); box-shadow: 0 0 0 100vmax var(--btc); clip-path: inset(0 -100vmax); }
+.x9-hero-eyebrow { margin: 0 0 14px; font-family: var(--mono); font-size: 14px; font-weight: 600; }
+.x9-hero-title { margin: 0; font-size: 52px; line-height: 1.08; font-weight: 800; letter-spacing: -.01em; text-wrap: balance; color: var(--on-btc); }
+.x9-hero-intro { margin: 18px 0 0; font-size: 18px; line-height: 1.65; max-width: 34em; }
+.x9-mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.x9-card { display: block; border: 2px solid var(--on-btc); border-radius: 14px; padding: 22px 24px 18px; color: var(--on-btc); text-decoration: none; transition: background .2s; }
+.x9-card:hover { background: rgb(255 255 255 / .12); color: var(--on-btc); }
+.x9-card:focus-visible { outline: 3px solid var(--on-btc); outline-offset: 3px; }
+.x9-card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; }
+.x9-name { font-family: var(--mono); font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+.x9-asof { font-size: 13px; opacity: .8; }
+.x9-body { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 24px; margin-top: 14px; }
+.x9-val { font-family: var(--mono); font-size: 96px; font-weight: 800; line-height: .88; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.x9-zone { display: inline-block; margin-top: 12px; padding: 2px 10px; border-radius: 6px; background: var(--on-btc); color: var(--btc); font-size: 16px; font-weight: 700; }
+.x9-say { flex: 1 1 220px; margin: 0; font-size: 15px; line-height: 1.6; }
+.x9-ruler { position: relative; margin-top: 20px; }
+.x9-bar { display: flex; height: 30px; border: 2px solid var(--on-btc); border-radius: 8px; overflow: hidden; font-size: 13px; font-weight: 700; }
+.x9-seg { display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden; }
+.x9-seg-buy { background: #1f5aa6; color: #fff; }
+.x9-seg-dca { background: rgb(255 255 255 / .55); }
+.x9-seg-hold { background: #ffe3bf; }
+.x9-seg-hot { background: #c9470b; color: #fff; }
+.x9-pin { position: absolute; top: -7px; height: 44px; width: 3px; border-radius: 2px; background: var(--on-btc); transition: left .8s cubic-bezier(.2, .8, .2, 1); }
+.x9-ticks { position: relative; height: 22px; font-family: var(--mono); font-size: 12px; }
+.x9-ticks span { position: absolute; top: 6px; transform: translateX(-50%); white-space: nowrap; }
+.x9-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 12px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgb(18 18 18 / .2); font-size: 13px; }
+.x9-more { font-size: 14px; font-weight: 700; }
+
+/* —— 区块标题 —— */
+#theme-xiyu .section-head { align-items: baseline; margin-bottom: 14px; border: 0; padding-top: 0; }
+#theme-xiyu .section-title { font-size: 24px; font-weight: 800; letter-spacing: 0; }
+#theme-xiyu .section-count { font-family: var(--mono); font-size: 13px; color: var(--ink-mute); letter-spacing: 0; }
+#theme-xiyu .context-link { color: var(--accent); }
+
+/* —— Now · 最近在想 —— */
+.now-section { margin-bottom: 48px; }
+.now-card { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 16px 32px; padding: 24px; background: var(--bg-elev); border: 1px solid var(--rule); border-radius: var(--r-md); }
+.now-year { display: block; font-family: var(--mono); font-size: 13px; color: var(--ink-mute); }
+.now-month { display: block; font-family: var(--mono); font-size: 56px; font-weight: 800; line-height: 1; letter-spacing: -.03em; color: var(--ink); }
+.now-month small { font-size: 20px; font-weight: 700; color: var(--ink-mute); letter-spacing: 0; }
+.now-quote { margin: 0; font-size: 17px; line-height: 1.75; color: var(--ink); max-width: 62ch; }
+.now-link { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin-top: 16px; padding: 0 16px; border-radius: var(--r-sm); background: var(--ink); color: var(--bg); font-weight: 600; text-decoration: none; }
+.now-link:hover { color: var(--bg); opacity: .88; }
+
+/* —— 文章列表：每年一张卡 —— */
+#theme-xiyu .rule-head { font-family: var(--mono); font-size: 15px; font-weight: 800; color: var(--ink); margin: 28px 0 10px; letter-spacing: 0; }
+#theme-xiyu .rule-head::before { display: none; }
+#theme-xiyu .post-list > div:first-child .rule-head { margin-top: 0; }
+#theme-xiyu .year-group { background: var(--bg-elev); border: 1px solid var(--rule); border-radius: var(--r-md); padding: 0 24px; }
+#theme-xiyu .year-group .article-row:last-child { border-bottom: 0; }
+#theme-xiyu .article-row { border-bottom: 1px solid var(--rule-soft); }
+#theme-xiyu .row-title { font-size: 19px; font-weight: 700; line-height: 1.4; letter-spacing: 0; margin-bottom: 6px; }
+#theme-xiyu .row-link { color: var(--ink); }
+#theme-xiyu .row-link:hover { color: var(--accent); }
+#theme-xiyu .row-excerpt { font-size: 15px; line-height: 1.6; color: var(--ink-soft); margin-bottom: 8px; }
+#theme-xiyu .post-num, #theme-xiyu .post-date { font-family: var(--mono); font-size: 13px; color: var(--ink-mute); }
+#theme-xiyu .post-tags .topic-chip { font-size: 13px; color: var(--ink-mute); background: var(--tag-bg); border: 0; border-radius: var(--r-full); padding: 3px 10px; }
+@media (min-width: 769px) {
+  #theme-xiyu .article-row { grid-template-columns: 64px minmax(0, 1fr) auto; gap: 6px 20px; padding: 20px 0; }
+  #theme-xiyu .row-num-col { grid-column: 1; grid-row: 1; padding-top: 4px; }
+  #theme-xiyu .row-main { grid-column: 2; grid-row: 1; }
+  #theme-xiyu .row-date-col { grid-column: 3; grid-row: 1; padding-top: 4px; text-align: right; }
+}
+#theme-xiyu .pagination { font-family: var(--mono); font-size: 14px; color: var(--ink-mute); align-items: center; }
+#theme-xiyu .pagination .page-link:not(.disabled) { background: var(--ink); color: var(--bg); font-family: inherit; font-weight: 600; padding: 0 16px; display: inline-flex; align-items: center; }
+#theme-xiyu .pagination .page-link:not(.disabled):hover { opacity: .88; }
+#theme-xiyu .pagination .page-link.disabled { opacity: .35; }
+
+/* —— 文章页 —— */
+#theme-xiyu .article-hero { border-bottom: 3px solid var(--btc); padding-bottom: 20px; margin-bottom: 36px; }
+#theme-xiyu .article-h1 { font-size: 40px; line-height: 1.2; font-weight: 800; letter-spacing: -.005em; }
+#theme-xiyu .article-head-meta { font-family: var(--mono); font-size: 13px; color: var(--ink-mute); }
+#theme-xiyu .article-lead { background: var(--bg-elev); border: 1px solid var(--rule); color: var(--ink-soft); }
+#theme-xiyu .article-body a:not(.notion-bookmark):not(.notion-page-link) { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+#theme-xiyu .article-body h2, #theme-xiyu .article-body .notion-h1, #theme-xiyu .article-body .notion-h2 { font-size: 26px; font-weight: 800; letter-spacing: 0; }
+#theme-xiyu .article-body h3, #theme-xiyu .article-body .notion-h3 { font-weight: 700; }
+#theme-xiyu .article-body :not(pre) > code, #theme-xiyu .article-body .notion-inline-code { font-family: var(--mono); background: var(--tag-bg); color: var(--ink); border-radius: var(--r-xs); padding: 1px 6px; font-size: .9em; }
+#theme-xiyu .article-body pre, #theme-xiyu .article-body .notion-code { background: #121212; color: #e9e8e2; border: 0; border-radius: 10px; font-family: var(--mono); font-size: 14px; line-height: 1.65; }
+#theme-xiyu .article-body .notion-code code, #theme-xiyu .article-body pre code { background: none; color: inherit; padding: 0; font-family: inherit; }
+#theme-xiyu .article-body .notion-code .token:is(.comment, .prolog, .doctype, .cdata) { color: #8a8f98; }
+#theme-xiyu .article-body .notion-code .token:is(.keyword, .boolean, .important, .atrule, .selector) { color: #f7931a; }
+#theme-xiyu .article-body .notion-code .token:is(.string, .char, .attr-value, .inserted, .regex) { color: #9fd39a; }
+#theme-xiyu .article-body .notion-code .token:is(.number, .constant, .symbol, .property, .tag) { color: #79aef0; }
+#theme-xiyu .article-body .notion-code .token:is(.function, .class-name, .builtin) { color: #f4d58d; }
+#theme-xiyu .article-body .notion-code .token:is(.operator, .punctuation, .entity, .url, .variable) { color: #cfcec8; background: none; }
+#theme-xiyu .article-body .notion-code .token.deleted { color: #ff8a80; }
+#theme-xiyu .article-body .notion-code-copy-button, #theme-xiyu .article-body .notion-code-copy { color: #e9e8e2; background: #2a2a2e; border-color: #3a3a3f; }
+#theme-xiyu .article-body .notion-callout { background: var(--bg-elev); border: 1px solid var(--rule); border-radius: var(--r-md); }
+#theme-xiyu .article-body .notion-quote { border-left: 3px solid var(--btc); }
+#theme-xiyu .article-body .notion-simple-table { font-variant-numeric: tabular-nums; }
+#theme-xiyu .article-body .notion-simple-table td { border-color: var(--rule); }
+#theme-xiyu .toc-label, #theme-xiyu .side-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0; color: var(--ink-mute); }
+#theme-xiyu .toc-link.active { background: var(--on-btc); color: var(--btc); font-weight: 700; }
+html.dark #theme-xiyu .toc-link.active { background: var(--btc); color: var(--on-btc); }
+#theme-xiyu .side-stat { font-family: var(--mono); }
+#theme-xiyu .article-share button { background: var(--bg-elev); border: 1px solid var(--rule); color: var(--ink); }
+#theme-xiyu .article-endnote { background: var(--bg-elev); border: 1px solid var(--rule); }
+#theme-xiyu .pn-card { background: var(--bg-elev); border: 1px solid var(--rule); border-radius: var(--r-md); padding: 16px 18px; }
+#theme-xiyu .pn-link:hover .pn-card { border-color: var(--ink-mute); background: var(--bg-elev); }
+#theme-xiyu .pn-label { font-family: var(--mono); font-size: 12px; }
+#theme-xiyu .pn-title { font-size: 16px; font-weight: 700; }
+#theme-xiyu .toc-mobile { background: var(--bg-elev); border: 1px solid var(--rule); }
+
+/* —— 归档、关于、页脚 —— */
+#theme-xiyu .archive-title, #theme-xiyu .info-hero h1 { font-weight: 800; letter-spacing: -.01em; }
+#theme-xiyu .archive-year-head { font-family: var(--mono); font-size: 20px; font-weight: 800; }
+#theme-xiyu .archive-item-date, #theme-xiyu .archive-item .post-num { font-family: var(--mono); }
+#theme-xiyu .archive-jump-link { font-family: var(--mono); font-size: 13px; }
+#theme-xiyu .archive-jump-link:first-child { background: var(--on-btc); color: var(--btc); }
+html.dark #theme-xiyu .archive-jump-link:first-child { background: var(--btc); color: var(--on-btc); }
+#theme-xiyu .about-h1 { font-weight: 800; }
+#theme-xiyu .about-era-when { font-family: var(--mono); font-size: 13px; }
+#theme-xiyu .site-foot { border-top: 1px solid var(--rule); padding-top: 28px; font-size: 14px; }
+#theme-xiyu .site-foot-copy { font-family: var(--mono); font-size: 13px; }
+#theme-xiyu .site-foot-links a { font-size: 14px; color: var(--accent); }
+
+@media (max-width: 1024px) {
+  .x9-hero { gap: 28px 32px; }
+  .x9-val { font-size: 80px; }
+}
+@media (max-width: 768px) {
+  #theme-xiyu .page > .site-nav + div { padding-top: 28px; }
+  .x9-hero { grid-template-columns: minmax(0, 1fr); margin: -28px 0 32px; padding: 26px 0 32px; }
+  .x9-hero-title { font-size: 36px; }
+  .x9-hero-intro { font-size: 16px; margin-top: 12px; }
+  .x9-card { padding: 16px 16px 14px; }
+  .x9-name { font-size: 20px; }
+  .x9-asof { font-size: 12px; }
+  .x9-val { font-size: 64px; }
+  .x9-bar { height: 24px; font-size: 11px; }
+  .x9-pin { height: 36px; top: -6px; }
+  .now-section { margin-bottom: 32px; }
+  .now-card { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+  .now-month { font-size: 40px; }
+  .now-quote { font-size: 15px; }
+  #theme-xiyu .section-title { font-size: 20px; }
+  #theme-xiyu .year-group { padding: 0 16px; }
+  #theme-xiyu .row-title { font-size: 17px; }
+  #theme-xiyu .row-excerpt { font-size: 14px; }
+  #theme-xiyu .article-h1 { font-size: 28px; line-height: 1.3; }
+  #theme-xiyu .article-body h2, #theme-xiyu .article-body .notion-h1, #theme-xiyu .article-body .notion-h2 { font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .x9-pin, .x9-card { transition: none; }
 }
