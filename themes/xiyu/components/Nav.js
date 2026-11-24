@@ -1,6 +1,5 @@
 import SmartLink from '@/components/SmartLink'
 import { siteConfig } from '@/lib/config'
-import { useGlobal } from '@/lib/global'
 import { useRouter } from 'next/router'
 import ThemeToggle from './ThemeToggle'
 import XLink from './XLink'
@@ -64,7 +63,6 @@ const NavIcon = ({ name }) => {
 const Nav = props => {
   const { allNavPages } = props || {}
   const router = useRouter()
-  const { isDarkMode } = useGlobal() || {}
   const path = router?.asPath || '/'
   const active = path.startsWith('/archive')
     ? 'archive'
@@ -75,9 +73,8 @@ const Nav = props => {
         : ''
 
 
-  const lightLogo = siteConfig('BLOG_LOGO') || '/images/logo/logo-mark.svg'
-  const darkLogo = siteConfig('BLOG_LOGO_DARK') || '/images/logo/logo-mark-dark.svg'
-  const logo = isDarkMode ? darkLogo : lightLogo
+  // 导航是比特币橙色带，深浅色模式下底色都不变，所以一直用墨黑那版 logo
+  const logo = siteConfig('BLOG_LOGO') || '/images/logo/logo-mark.svg'
   const author = siteConfig('AUTHOR') || 'xiyu'
   // 留空就自动跟着 SINCE 走（2013 = 入行那年），不用两处维护同一个年份
   const since = parseInt(siteConfig('SINCE')) || new Date().getFullYear()
