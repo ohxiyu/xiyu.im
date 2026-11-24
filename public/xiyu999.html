@@ -8,6 +8,11 @@
 <meta property="og:title" content="xiyu999 指数">
 <meta property="og:description" content="比特币链上成本指数：当前读数、关键价位、回测与超越黄金进度，每天自动更新。">
 <link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<script>
+/* 和博客共用 localStorage.darkMode（'true' / 'false'），先于渲染设好，避免闪一下 */
+try{var d=localStorage.getItem('darkMode');if(d==='true'||d==='dark')document.documentElement.dataset.theme='dark';else if(d==='false'||d==='light')document.documentElement.dataset.theme='light'}catch(e){}
+</script>
 <style>
 /* VOICE: 冷静、工程师写给自己看的仪表，结论先行，不煽动
    IDEA: 一台节点的读数面板：公式被真实数字代入、逐项求值
@@ -19,19 +24,42 @@
 *{box-sizing:border-box;min-width:0}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;overflow-x:clip}
 .m{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;font-variant-numeric:tabular-nums}
-.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}
-.band.top{padding-top:14px}
-.wrap{max-width:1180px;margin:0 auto}
+.band{padding:clamp(28px,4vw,56px) 46px}
+.band.top{padding-top:28px}
+.wrap{max-width:1028px;margin:0 auto}
 .top{background:var(--btc);color:#121212}
-.sitenav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;padding-bottom:14px;margin-bottom:24px;border-bottom:2px solid #121212}
-.sitenav .brand{font:800 24px/1 ui-monospace,"SF Mono",Menlo,Consolas,monospace;letter-spacing:-.02em;color:#121212;text-decoration:none;display:inline-flex;align-items:baseline;gap:10px;min-height:44px;align-items:center}
-.sitenav .brand span{font-size:13px;font-weight:400;opacity:.75;letter-spacing:0}
-.navlinks{display:flex;flex-wrap:wrap;gap:4px}
-.navlinks a{min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border-radius:8px;color:#121212;font-weight:600;font-size:15px;text-decoration:none}
-.navlinks a:hover{background:rgb(18 18 18/.08)}
+/* 站点导航：与博客 themes/xiyu 的 .site-nav 同一套尺寸（容器 1120 / 内边距 46·28·20 / 高 76·65） */
+.sitenav{background:var(--btc);color:#121212}
+.navin{max-width:1120px;margin:0 auto;padding:0 46px}
+.navbar{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:76px;border-bottom:2px solid #121212}
+.sitenav .brand{display:inline-flex;align-items:center;gap:9px;min-height:44px;color:#121212;text-decoration:none}
+.sitenav .brand img{width:32px;height:32px;flex:none}
+.sitenav .brand b{font:800 24px/1 ui-monospace,"SF Mono",Menlo,Consolas,monospace;letter-spacing:-.02em}
+.sitenav .brand .tag{font:400 13px/1 ui-monospace,"SF Mono",Menlo,Consolas,monospace;opacity:.75}
+.navright,.navlinks,.navtools{display:flex;align-items:center;gap:4px}
+.navlinks{margin-right:8px}
+.navlinks a{min-height:44px;display:inline-flex;align-items:center;padding:10px 12px;border-radius:8px;color:#121212;font-weight:700;font-size:15px;line-height:24px;text-decoration:none}
+.navlinks a:hover,.navicon:hover{background:rgb(18 18 18/.08)}
 .navlinks a[aria-current=page]{background:#121212;color:var(--btc)}
-.sitenav a:focus-visible{outline:3px solid #121212;outline-offset:2px}
-@media(max-width:600px){.sitenav .brand span{display:none}.navlinks a{padding:0 10px;font-size:14px}}
+.navsearch{display:inline-flex;align-items:center;gap:9px;height:44px;padding:0 12px;border:2px solid #121212;border-radius:8px;color:#121212;font-size:13px;text-decoration:none}
+.navsearch kbd{font:12px ui-monospace,"SF Mono",Menlo,Consolas,monospace;border:1px solid rgb(18 18 18/.35);border-radius:4px;padding:0 5px}
+.navicon{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:8px;background:transparent;color:#121212;cursor:pointer}
+.navmenu{display:none;width:44px;height:44px;align-items:center;justify-content:center;border:0;border-radius:8px;background:#121212;color:var(--btc);cursor:pointer}
+.sitenav :is(a,button):focus-visible{outline:3px solid #121212;outline-offset:2px}
+.drawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(300px,84vw);height:100%;max-height:none;padding:22px;border:0;border-left:1px solid var(--line);background:var(--panel);color:var(--ink);box-sizing:border-box}
+.drawer[open]{display:flex;flex-direction:column}
+.drawer::backdrop{background:rgb(20 20 20/.4)}
+.drawer .dh{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.drawer .dh b{font-size:17px;font-weight:600}
+.drawer .dh button,.drawer .dt :is(a,button){width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:8px;background:transparent;color:var(--ink);cursor:pointer}
+.drawer nav a{display:flex;align-items:center;gap:11px;padding:11px 8px;border-radius:6px;color:var(--ink);font-size:14.5px;text-decoration:none}
+.drawer nav a i{width:24px;font:normal 10px ui-monospace,"SF Mono",Menlo,Consolas,monospace;color:var(--mute)}
+.drawer nav a:hover{background:var(--bg)}
+.drawer nav a[aria-current=page]{font-weight:700}
+.drawer .dt{margin-top:auto;display:flex;gap:8px;padding-top:16px;border-top:1px solid var(--line)}
+.drawer :is(a,button):focus-visible{outline:2px solid var(--cool);outline-offset:2px}
+@media(max-width:1024px){.navin{padding:0 28px}}
+@media(max-width:768px){.navin{padding:0 20px}.navbar{min-height:65px}.navlinks,.navtools .navicon,.sitenav .brand .tag{display:none}.navsearch{width:44px;padding:0;justify-content:center}.navsearch span,.navsearch kbd{display:none}.navmenu{display:inline-flex}.sitenav .brand img{width:28px;height:28px}}
 
 .row{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
 h1{font:800 clamp(34px,6vw,52px)/1.05 ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;margin:0;letter-spacing:-.02em}
@@ -103,7 +131,9 @@ footer{border-top:1px solid var(--line)}footer a{color:var(--ink)}
 @media(prefers-reduced-motion:no-preference){.pin{transition:left .8s cubic-bezier(.2,.8,.2,1)}}
 
 /* ---------- v2：逐日查询 + 正文排版 ---------- */
-.sec{padding:clamp(36px,5vw,64px) max(5vw,16px);border-top:1px solid var(--line)}
+.sec{padding:clamp(36px,5vw,64px) 46px;border-top:1px solid var(--line)}
+@media(max-width:1024px){.band,.sec{padding-left:28px;padding-right:28px}}
+@media(max-width:768px){.band,.sec{padding-left:20px;padding-right:20px}}
 .sh{display:flex;align-items:center;gap:12px;margin-bottom:8px}
 .sh h2{margin:0}
 .kick{font:700 12px/1 ui-monospace,"SF Mono",Menlo,Consolas,monospace;color:var(--mute);border:1px solid var(--line);border-radius:6px;padding:5px 7px;letter-spacing:.04em}
@@ -279,17 +309,42 @@ details.code .cbar{margin:0 0 10px}
 
 <body data-mode="pro">
 
-<header class="band top">
-<div class="wrap">
-  <nav class="sitenav" aria-label="主导航">
-    <a class="brand" href="/">xiyu<span>since 2013</span></a>
+<nav class="sitenav" aria-label="主导航">
+<div class="navin"><div class="navbar">
+  <a class="brand" href="/"><img src="/images/logo/logo-mark.svg" width="32" height="32" alt=""><b>xiyu</b><span class="tag">since 2013</span></a>
+  <div class="navright">
     <div class="navlinks">
       <a href="/">写作</a>
       <a href="/archive">归档</a>
       <a href="/about">关于</a>
       <a href="/xiyu999.html" aria-current="page">xiyu999</a>
     </div>
+    <div class="navtools">
+      <a class="navsearch" href="/search" aria-label="搜索文章"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>搜索</span><kbd>⌘K</kbd></a>
+      <button class="navicon theme-t" aria-label="切换深浅色"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+      <a class="navicon" href="https://x.com/ohxiyu" target="_blank" rel="noopener noreferrer" aria-label="在 X 上关注作者"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <button class="navmenu" id="menu-open" aria-label="打开菜单" aria-haspopup="dialog" aria-controls="menu"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</div></div>
+</nav>
+
+<dialog id="menu" class="drawer" aria-labelledby="menu-t">
+  <div class="dh"><b id="menu-t">菜单</b><button id="menu-close" aria-label="关闭菜单"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+  <nav aria-label="站点主导航">
+    <a href="/"><i>01</i>写作</a>
+    <a href="/archive"><i>02</i>归档</a>
+    <a href="/about"><i>03</i>关于</a>
+    <a href="/xiyu999.html" aria-current="page"><i>04</i>xiyu999</a>
   </nav>
+  <div class="dt">
+    <button class="theme-t" aria-label="切换深浅色"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+    <a href="https://x.com/ohxiyu" target="_blank" rel="noopener noreferrer" aria-label="在 X 上关注作者"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+  </div>
+</dialog>
+
+<header class="band top">
+<div class="wrap">
   <div class="row">
     <div>
       <h1>xiyu999</h1>
@@ -887,6 +942,20 @@ const render=(data,live)=>{
  sel=last();if(!keep)view={a:0,b:last()};setView(view.a,view.b,false);select(sel);
 };
 for(const id of ['cyc','chips'])$(id).onclick=e=>{const b=e.target.closest('.go');if(b)jump(+b.dataset.i,true)};
+
+
+/* 导航：深浅色（和博客共用 localStorage.darkMode）、手机菜单、⌘K 去搜索 */
+const SUN='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>';
+const MOON='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+const isDark=()=>{const t=document.documentElement.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches};
+const syncThemeIcons=()=>{for(const b of document.querySelectorAll('.theme-t'))b.innerHTML=isDark()?SUN:MOON};
+for(const b of document.querySelectorAll('.theme-t'))b.onclick=()=>{const next=!isDark();document.documentElement.dataset.theme=next?'dark':'light';try{localStorage.setItem('darkMode',String(next))}catch(e){}syncThemeIcons()};
+syncThemeIcons();
+const menu=$('menu');
+$('menu-open').onclick=()=>menu.showModal();
+$('menu-close').onclick=()=>menu.close();
+menu.addEventListener('click',e=>{if(e.target===menu)menu.close()});
+addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();location.href='/search'}});
 
 /* 解读方式 */
 const setMode=md=>{document.body.dataset.mode=md;$('m-pro').setAttribute('aria-pressed',md=='pro');$('m-plain').setAttribute('aria-pressed',md=='plain');try{localStorage.setItem('xiyu999-mode',md)}catch(e){}};

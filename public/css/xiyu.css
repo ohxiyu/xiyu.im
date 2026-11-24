@@ -2404,9 +2404,10 @@ html.dark .hero-card { background: var(--tag-bg); box-shadow: none; }
 #theme-xiyu .site-nav { background: var(--btc); color: var(--on-btc); border-bottom: 0; margin-bottom: 0; box-shadow: 0 0 0 100vmax var(--btc); clip-path: inset(0 -100vmax); }
 #theme-xiyu .page > .site-nav + div { padding-top: 48px; }
 #theme-xiyu .brand { color: var(--on-btc); }
-#theme-xiyu .brand-logo { display: none; }
+#theme-xiyu .brand { gap: 9px; }
+#theme-xiyu .brand-logo { display: block; width: 32px; height: 32px; margin: 0; border-radius: 0; }
 #theme-xiyu .brand-mark { font-family: var(--mono); font-size: 24px; font-weight: 800; letter-spacing: -.02em; color: var(--on-btc); }
-#theme-xiyu .brand-tag { font-family: var(--mono); font-size: 13px; color: var(--on-btc); opacity: .75; }
+#theme-xiyu .brand-tag { font-family: var(--mono); font-size: 13px; color: var(--on-btc); opacity: .75; text-transform: none; letter-spacing: 0; margin-left: 0; }
 #theme-xiyu .nav-link { color: var(--on-btc); font-weight: 600; font-size: 15px; border-radius: var(--r-sm); }
 #theme-xiyu .nav-link:hover { background: rgb(18 18 18 / .08); color: var(--on-btc); }
 #theme-xiyu .nav-link.active { background: var(--on-btc); color: var(--btc); font-weight: 700; }
@@ -2543,6 +2544,7 @@ html.dark #theme-xiyu .archive-jump-link:first-child { background: var(--btc); c
 }
 @media (max-width: 768px) {
   #theme-xiyu .page > .site-nav + div { padding-top: 28px; }
+  #theme-xiyu .brand-logo { width: 28px; height: 28px; }
   .x9-hero { grid-template-columns: minmax(0, 1fr); margin: -28px 0 32px; padding: 26px 0 32px; }
   .x9-hero-title { font-size: 36px; }
   .x9-hero-intro { font-size: 16px; margin-top: 12px; }
