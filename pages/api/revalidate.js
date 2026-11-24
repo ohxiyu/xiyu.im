@@ -1,5 +1,8 @@
 import BLOG from '@/blog.config'
 import { cleanCache } from '@/lib/cache/local_file_cache'
+import { bearerToken, tokenMatches } from '@/lib/server/guard'
+
+const MAX_PATHS = 50
 
 /**
  * On-Demand Revalidation API
@@ -33,12 +36,8 @@ export default async function handler(req, res) {
     })
   }
 
-  const authHeader = req.headers.authorization || ''
-  const receivedToken = authHeader.startsWith('Bearer ')
-    ? authHeader.slice(7)
-    : req.body?.token || ''
-
-  if (receivedToken !== token) {
+  const receivedToken = bearerToken(req) || String(req.body?.token || '')
+  if (!tokenMatches(receivedToken, token)) {
     return res.status(401).json({ ok: false, message: 'Unauthorized' })
   }
 
@@ -63,7 +62,10 @@ export default async function handler(req, res) {
     }
 
     // 批量刷新
-    const targetPaths = paths || (path ? [path] : ['/'])
+    const targetPaths = Array.isArray(paths) ? paths : path ? [path] : ['/']
+    if (targetPaths.length > MAX_PATHS) {
+      return res.status(400).json({ ok: false, message: `At most ${MAX_PATHS} paths per request` })
+    }
     const results = []
 
     for (const p of targetPaths) {
@@ -85,8 +87,7 @@ export default async function handler(req, res) {
     console.error('[revalidate] Error:', error)
     return res.status(500).json({
       ok: false,
-      message: 'Revalidation failed',
-      error: error.message
+      message: 'Revalidation failed'
     })
   }
 }

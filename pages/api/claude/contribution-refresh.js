@@ -1,4 +1,5 @@
 import { markContributionCacheDirty } from '@/lib/server/claude/contributionStore'
+import { tokenMatches } from '@/lib/server/guard'
 
 const getTokenFromRequest = req => {
   const queryToken = Array.isArray(req.query?.token)
@@ -33,7 +34,7 @@ export default async function handler(req, res) {
   }
 
   const receivedToken = getTokenFromRequest(req)
-  if (!receivedToken || receivedToken !== expectedToken) {
+  if (!tokenMatches(receivedToken, expectedToken)) {
     return res.status(401).json({ ok: false, message: 'Unauthorized' })
   }
 
