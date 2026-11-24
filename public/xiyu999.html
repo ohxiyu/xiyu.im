@@ -256,6 +256,24 @@ details.code .cbar{margin:0 0 10px}
  .cy .cr{grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:12px 14px}.cy .per{grid-column:1/-1}.cy .ch .per{display:none}
  .card.flush table th,.card.flush table td{padding:10px 10px}
 }
+
+/* 分享图 */
+.acts{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sharebtn{font:700 15px -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;min-height:44px;padding:0 16px;border:2px solid #121212;border-radius:10px;background:#121212;color:var(--btc);cursor:pointer}
+.sharebtn:focus-visible,.share button:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
+.share{width:min(94vw,500px);max-height:94vh;border:0;border-radius:16px;padding:16px;background:var(--panel);color:var(--ink)}
+.share::backdrop{background:#000000a6}
+.sh-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sh-head b{font-size:17px}
+.sh-head button{min-width:44px;min-height:44px;border:0;background:none;color:var(--ink);font-size:28px;cursor:pointer}
+.share img{display:block;width:100%;max-height:62vh;object-fit:contain;border-radius:10px;background:var(--bg)}
+.sh-act{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.sh-act button{flex:1;min-width:120px;min-height:46px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);font:600 15px inherit;cursor:pointer}
+.sh-act .pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sh-msg{margin:10px 0 0;font-size:14px;min-height:1.4em}
+.sh-tip{margin:4px 0 0;font-size:13px;color:var(--mute)}
+@media(max-width:600px){.acts{width:100%;flex-wrap:nowrap}.acts .seg{flex:none}.sharebtn{flex:1;padding:0 10px}}
+.seg button,.sharebtn{white-space:nowrap}
 </style>
 </head>
 
@@ -277,9 +295,12 @@ details.code .cbar{margin:0 0 10px}
       <h1>xiyu999</h1>
       <p class="sub">比特币链上成本指数 · 截至 <span class="m d-asof"></span> 收盘（UTC）· <span id="src">内置数据</span></p>
     </div>
-    <div class="seg" role="group" aria-label="解读方式">
-      <button id="m-pro" aria-pressed="true">专业</button>
-      <button id="m-plain" aria-pressed="false">大白话</button>
+    <div class="acts">
+      <div class="seg" role="group" aria-label="解读方式">
+        <button id="m-pro" aria-pressed="true">专业</button>
+        <button id="m-plain" aria-pressed="false">大白话</button>
+      </div>
+      <button class="sharebtn" id="share-btn">生成分享图</button>
     </div>
   </div>
 
@@ -302,6 +323,18 @@ details.code .cbar{margin:0 0 10px}
   <div class="eq m" id="eq"></div>
 </div>
 </header>
+
+<dialog id="share" class="share" aria-labelledby="sh-t">
+  <div class="sh-head"><b id="sh-t">今日分享图</b><button id="sh-x" aria-label="关闭">×</button></div>
+  <img id="sh-img" alt="">
+  <div class="sh-act">
+    <button id="sh-copy" class="pri">复制图片</button>
+    <button id="sh-share" hidden>分享到…</button>
+    <button id="sh-dl">保存图片</button>
+  </div>
+  <p class="sh-msg" id="sh-msg" aria-live="polite"></p>
+  <p class="sh-tip">图上的解读跟随"专业 / 大白话"切换。</p>
+</dialog>
 
 <section class="sec" id="daily" style="border-top:0">
 <div class="wrap">
@@ -732,9 +765,93 @@ const jump=(i,scroll)=>{select(i);if(scroll)fig.scrollIntoView({behavior:'smooth
 $('cal').onclick=e=>{const b=e.target.closest('.cd[data-i]');if(b)select(+b.dataset.i)};
 $('msum').onclick=e=>{const b=e.target.closest('.go');if(b)select(+b.dataset.i)};
 
+/* 分享图：4:5（1080×1350，按 1.5 倍输出），跟随当前解读方式 */
+let NOW=null,shareBlob=null;
+const CW=1080,CH=1350,PAD=72;
+const wrapText=(ctx,text,maxW)=>{
+ const toks=text.match(/[A-Za-z0-9$.,%+\-×/()（）]+\s?|\s|./gu)||[],lines=[];let cur='';
+ const NOHEAD=/^[，。、；：！？）》」%,.]/;
+ for(const t of toks){
+  const next=cur+t;
+  if(ctx.measureText(next.trimEnd()).width<=maxW||!cur){cur=next;continue}
+  if(NOHEAD.test(t)){const last=[...cur].pop();lines.push(cur.slice(0,-last.length).trimEnd());cur=last+t}
+  else{lines.push(cur.trimEnd());cur=t.trimStart()}
+ }
+ if(cur.trim())lines.push(cur.trimEnd());
+ return lines;
+};
+const rr=(ctx,x,y,w,h,r)=>{ctx.beginPath();ctx.roundRect?ctx.roundRect(x,y,w,h,r):ctx.rect(x,y,w,h)};
+const drawCard=()=>{
+ const N=NOW,mode=document.body.dataset.mode==='plain'?'plain':'pro',S=1.5;
+ const cv=document.createElement('canvas');cv.width=CW*S;cv.height=CH*S;
+ const ctx=cv.getContext('2d');ctx.scale(S,S);
+ const SANS=getComputedStyle(document.body).fontFamily,MONO=getComputedStyle($('val')).fontFamily;
+ const INK='#121212',BTC='#f7931a',W=CW-PAD*2;
+ ctx.fillStyle=BTC;ctx.fillRect(0,0,CW,CH);ctx.textBaseline='alphabetic';
+ /* 标题 */
+ ctx.fillStyle=INK;ctx.font=`800 92px ${MONO}`;ctx.fillText('xiyu999',PAD,150);
+ ctx.globalAlpha=.78;ctx.font=`500 32px ${SANS}`;ctx.fillText(`比特币链上成本指数 · 截至 ${N.date} 收盘（UTC）`,PAD,204);ctx.globalAlpha=1;
+ /* 大数字 */
+ ctx.font=`800 300px ${MONO}`;if('letterSpacing' in ctx)ctx.letterSpacing='-12px';
+ ctx.fillText(N.x.toFixed(2),PAD-8,500);if('letterSpacing' in ctx)ctx.letterSpacing='0px';
+ /* 区间 + 较前日 */
+ const zn=ZN[zi(N.x)];ctx.font=`800 46px ${SANS}`;const zw=ctx.measureText(zn).width+44;
+ rr(ctx,PAD,540,zw,72,12);ctx.fillStyle=INK;ctx.fill();ctx.fillStyle=BTC;ctx.fillText(zn,PAD+22,592);
+ const pv=D[last()-1];if(pv){ctx.fillStyle=INK;ctx.globalAlpha=.8;ctx.font=`600 34px ${SANS}`;ctx.fillText(`较前一天 ${sgn(N.x-pv[1])}`,PAD+zw+28,589);ctx.globalAlpha=1}
+ /* 解读 */
+ ctx.fillStyle=INK;ctx.font=`500 38px ${SANS}`;
+ let y=690;for(const l of wrapText(ctx,$('say-'+mode).textContent,W).slice(0,5)){ctx.fillText(l,PAD,y);y+=58}
+ /* 标尺 */
+ const ry=Math.max(y+20,880),rh=66,x0=PAD,px=v=>x0+pos(v)/100*W;
+ const ZC=[['抄底','#1f5aa6','#fff'],['定投','#fbd2a0',INK],['持有','#ffe3bf',INK],['过热','#c9470b','#fff']];
+ ctx.save();rr(ctx,x0,ry,W,rh,14);ctx.clip();
+ ZONES.forEach((z,k)=>{const a=px(z.lo),b=px(z.hi);ctx.fillStyle=ZC[k][1];ctx.fillRect(a,ry,b-a,rh);ctx.fillStyle=ZC[k][2];ctx.font=`800 30px ${SANS}`;const tw=ctx.measureText(ZC[k][0]).width;ctx.fillText(ZC[k][0],(a+b)/2-tw/2,ry+rh/2+11)});
+ ctx.restore();rr(ctx,x0,ry,W,rh,14);ctx.lineWidth=4;ctx.strokeStyle=INK;ctx.stroke();
+ const pX=px(N.x);ctx.fillStyle=INK;ctx.fillRect(pX-3,ry-16,6,rh+32);
+ ctx.beginPath();ctx.moveTo(pX-14,ry-30);ctx.lineTo(pX+14,ry-30);ctx.lineTo(pX,ry-14);ctx.closePath();ctx.fill();
+ ctx.font=`600 28px ${MONO}`;
+ for(const t of [.3,.65,1,2,5,15]){const s=String(t),tw=ctx.measureText(s).width;let tx=px(t)-tw/2;tx=Math.max(x0,Math.min(x0+W-tw,tx));ctx.fillText(s,tx,ry+rh+44)}
+ ctx.font=`700 28px ${SANS}`;
+ for(const [lo,hi,t] of [[.38,.49,'历次大底'],[6.2,9.8,'历次顶部']]){const c=(px(lo)+px(hi))/2,tw=ctx.measureText(t).width;ctx.fillText(t,Math.max(x0,Math.min(x0+W-tw,c-tw/2)),ry+rh+86)}
+ /* 三个价格 */
+ const ky=ry+rh+126;ctx.globalAlpha=.3;ctx.fillRect(PAD,ky,W,3);ctx.globalAlpha=1;
+ const L=mode==='plain'?['比特币价格','近半年进场成本','全网平均成本']:['价格','200 日成本','链上平均成本'];
+ const cols=[[L[0],usd(N.p),''],[L[1],usd(N.g),`价格${N.p<N.g?'低':'高'} ${pct(N.p/N.g)}`],[L[2],usd(N.rp),`价格${N.p<N.rp?'低':'高'} ${pct(N.p/N.rp)}`]];
+ cols.forEach(([a,b,c],k)=>{const cx=PAD+k*W/3;ctx.globalAlpha=.75;ctx.font=`600 28px ${SANS}`;ctx.fillText(a,cx,ky+48);ctx.globalAlpha=1;ctx.font=`800 46px ${MONO}`;ctx.fillText(b,cx,ky+100);if(c){ctx.globalAlpha=.75;ctx.font=`600 28px ${SANS}`;ctx.fillText(c,cx,ky+138);ctx.globalAlpha=1}});
+ /* 页脚 */
+ ctx.fillStyle=INK;ctx.fillRect(0,CH-92,CW,92);
+ ctx.fillStyle=BTC;ctx.font=`800 34px ${MONO}`;ctx.fillText('xiyu.im/xiyu999',PAD,CH-34);
+ ctx.fillStyle='#f4f3ef';ctx.globalAlpha=.7;ctx.font=`500 28px ${SANS}`;const dis='@ohxiyu · 非投资建议',dw=ctx.measureText(dis).width;ctx.fillText(dis,CW-PAD-dw,CH-36);ctx.globalAlpha=1;
+ return cv;
+};
+const dlg=$('share'),shMsg=$('sh-msg');
+const canCopy=!!(navigator.clipboard&&navigator.clipboard.write&&window.ClipboardItem);
+const shareFile=()=>new File([shareBlob],`xiyu999-${NOW.date}.png`,{type:'image/png'});
+const canShare=()=>{try{return !!(navigator.canShare&&navigator.canShare({files:[shareFile()]}))}catch(e){return false}};
+$('share-btn').onclick=async()=>{
+ if(!NOW)return;
+ try{if(document.fonts&&document.fonts.ready)await document.fonts.ready}catch(e){}
+ const cv=drawCard();
+ shareBlob=await new Promise(r=>cv.toBlob(r,'image/png'));
+ const im=$('sh-img');if(im.dataset.url)URL.revokeObjectURL(im.dataset.url);im.dataset.url=URL.createObjectURL(shareBlob);im.src=im.dataset.url;
+ im.alt=`xiyu999 ${NOW.date} 读数 ${NOW.x.toFixed(2)}，${ZN[zi(NOW.x)]}`;
+ $('sh-copy').hidden=!canCopy;$('sh-share').hidden=!canShare();
+ shMsg.textContent=canCopy?'点"复制图片"，再到 X 发帖框粘贴。':'这个浏览器不能直接复制图片：用"保存图片"，或长按图片保存。';
+ dlg.showModal();
+};
+$('sh-copy').onclick=()=>{
+ navigator.clipboard.write([new ClipboardItem({'image/png':shareBlob})])
+  .then(()=>{shMsg.textContent='已复制。去 X 发帖框粘贴（Ctrl/⌘ + V，手机长按输入框粘贴）。'})
+  .catch(()=>{shMsg.textContent='复制没成功：用"保存图片"，或长按图片保存后再发。'});
+};
+$('sh-dl').onclick=()=>{const a=document.createElement('a');a.href=$('sh-img').src;a.download=`xiyu999-${NOW.date}.png`;document.body.appendChild(a);a.click();a.remove()};
+$('sh-share').onclick=()=>{navigator.share({files:[shareFile()]}).catch(()=>{})};
+$('sh-x').onclick=()=>dlg.close();
+dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
+
 /* 渲染 */
 const render=(data,live)=>{
- const N=data.now;D=data.series;T=D.map(r=>Date.parse(r[0]));XS=D.map(r=>r[1]).sort((a,b)=>a-b);
+ const N=data.now;NOW=N;D=data.series;T=D.map(r=>Date.parse(r[0]));XS=D.map(r=>r[1]).sort((a,b)=>a-b);
  for(const el of document.querySelectorAll('.d-asof'))el.textContent=N.date;
  $('src').textContent=live?'每日自动更新':'内置数据';
  $('val').textContent=N.x.toFixed(2);
