@@ -1,4 +1,5 @@
 import { cleanCache } from '@/lib/cache/local_file_cache'
+import { bearerToken, tokenMatches } from '@/lib/server/guard'
 
 /**
  * 清理缓存
@@ -10,8 +11,12 @@ export default function handler(req, res) {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' })
   }
 
-  const token = process.env.CACHE_REVALIDATION_TOKEN
-  if (token && req.headers.authorization !== `Bearer ${token}`) {
+  // 没配 token 就整个关掉：以前没配时任何人都能清缓存
+  const token = process.env.CACHE_REVALIDATION_TOKEN || process.env.REVALIDATION_TOKEN
+  if (!token) {
+    return res.status(404).json({ status: 'error', message: 'Not found' })
+  }
+  if (!tokenMatches(bearerToken(req), token)) {
     return res.status(401).json({ status: 'error', message: 'Unauthorized' })
   }
 

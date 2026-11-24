@@ -22,7 +22,7 @@ const loadTitleFont = async (requestUrl: string): Promise<ArrayBuffer | null> =>
 
 export default async function handler(request: Request): Promise<ImageResponse> {
   const { searchParams } = new URL(request.url)
-  const title = clean(searchParams.get('title'), '西羽的文章', 84)
+  const title = clean(searchParams.get('title'), 'xiyu 的文章', 84)
   const category = clean(searchParams.get('category'), 'Writing', 28)
   const date = clean(searchParams.get('date'), 'xiyu.im', 20)
   const fontData = await loadTitleFont(request.url)

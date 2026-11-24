@@ -239,6 +239,12 @@ shadcn 组件要用的字体已另起名为 `font-xiyu-serif` / `font-xiyu-mono`
 
 ---
 
+### 15. API 默认关着，防刷靠 Firewall
+- 带 token 的接口（`/api/cache`、`/api/revalidate`、`/api/claude/*`）没配 token 时一律关闭，比较 token 用 `lib/server/guard.js` 的 `tokenMatches`。
+- 依赖第三方的接口（评论、订阅、OAuth）没配置时返回 404，不去碰上游。
+- 按 Notion ID 直接拉的页面必须挂在本站文章之下（`lib/db/pageScope.js`），别放开。
+- 进程内限流只挡单个来源；大流量靠 Vercel Firewall 的规则，不在代码里硬扛。
+
 ## 验证改动
 
 按代价从低到高：

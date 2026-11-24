@@ -13,12 +13,18 @@ import { cachePolicy } from '@/lib/xiyu999/freshness'
 
 const CM = 'https://community-api.coinmetrics.io/v4/timeseries/asset-metrics'
 let memo = { body: null, until: 0 }
+// 同一实例里同时进来的请求共用一次上游拉取，避免并发时把 Coin Metrics 打爆
+let inflight = null
+const UPSTREAM_TIMEOUT_MS = 8000
 
 async function fetchAll (params) {
   let url = `${CM}?${new URLSearchParams({ frequency: '1d', page_size: '10000', ...params }).toString()}`
   const out = []
   for (let page = 0; url && page < 5; page++) {
-    const res = await fetch(url, { headers: { 'User-Agent': 'xiyu.im/xiyu999' } })
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'xiyu.im/xiyu999' },
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)
+    })
     if (!res.ok) throw new Error(`coinmetrics ${res.status}`)
     const json = await res.json()
     out.push(...(json.data || []))
@@ -55,8 +61,16 @@ export default async function handler (req, res) {
   }
   try {
     if (!memo.body || Date.now() > memo.until) {
-      const body = await build()
-      memo = { body, until: Date.now() + cachePolicy(body.now.date).ttlMs }
+      if (!inflight) {
+        inflight = build()
+          .then(body => {
+            memo = { body, until: Date.now() + cachePolicy(body.now.date).ttlMs }
+          })
+          .finally(() => {
+            inflight = null
+          })
+      }
+      await inflight
     }
     const ttl = Math.max(60, Math.floor((memo.until - Date.now()) / 1000))
     res.setHeader('Cache-Control', `public, s-maxage=${ttl}, stale-while-revalidate=600`)

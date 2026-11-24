@@ -45,6 +45,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // 没配 OAuth 就当不存在
+  if (!process.env.OAUTH_CLIENT_ID || !process.env.OAUTH_CLIENT_SECRET) {
+    return res.status(404).json({ error: 'Not found' })
+  }
   try {
     const code = Array.isArray(req.query.code)
       ? req.query.code[0]
@@ -57,8 +61,9 @@ export default async function handler(
     const params = await fetchToken(code)
 
     if (params?.status === 200) {
+      // 不要把 access_token 放进 URL：会进浏览器历史、日志和 Referer
       const redirectQuery = {
-        msg: '成功了' + JSON.stringify(params.data)
+        msg: `授权成功：${params.data?.workspace_name || ''}`
       }
 
       // 这里将用户数据写入到Notion数据库
@@ -105,7 +110,6 @@ const fetchToken = async (code: string): Promise<NotionTokenResponse> => {
         }
       }
     )
-    console.log('OAuth身份信息', response.data)
     return {
       status: response.status,
       statusText: response.statusText,

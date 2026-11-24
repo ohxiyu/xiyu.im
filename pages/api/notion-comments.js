@@ -1,5 +1,6 @@
 import { Client } from '@notionhq/client'
 import { createHash } from 'node:crypto'
+import { clientIp, createRateLimiter } from '@/lib/server/guard'
 import {
   formatNotionComment,
   getPlainText,
@@ -10,10 +11,15 @@ import {
 
 const databaseId = process.env.NOTION_COMMENT_DATABASE_ID
 const token = process.env.NOTION_TOKEN
+const enabled = process.env.NEXT_PUBLIC_COMMENT_NOTION_ENABLE === 'true'
 const requireApproval = process.env.NOTION_COMMENT_REQUIRE_APPROVAL === 'true'
-const rateWindowMs = 60 * 1000
-const rateLimit = Number(process.env.NOTION_COMMENT_RATE_LIMIT || 5)
-const ipHits = new Map()
+const isRateLimited = createRateLimiter({
+  windowMs: 60 * 1000,
+  max: Number(process.env.NOTION_COMMENT_RATE_LIMIT || 5)
+})
+// 读评论也会打 Notion API（每秒 3 次的配额和全站共用），单 IP 每分钟最多 30 次
+const isReadLimited = createRateLimiter({ windowMs: 60 * 1000, max: 30 })
+const POST_ID = /^[a-z0-9-]{1,64}$/i
 
 const getClient = () => {
   if (!databaseId || !token) {
@@ -22,26 +28,6 @@ const getClient = () => {
   return new Client({ auth: token })
 }
 
-const getClientIp = req => {
-  const forwardedFor = req.headers['x-forwarded-for']
-  return String(
-    Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor || ''
-  )
-    .split(',')[0]
-    .trim()
-}
-
-const isRateLimited = ip => {
-  const now = Date.now()
-  const hits = (ipHits.get(ip) || []).filter(time => now - time < rateWindowMs)
-  if (hits.length >= rateLimit) {
-    ipHits.set(ip, hits)
-    return true
-  }
-  hits.push(now)
-  ipHits.set(ip, hits)
-  return false
-}
 
 const hasProperty = (properties, name, type) =>
   properties[name] && (!type || properties[name].type === type)
@@ -97,12 +83,20 @@ const getParentLevel = async (notion, parentId, postId) => {
 }
 
 export default async function handler(req, res) {
+  // 没开评论就当不存在，不碰 Notion
+  if (!enabled || !databaseId || !token) {
+    return res.status(404).json({ error: 'Not found' })
+  }
   if (req.method === 'GET') {
     const postId = String(req.query.postId || '').trim()
-    if (!postId) {
-      return res.status(400).json({ error: 'Missing postId' })
+    if (!POST_ID.test(postId)) {
+      return res.status(400).json({ error: 'Invalid postId' })
+    }
+    if (isReadLimited(clientIp(req))) {
+      return res.status(429).json({ error: 'Too many requests' })
     }
     try {
+      res.setHeader('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=300')
       return res.status(200).json(await fetchComments(postId))
     } catch (error) {
       console.error('Failed to fetch Notion comments:', error)
@@ -125,7 +119,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true })
     }
 
-    const ip = getClientIp(req) || 'unknown'
+    const ip = clientIp(req)
     if (isRateLimited(ip)) {
       return res.status(429).json({ error: 'Too many comments' })
     }

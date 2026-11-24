@@ -74,20 +74,33 @@ export const config = {
   matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)']
 }
 
+// redirect.json 每个实例缓存 10 分钟，不再每个请求都回源拉一次（否则流量翻倍）
+let redirectCache: { at: number; data: Record<string, string> } | null = null
+const REDIRECT_TTL_MS = 10 * 60 * 1000
+
+const loadRedirects = async (origin: string) => {
+  if (redirectCache && Date.now() - redirectCache.at < REDIRECT_TTL_MS) {
+    return redirectCache.data
+  }
+  let data: Record<string, string> = {}
+  try {
+    const response = await fetch(`${origin}/redirect.json`)
+    if (response.ok) {
+      data = (await response.json()) as Record<string, string>
+    }
+  } catch (err) {
+    console.error('Error fetching static file:', err)
+  }
+  redirectCache = { at: Date.now(), data }
+  return data
+}
+
 export default async function middleware(req: NextRequest) {
   const negotiatedResponse = getContentNegotiationResponse(req)
   if (negotiatedResponse) return negotiatedResponse
 
   if (BLOG['UUID_REDIRECT']) {
-    let redirectJson: Record<string, string> = {}
-    try {
-      const response = await fetch(`${req.nextUrl.origin}/redirect.json`)
-      if (response.ok) {
-        redirectJson = (await response.json()) as Record<string, string>
-      }
-    } catch (err) {
-      console.error('Error fetching static file:', err)
-    }
+    const redirectJson = await loadRedirects(req.nextUrl.origin)
     let lastPart = getLastPartOfUrl(req.nextUrl.pathname) as string
     if (checkStrIsNotionId(lastPart)) {
       lastPart = idToUuid(lastPart)
