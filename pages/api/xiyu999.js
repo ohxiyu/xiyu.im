@@ -1,4 +1,5 @@
 import { computeXiyu999 } from '@/lib/xiyu999/compute'
+import { cachePolicy } from '@/lib/xiyu999/freshness'
 
 /**
  * GET /api/xiyu999
@@ -6,13 +7,12 @@ import { computeXiyu999 } from '@/lib/xiyu999/compute'
  * 给 public/xiyu999.html 提供每日更新的数据。数据源是 Coin Metrics 社区版免费接口：
  *   btc：PriceUSD、CapMVRVCur（→ 链上平均成本）、SplyCur
  *   paxg：PriceUSD（1 PAXG ≈ 1 金衡盎司黄金，用来算比特币/黄金市值比）
- * Coin Metrics 每天出一根日线，所以 CDN 缓存 6 小时、过期后 1 天内先返回旧值再后台刷新。
+ * Coin Metrics 按 UTC 日收盘出日线，发布时间不固定。缓存时长按"有没有拿到昨天的数据"来定，
+ * 见 lib/xiyu999/freshness.js：拿到了就缓存到下一个 UTC 0:30，没拿到就每 10 分钟重取。
  */
 
 const CM = 'https://community-api.coinmetrics.io/v4/timeseries/asset-metrics'
-const MEMORY_TTL_MS = 60 * 60 * 1000
-
-let memo = { body: null, at: 0 }
+let memo = { body: null, until: 0 }
 
 async function fetchAll (params) {
   let url = `${CM}?${new URLSearchParams({ frequency: '1d', page_size: '10000', ...params }).toString()}`
@@ -54,11 +54,13 @@ export default async function handler (req, res) {
     return res.status(405).json({ error: 'method not allowed' })
   }
   try {
-    if (!memo.body || Date.now() - memo.at > MEMORY_TTL_MS) {
-      memo = { body: await build(), at: Date.now() }
+    if (!memo.body || Date.now() > memo.until) {
+      const body = await build()
+      memo = { body, until: Date.now() + cachePolicy(body.now.date).ttlMs }
     }
-    res.setHeader('Cache-Control', 'public, s-maxage=21600, stale-while-revalidate=86400')
-    // 首页卡片只要当天读数：?fields=now 省掉 700 多个周线点
+    const ttl = Math.max(60, Math.floor((memo.until - Date.now()) / 1000))
+    res.setHeader('Cache-Control', `public, s-maxage=${ttl}, stale-while-revalidate=600`)
+    // 首页卡片只要当天读数：?fields=now 省掉 5000 多个逐日点
     if (req.query?.fields === 'now') {
       return res.status(200).json({ now: memo.body.now, builtAt: memo.body.builtAt })
     }
@@ -66,7 +68,8 @@ export default async function handler (req, res) {
   } catch (err) {
     console.error('[xiyu999] %s', err instanceof Error ? err.message : String(err))
     if (memo.body) {
-      res.setHeader('Cache-Control', 'public, s-maxage=600')
+      memo.until = Date.now() + 5 * 60 * 1000
+      res.setHeader('Cache-Control', 'public, s-maxage=300')
       return res.status(200).json({ ...memo.body, stale: true })
     }
     res.setHeader('Cache-Control', 'no-store')

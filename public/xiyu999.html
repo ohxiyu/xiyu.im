@@ -275,7 +275,7 @@ details.code .cbar{margin:0 0 10px}
   <div class="row">
     <div>
       <h1>xiyu999</h1>
-      <p class="sub">比特币链上成本指数 · 截至 <span class="m d-asof"></span> 收盘 · <span id="src">内置数据</span></p>
+      <p class="sub">比特币链上成本指数 · 截至 <span class="m d-asof"></span> 收盘（UTC）· <span id="src">内置数据</span></p>
     </div>
     <div class="seg" role="group" aria-label="解读方式">
       <button id="m-pro" aria-pressed="true">专业</button>
@@ -486,7 +486,7 @@ xiyu999 = np.exp(0.6 * (cost + value))</pre>
 
 <footer class="sec">
 <div class="wrap foot">
-  <div><h3>数据</h3><p>Coin Metrics 社区版：价格、CapMVRVCur（换算链上平均成本），2012-07 至 <span class="m d-asof"></span>，逐日，每天自动更新。金价用 PAXG，地上存量按约 22 万吨估算。接口 <a href="/api/xiyu999">/api/xiyu999</a>。</p></div>
+  <div><h3>数据</h3><p>Coin Metrics 社区版：价格、CapMVRVCur（换算链上平均成本），2012-07 至 <span class="m d-asof"></span>，逐日，按 UTC 日收盘计：前一天的数值在 Coin Metrics 发布后（通常北京时间上午）自动更新。金价用 PAXG，地上存量按约 22 万吨估算。接口 <a href="/api/xiyu999">/api/xiyu999</a>。</p></div>
   <div><h3>原理</h3><p><a href="/article/ahr999-xiyu999">ahr999 的估值线跑到了价格前面，于是我做了 xiyu999</a> · <a href="/">回到 xiyu.im</a></p></div>
   <div><h3>声明</h3><p>这是指标读数，不是买卖建议。xiyu999 由 xiyu 设计。</p></div>
 </div>
