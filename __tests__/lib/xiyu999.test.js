@@ -88,3 +88,29 @@ describe('区间划分', () => {
     expect(zoneOf(5).label).toBe('过热区')
   })
 })
+
+describe('xiyu999 数据新鲜度', () => {
+  const { cachePolicy, expectedLatest, RETRY_MS } = require('@/lib/xiyu999/freshness')
+  const t = iso => Date.parse(iso)
+
+  it('UTC 11-24 任意时刻，应有的最新一天是 11-23', () => {
+    expect(expectedLatest(t('2026-11-24T00:05:00Z'))).toBe('2026-11-23')
+    expect(expectedLatest(t('2026-11-24T23:59:00Z'))).toBe('2026-11-23')
+  })
+
+  it('还没拿到昨天的数据：10 分钟后重取', () => {
+    const p = cachePolicy('2026-11-22', t('2026-11-24T02:33:00Z'))
+    expect(p.fresh).toBe(false)
+    expect(p.ttlMs).toBe(RETRY_MS)
+  })
+
+  it('拿到昨天的数据：缓存到下一个 UTC 0:30', () => {
+    const p = cachePolicy('2026-11-23', t('2026-11-24T03:00:00Z'))
+    expect(p.fresh).toBe(true)
+    expect(p.ttlMs).toBe(t('2026-11-25T00:30:00Z') - t('2026-11-24T03:00:00Z'))
+  })
+
+  it('跨过 UTC 0 点后，旧数据立即变成不新鲜', () => {
+    expect(cachePolicy('2026-11-23', t('2026-11-25T00:31:00Z')).fresh).toBe(false)
+  })
+})
