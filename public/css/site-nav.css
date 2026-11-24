@@ -1,0 +1,137 @@
+/* ============================================================
+   站点导航 + 搜索：博客（themes/xiyu/components/Nav.js）和 /xiyu999.html 共用这一份。
+   两边用同一套 class 和这份样式，切换页面时导航一像素都不动。
+   改这里两边一起变；不要在 xiyu.css 或 xiyu999.html 里再覆盖 .xn-*。
+
+   深浅色：博客在 <html> 上加 .dark / .light；xiyu999 页面用 data-theme，没设就跟系统。
+   ============================================================ */
+:root {
+  --xn-btc: #f7931a;
+  --xn-on: #121212;
+  --xn-panel: #ffffff;
+  --xn-ink: #141414;
+  --xn-mute: #66655f;
+  --xn-faint: #7a7973;
+  --xn-line: #dcdad2;
+  --xn-hover: #f1f0eb;
+  --xn-accent: #1f5aa6;
+  --xn-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --xn-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+}
+html.dark, :root[data-theme=dark] {
+  --xn-panel: #1b1c20; --xn-ink: #ecebe6; --xn-mute: #9b9a94; --xn-faint: #85847e;
+  --xn-line: #2c2d33; --xn-hover: #26272c; --xn-accent: #79aef0;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not(.dark):not([data-theme]) {
+    --xn-panel: #1b1c20; --xn-ink: #ecebe6; --xn-mute: #9b9a94; --xn-faint: #85847e;
+    --xn-line: #2c2d33; --xn-hover: #26272c; --xn-accent: #79aef0;
+  }
+}
+
+.xn, .xn *, .xn-drawer, .xn-drawer *, .xn-sd-wrap, .xn-sd-wrap * { box-sizing: border-box; }
+
+/* —— 导航条 —— 高度固定（不是 min-height），字重统一，当前页只换底色不换字重 */
+.xn { background: var(--xn-btc); color: var(--xn-on); font: 400 16px/24px var(--xn-font); -webkit-font-smoothing: antialiased; }
+.xn button, .xn-drawer button { font: inherit; }
+.xn-in { max-width: 1120px; margin: 0 auto; padding: 0 46px; }
+.xn-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 78px; border-bottom: 2px solid var(--xn-on); }
+.xn-brand { display: inline-flex; align-items: center; gap: 9px; height: 44px; color: var(--xn-on); text-decoration: none; flex: none; }
+.xn-logo { display: block; width: 32px; height: 32px; flex: none; }
+.xn-mark { font: 800 24px/24px var(--xn-mono); letter-spacing: -.02em; }
+.xn-tag { font: 400 13px/24px var(--xn-mono); opacity: .75; white-space: nowrap; }
+.xn-right, .xn-links, .xn-tools { display: flex; align-items: center; gap: 4px; }
+/* 两边页面的全局 reset 不同（博客是 Tailwind，xiyu999 有 *{min-width:0}），统一不许导航里的东西被压缩 */
+.xn-bar > *, .xn-right > *, .xn-links > *, .xn-tools > * { flex: none; min-width: auto; }
+.xn-link {
+  display: inline-flex; align-items: center; height: 44px; padding: 0 12px; border-radius: 8px;
+  color: var(--xn-on); font: 600 15px/24px var(--xn-font); text-decoration: none; white-space: nowrap;
+}
+.xn-link[aria-current=page] { background: var(--xn-on); color: var(--xn-btc); }
+.xn-search {
+  display: inline-flex; align-items: center; gap: 9px; height: 44px; padding: 0 12px; margin: 0;
+  border: 2px solid var(--xn-on); border-radius: 8px; background: transparent; color: var(--xn-on);
+  font: 400 13px/24px var(--xn-font); cursor: pointer; white-space: nowrap;
+}
+.xn-kbd { font: 400 10px/1 var(--xn-mono); padding: 4px 5px; border: 1px solid rgb(18 18 18 / .35); border-radius: 4px; }
+.xn-icon {
+  display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; margin: 0;
+  border: 0; border-radius: 8px; background: transparent; color: var(--xn-on); cursor: pointer; text-decoration: none;
+}
+.xn-menu { display: none; background: var(--xn-on); color: var(--xn-btc); }
+.xn-link:hover, .xn-search:hover, .xn .xn-icon:not(.xn-menu):hover { background: rgb(18 18 18 / .08); }
+.xn-link[aria-current=page]:hover { background: var(--xn-on); }
+.xn :is(a, button):focus-visible { outline: 3px solid var(--xn-on); outline-offset: 2px; }
+
+@media (max-width: 1024px) { .xn-in { padding: 0 28px; } }
+@media (max-width: 768px) {
+  .xn-in { padding: 0 20px; }
+  .xn-bar { height: 67px; }
+  .xn-links, .xn-tools .xn-desk, .xn-tag { display: none; }
+  .xn-search { width: 44px; padding: 0; justify-content: center; }
+  .xn-search .xn-search-label, .xn-search .xn-kbd { display: none; }
+  .xn-menu { display: inline-flex; }
+  .xn-logo { width: 28px; height: 28px; }
+}
+
+/* —— 手机菜单（原生 <dialog>） —— */
+.xn-drawer {
+  position: fixed; inset: 0 0 0 auto; margin: 0; width: min(300px, 84vw); height: 100%; max-width: none; max-height: none;
+  padding: 22px; border: 0; border-left: 1px solid var(--xn-line); background: var(--xn-panel); color: var(--xn-ink); font-family: var(--xn-font);
+}
+.xn-drawer[open] { display: flex; flex-direction: column; }
+.xn-drawer::backdrop { background: rgb(20 20 20 / .4); }
+.xn-dh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.xn-dh b { font: 600 17px/1.4 var(--xn-font); }
+.xn-drawer .xn-icon { color: var(--xn-ink); }
+.xn-drawer .xn-icon:hover { background: var(--xn-hover); }
+.xn-dnav { display: flex; flex-direction: column; }
+.xn-dnav a { display: flex; align-items: center; gap: 11px; padding: 11px 8px; border-radius: 6px; color: var(--xn-ink); font: 400 15px/1.5 var(--xn-font); text-decoration: none; }
+.xn-dnav a i { width: 24px; font: normal 10px/1 var(--xn-mono); color: var(--xn-faint); }
+.xn-dnav a:hover { background: var(--xn-hover); }
+.xn-dnav a[aria-current=page] { font-weight: 600; }
+.xn-dt { margin-top: auto; display: flex; gap: 8px; padding-top: 16px; border-top: 1px solid var(--xn-line); }
+.xn-drawer :is(a, button):focus-visible { outline: 2px solid var(--xn-accent); outline-offset: 2px; }
+
+/* —— 搜索面板（public/js/site-search.js） —— */
+.xn-sd-wrap {
+  position: fixed; inset: 0; z-index: 1000; display: flex; justify-content: center; align-items: flex-start;
+  padding: 14vh 16px 16px; background: rgb(20 20 20 / .4); font-family: var(--xn-font);
+}
+.xn-sd-wrap[hidden] { display: none; }
+.xn-sd {
+  width: min(560px, 100%); border: 1px solid var(--xn-line); border-radius: 12px; background: var(--xn-panel); color: var(--xn-ink);
+  box-shadow: 0 18px 48px rgb(26 22 18 / .16); overflow: hidden;
+}
+.xn-sd-in { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--xn-line); }
+.xn-sd-in svg { flex: none; color: var(--xn-faint); }
+.xn-sd-in input {
+  flex: 1; min-width: 0; height: 32px; padding: 0; border: 0; background: transparent; color: var(--xn-ink);
+  font: 400 16px/1.5 var(--xn-font); outline: none; -webkit-appearance: none; appearance: none;
+}
+.xn-sd-in input::placeholder { color: var(--xn-faint); }
+.xn-sd-in input::-webkit-search-cancel-button { display: none; }
+.xn-sd-close { flex: none; height: 32px; padding: 0 8px; border: 1px solid var(--xn-line); border-radius: 6px; background: transparent; color: var(--xn-mute); font: 400 11px/1 var(--xn-mono); cursor: pointer; }
+.xn-sd-cancel { display: none; }
+.xn-sd-list { max-height: min(380px, 55vh); overflow-y: auto; padding: 6px; overscroll-behavior: contain; }
+.xn-sd-h { padding: 10px 10px 6px; font: 400 10px/1 var(--xn-mono); letter-spacing: .12em; color: var(--xn-faint); }
+.xn-sd-item { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 8px 10px; border-radius: 8px; cursor: pointer; }
+.xn-sd-item[aria-selected=true] { background: var(--xn-hover); }
+.xn-sd-item[aria-selected=true] .xn-sd-t { color: var(--xn-accent); }
+.xn-sd-t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 400 14.5px/1.4 var(--xn-font); }
+.xn-sd-t mark { background: transparent; color: inherit; font-weight: 700; }
+.xn-sd-d { flex: none; font: 400 11px/1 var(--xn-mono); color: var(--xn-faint); font-variant-numeric: tabular-nums; }
+.xn-sd-empty { padding: 28px 12px; text-align: center; font-size: 14px; color: var(--xn-faint); }
+.xn-sd-foot { display: flex; gap: 16px; padding: 9px 16px; border-top: 1px solid var(--xn-line); font: 400 10px/1.4 var(--xn-mono); color: var(--xn-faint); }
+.xn-sd-wrap :is(button):focus-visible, .xn-sd-in input:focus-visible { outline: none; }
+@media (max-width: 768px) {
+  .xn-sd-wrap { padding-top: 12px; }
+  .xn-sd-foot { display: none; }
+  .xn-sd-esc { display: none; }
+  .xn-sd-cancel { display: inline; font: 400 14px/1 var(--xn-font); }
+  .xn-sd-close { border: 0; color: var(--xn-accent); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .xn-sd { animation: xn-in .14s ease-out; }
+  @keyframes xn-in { from { opacity: 0; transform: translateY(-4px) scale(.99); } }
+}

@@ -9,7 +9,7 @@ import CONFIG from '../config'
  *
  * 复用 .theme-toggle 的外观，和旁边的主题切换按钮保持同一尺寸与圆角。
  */
-const XLink = () => {
+const XLink = ({ className = 'xn-icon' }) => {
   const href =
     siteConfig('CONTACT_TWITTER') || siteConfig('XIYU_NAV_TWITTER', '', CONFIG)
 
@@ -20,7 +20,7 @@ const XLink = () => {
       href={href}
       target='_blank'
       rel='noopener noreferrer'
-      className='theme-toggle'
+      className={className}
       aria-label='在 X 上关注作者'
       title='X'>
       <svg

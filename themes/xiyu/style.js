@@ -23,6 +23,8 @@ export const Style = () => (
     <meta key='xiyu-app-title' name='apple-mobile-web-app-title' content='xiyu' />
     <link key='xiyu-manifest' rel='manifest' href='/manifest.json' />
     <link key='xiyu-css' rel='stylesheet' href='/css/xiyu.css' />
+    {/* 导航与搜索：和 /xiyu999.html 共用 */}
+    <link key='xiyu-site-nav-css' rel='stylesheet' href='/css/site-nav.css' />
   </Head>
 )
 
