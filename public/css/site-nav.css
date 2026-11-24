@@ -32,7 +32,8 @@ html.dark, :root[data-theme=dark] {
 .xn, .xn *, .xn-drawer, .xn-drawer *, .xn-sd-wrap, .xn-sd-wrap * { box-sizing: border-box; }
 
 /* —— 导航条 —— 高度固定（不是 min-height），字重统一，当前页只换底色不换字重 */
-.xn { background: var(--xn-btc); color: var(--xn-on); font-family: var(--xn-font); -webkit-font-smoothing: antialiased; }
+.xn { background: var(--xn-btc); color: var(--xn-on); font: 400 16px/24px var(--xn-font); -webkit-font-smoothing: antialiased; }
+.xn button, .xn-drawer button { font: inherit; }
 .xn-in { max-width: 1120px; margin: 0 auto; padding: 0 46px; }
 .xn-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 78px; border-bottom: 2px solid var(--xn-on); }
 .xn-brand { display: inline-flex; align-items: center; gap: 9px; height: 44px; color: var(--xn-on); text-decoration: none; flex: none; }
