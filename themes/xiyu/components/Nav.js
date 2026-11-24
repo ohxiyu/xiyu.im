@@ -1,67 +1,42 @@
 import SmartLink from '@/components/SmartLink'
 import { siteConfig } from '@/lib/config'
 import { useRouter } from 'next/router'
+import Script from 'next/script'
+import { useEffect, useRef } from 'react'
 import ThemeToggle from './ThemeToggle'
 import XLink from './XLink'
 import CONFIG from '../config'
-import CommandPalette from '@/components/ui/CommandPalette'
-import MobileNav from '@/components/ui/MobileNav'
 
-const NavIcon = ({ name }) => {
-  const common = {
-    width: 15,
-    height: 15,
-    viewBox: '0 0 24 24',
-    fill: 'none',
-    stroke: 'currentColor',
-    strokeWidth: 1.8,
-    strokeLinecap: 'round',
-    strokeLinejoin: 'round',
-    'aria-hidden': true
-  }
+/*
+ * 导航的 class（.xn-*）和样式表 /css/site-nav.css 与 /xiyu999.html 共用，
+ * 两边的结构要保持一致：改这里时同步改 public/xiyu999.html 里的 <nav class="xn">。
+ * 搜索面板由 /js/site-search.js 提供（两边同一份），点 data-xn-search 或 ⌘K 打开。
+ */
 
-  if (name === 'writing') {
-    return (
-      <svg {...common}>
-        <path d='M4 20l4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20Z' />
-        <path d='m14.5 7.5 3 3' />
-      </svg>
-    )
-  }
-  if (name === 'archive') {
-    return (
-      <svg {...common}>
-        <path d='M4 7h16v13H4z' />
-        <path d='M3 4h18v3H3zM9 11h6' />
-      </svg>
-    )
-  }
-  if (name === 'index') {
-    return (
-      <svg {...common}>
-        <path d='M4 20h16' />
-        <path d='m5 15 4-4 3 3 7-7' />
-      </svg>
-    )
-  }
-  if (name === 'about') {
-    return (
-      <svg {...common}>
-        <circle cx='12' cy='8' r='3' />
-        <path d='M5.5 20a6.5 6.5 0 0 1 13 0' />
-      </svg>
-    )
-  }
-  return (
-    <svg {...common}>
-      <path d='M7 17 17 7M8 7h9v9' />
-    </svg>
-  )
+const LINKS = [
+  { key: 'writing', href: '/', label: '写作' },
+  { key: 'archive', href: '/archive', label: '归档' },
+  { key: 'about', href: '/about', label: '关于' },
+  // xiyu999 是 public/ 下的独立静态页，不走 Next 路由，用普通 <a> 整页跳转
+  { key: 'xiyu999', href: '/xiyu999.html', label: 'xiyu999', native: true }
+]
+
+const SearchIcon = () => (
+  <svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' aria-hidden='true'>
+    <circle cx='11' cy='11' r='7' />
+    <path d='m20 20-3.5-3.5' />
+  </svg>
+)
+
+const NavLink = ({ link, active, className, children }) => {
+  const current = active === link.key ? 'page' : undefined
+  return link.native
+    ? <a href={link.href} className={className} aria-current={current}>{children}</a>
+    : <SmartLink href={link.href} className={className} aria-current={current}>{children}</SmartLink>
 }
 
 // xiyu 主题顶部导航（对应 .design/source/shared.jsx 的 SiteNav）
 const Nav = props => {
-  const { allNavPages } = props || {}
   const router = useRouter()
   const path = router?.asPath || '/'
   const active = path.startsWith('/archive')
@@ -82,62 +57,78 @@ const Nav = props => {
     String(siteConfig('XIYU_NAV_TAGLINE', '', CONFIG) || '').trim() ||
     `since ${since}`
 
+  const drawer = useRef(null)
+  const openMenu = () => drawer.current?.showModal?.()
+  const closeMenu = () => drawer.current?.close?.()
+  // 路由变化后收起菜单
+  useEffect(() => closeMenu(), [path])
+
   return (
-    <nav className='site-nav' aria-label='主导航'>
-      <SmartLink href='/' className='brand'>
-        {logo && (
-          <img
-            src={logo}
-            width={32}
-            height={32}
-            alt={author}
-            className='brand-logo'
-          />
-        )}
-        <span className='brand-mark'>
-          {author}
-          <span className='brand-dot'></span>
-        </span>
-        <span className='brand-tag'>{tagline}</span>
-      </SmartLink>
-      <div className='nav-links'>
-        <div
-          id='xiyu-primary-navigation'
-          className='nav-primary'>
-          <SmartLink href='/' aria-current={active === 'writing' ? 'page' : undefined} className={'nav-link' + (active === 'writing' ? ' active' : '')}>
-            <NavIcon name='writing' />
-            <span className='nav-link-label'>写作</span>
-          </SmartLink>
-          <SmartLink href='/archive' aria-current={active === 'archive' ? 'page' : undefined} className={'nav-link' + (active === 'archive' ? ' active' : '')}>
-            <NavIcon name='archive' />
-            <span className='nav-link-label'>归档</span>
-          </SmartLink>
-          <SmartLink href='/about' aria-current={active === 'about' ? 'page' : undefined} className={'nav-link' + (active === 'about' ? ' active' : '')}>
-            <NavIcon name='about' />
-            <span className='nav-link-label'>关于</span>
-          </SmartLink>
-          {/* xiyu999 是 public/ 下的独立静态页，不走 Next 路由，用普通 <a> 整页跳转 */}
-          <a href='/xiyu999.html' className='nav-link'>
-            <NavIcon name='index' />
-            <span className='nav-link-label'>xiyu999</span>
-          </a>
+    <>
+      <nav className='xn' aria-label='主导航'>
+        <div className='xn-in'>
+          <div className='xn-bar'>
+            <SmartLink href='/' className='xn-brand'>
+              {logo && <img src={logo} width={32} height={32} alt='' className='xn-logo' />}
+              <b className='xn-mark'>{author}</b>
+              <span className='xn-tag'>{tagline}</span>
+            </SmartLink>
+            <div className='xn-right'>
+              <div className='xn-links'>
+                {LINKS.map(link => (
+                  <NavLink key={link.key} link={link} active={active} className='xn-link'>
+                    {link.label}
+                  </NavLink>
+                ))}
+              </div>
+              <div className='xn-tools'>
+                <button type='button' className='xn-search' data-xn-search aria-label='搜索文章'>
+                  <SearchIcon />
+                  <span className='xn-search-label'>搜索</span>
+                  <kbd className='xn-kbd' aria-hidden='true'>⌘K</kbd>
+                </button>
+                <ThemeToggle className='xn-icon xn-desk' />
+                <XLink className='xn-icon xn-desk' />
+                <button type='button' className='xn-icon xn-menu' aria-label='打开菜单' aria-haspopup='dialog' onClick={openMenu}>
+                  <svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' aria-hidden='true'>
+                    <path d='M4 7h16M4 12h16M4 17h16' />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <CommandPalette posts={allNavPages} />
-        <div className='nav-desktop-tools'>
+      </nav>
+
+      <dialog
+        ref={drawer}
+        className='xn-drawer'
+        aria-label='菜单'
+        onClick={e => e.target === drawer.current && closeMenu()}>
+        <div className='xn-dh'>
+          <b>菜单</b>
+          <button type='button' className='xn-icon' aria-label='关闭菜单' onClick={closeMenu}>
+            <svg width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' aria-hidden='true'>
+              <path d='m6 6 12 12M18 6 6 18' />
+            </svg>
+          </button>
+        </div>
+        <nav className='xn-dnav' aria-label='站点主导航'>
+          {LINKS.map((link, i) => (
+            <NavLink key={link.key} link={link} active={active}>
+              <i>{String(i + 1).padStart(2, '0')}</i>
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
+        <div className='xn-dt'>
           <ThemeToggle />
           <XLink />
         </div>
-        <MobileNav
-          links={[
-            { key: 'writing', href: '/', label: '写作' },
-            { key: 'archive', href: '/archive', label: '归档' },
-            { key: 'about', href: '/about', label: '关于' },
-            { key: 'xiyu999', href: '/xiyu999.html', label: 'xiyu999', native: true }
-          ]}
-          tools={<><ThemeToggle /><XLink /></>}
-        />
-      </div>
-    </nav>
+      </dialog>
+
+      <Script src='/js/site-search.js' strategy='afterInteractive' />
+    </>
   )
 }
 

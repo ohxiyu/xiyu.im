@@ -245,6 +245,11 @@ shadcn 组件要用的字体已另起名为 `font-xiyu-serif` / `font-xiyu-mono`
 - 按 Notion ID 直接拉的页面必须挂在本站文章之下（`lib/db/pageScope.js`），别放开。
 - 进程内限流只挡单个来源；大流量靠 Vercel Firewall 的规则，不在代码里硬扛。
 
+### 16. 导航和搜索两边共用
+- 导航的结构（.xn-*）和样式 `public/css/site-nav.css` 由博客 `themes/xiyu/components/Nav.js` 与 `public/xiyu999.html` 共用；改一处，另一处的 HTML 结构同步改，别在各自的 CSS 里覆盖 .xn-*。
+- 搜索面板是 `public/js/site-search.js`（原生 JS，两边同一份），数据来自 `/api/search-index`。
+- 导航高度固定、所有链接同一字重，当前页只换底色：切页面时导航不能有任何位移。
+
 ## 验证改动
 
 按代价从低到高：

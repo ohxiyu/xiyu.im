@@ -2400,29 +2400,11 @@ html.dark .hero-card { background: var(--tag-bg); box-shadow: none; }
 :root { --btc: #f7931a; --on-btc: #121212; --mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace; }
 #theme-xiyu ::selection { background: var(--selection); }
 
-/* —— 导航：橙色色带 —— */
-#theme-xiyu .site-nav { background: var(--btc); color: var(--on-btc); border-bottom: 0; margin-bottom: 0; box-shadow: 0 0 0 100vmax var(--btc); clip-path: inset(0 -100vmax); }
-#theme-xiyu .page > .site-nav + div { padding-top: 48px; }
-#theme-xiyu .brand { color: var(--on-btc); }
-#theme-xiyu .brand { gap: 9px; }
-#theme-xiyu .brand-logo { display: block; width: 32px; height: 32px; margin: 0; border-radius: 0; }
-#theme-xiyu .brand-mark { font-family: var(--mono); font-size: 24px; font-weight: 800; letter-spacing: -.02em; color: var(--on-btc); }
-#theme-xiyu .brand-tag { font-family: var(--mono); font-size: 13px; color: var(--on-btc); opacity: .75; text-transform: none; letter-spacing: 0; margin-left: 0; }
-#theme-xiyu .nav-link { color: var(--on-btc); font-weight: 600; font-size: 15px; border-radius: var(--r-sm); }
-#theme-xiyu .nav-link:hover { background: rgb(18 18 18 / .08); color: var(--on-btc); }
-#theme-xiyu .nav-link.active { background: var(--on-btc); color: var(--btc); font-weight: 700; }
-#theme-xiyu .site-nav .theme-toggle, #theme-xiyu .site-nav .theme-toggle:hover { color: var(--on-btc); background: transparent; }
-#theme-xiyu .site-nav .theme-toggle:hover, #theme-xiyu .site-nav a[aria-label*="X"]:hover { background: rgb(18 18 18 / .08); }
-#theme-xiyu .site-nav a, #theme-xiyu .site-nav button { color: var(--on-btc); }
-#theme-xiyu .site-nav .nav-link.active { color: var(--btc); }
-#theme-xiyu .xiyu-cmd-trigger { border: 2px solid var(--on-btc); background: transparent; color: var(--on-btc); box-shadow: none; }
-#theme-xiyu .xiyu-cmd-trigger:hover { background: rgb(18 18 18 / .08); }
-#theme-xiyu .site-nav .xiyu-kbd { background: transparent; border-color: rgb(18 18 18 / .35); color: var(--on-btc); font-family: var(--mono); }
-#theme-xiyu .site-nav .nav-menu-toggle { background: var(--on-btc); color: var(--btc); border: 0; border-radius: var(--r-sm); }
-#theme-xiyu .site-nav :is(a, button):focus-visible { outline-color: var(--on-btc); }
+/* —— 导航：见 /css/site-nav.css（与 /xiyu999.html 共用），这里只管导航下面的间距 —— */
+#theme-xiyu .page { padding-top: 48px; }
 
 /* —— 首页 Hero：橙色色带延续，左自述右指数 —— */
-.x9-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 32px 56px; align-items: end; margin: -48px 0 48px; padding: 44px 0 56px; border-top: 2px solid var(--on-btc); background: var(--btc); color: var(--on-btc); box-shadow: 0 0 0 100vmax var(--btc); clip-path: inset(0 -100vmax); }
+.x9-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 32px 56px; align-items: end; margin: -48px 0 48px; padding: 44px 0 56px; background: var(--btc); color: var(--on-btc); box-shadow: 0 0 0 100vmax var(--btc); clip-path: inset(0 -100vmax); }
 .x9-hero-eyebrow { margin: 0 0 14px; font-family: var(--mono); font-size: 14px; font-weight: 600; }
 .x9-hero-title { margin: 0; font-size: 52px; line-height: 1.08; font-weight: 800; letter-spacing: -.01em; text-wrap: balance; color: var(--on-btc); }
 .x9-hero-intro { margin: 18px 0 0; font-size: 18px; line-height: 1.65; max-width: 34em; }
@@ -2543,8 +2525,7 @@ html.dark #theme-xiyu .archive-jump-link:first-child { background: var(--btc); c
   .x9-val { font-size: 80px; }
 }
 @media (max-width: 768px) {
-  #theme-xiyu .page > .site-nav + div { padding-top: 28px; }
-  #theme-xiyu .brand-logo { width: 28px; height: 28px; }
+  #theme-xiyu .page { padding-top: 28px; }
   .x9-hero { grid-template-columns: minmax(0, 1fr); margin: -28px 0 32px; padding: 26px 0 32px; }
   .x9-hero-title { font-size: 36px; }
   .x9-hero-intro { font-size: 16px; margin-top: 12px; }
